@@ -1,0 +1,185 @@
+generated: '2026-09-19'
+method: derived
+probed: true
+source: openapi/councilof-ai-public-api-openapi.yml (141 operations) + live unauthenticated responses observed 2026-09-19
+  on https://councilof.ai
+docs: https://councilof.ai/api-docs/
+format: json-error-object (REST) + x402 v2 PaymentRequired (402) + capability-state / retired-endpoint objects (501/503)
+  + JSON-RPC 2.0 error objects (MCP, A2A)
+rfc9457: false
+envelope:
+  media_type: application/json
+  shapes:
+  - status: 404
+    shape: '{ "error": "not_found", "path": <string>, "hint": <string> }'
+    observed_at: GET https://councilof.ai/api and GET /api/status and GET /api/<unknown> (194 bytes)
+    observed: '{"error":"not_found","path":"/api","hint":"See the MCP registry entry io.github.CSOAI-ORG/gspc for
+      live endpoints, or /api/mcp for the server catalogue."}'
+  - status: 404
+    shape: '{ "error": "unknown axis", "known": [<axis names>] }'
+    observed_at: GET https://councilof.ai/api/gspc?axis=not-an-axis-probe
+    note: The 404 carries the full list of known axis names — an enumerable, self-correcting error.
+  - status: 402
+    shape: 'X402PaymentRequired: { x402Version: 2, error: "Payment required", resource: {url, description, mimeType,
+      serviceName, tags}, accepts: [X402Accept], extensions: {bazaar, offer-receipt}, catalog, csoai: {...free preview...}
+      } + response header PAYMENT-REQUIRED (base64 of the same body)'
+    observed_at: GET /api/free-door (amount "0"), GET /api/request-attestation?subject=…, GET /api/proof?bundle=1
+      (amount "10000")
+    schema: components.schemas.X402PaymentRequired / X402Accept in the OpenAPI (the only two schemas the spec declares)
+  - status: 501
+    shape: '{ "schema": "csoai.capability-state/0.1", "endpoint": <path>, "state": "NOT_IMPLEMENTED", "accepted":
+      false, "persisted": false, "signed": false }'
+    observed_at: GET https://councilof.ai/api/include
+    note: '13 operations declare only a 501 with this example; the operation carries x-csoai-lifecycle: NOT_IMPLEMENTED.'
+  - status: 503
+    shape: '{ "schema": "csoai.retired-endpoint/0.1", "status": "UNAVAILABLE", "code": "RETIRED", "endpoint": <path>,
+      "message": <string> }'
+    observed_at: GET https://councilof.ai/api/prod-readiness
+    note: 19 operations declare only a 503 ("quarantined pre-release; no evidence is manufactured"); x-csoai-lifecycle
+      QUARANTINED_PRE_RELEASE or RETIRED.
+  - status: 401
+    shape: not observed; declared on 5 operator/OIDC-gated operations
+    note: operatorBearer and githubOidc schemes; bodies not documented.
+  - status: 405
+    shape: declared on 1 operation
+    note: not observed.
+status_code_census:
+  '200': 107
+  '401': 5
+  '402': 10
+  '404': 1
+  '405': 1
+  '501': 13
+  '503': 19
+lifecycle_markers:
+  QUARANTINED_PRE_RELEASE: 19
+  NOT_IMPLEMENTED: 13
+  DOOR_CLOSED: 1
+  METHOD_NOT_ALLOWED: 1
+problem_types:
+- status: 402
+  title: Payment required (x402 challenge)
+  occurrences: 10
+  source_operations:
+  - x402_art50_marking_evidence
+  - x402_eunomia_data
+  - x402_evidence_bundle
+  - x402_feeds_provider_diff
+  - x402_free_door
+  - x402_proof
+  - x402_receipts_batch
+  - x402_request_attestation
+  - x402_rwa_evidence
+  - x402_wrapper
+  causes:
+  - A metered door called without an X-PAYMENT header (REST) or x_payment argument (MCP).
+  remediation: Read accepts[0] (scheme exact, network eip155:8453, asset USDC, payTo, amount in atomic units, maxTimeoutSeconds
+    300), settle from your own wallet via an x402 client, retry the same URL with the payment header. The csoai.free_preview
+    / preview=true path is free. A 402 is not delivery. Amounts appear ONLY here, never in docs.
+  verification: extensions["offer-receipt"].info.offers[] carries a JWS (EdDSA, kid did:web:csoai.org#board-attestation-1)
+    you can verify against https://csoai.org/.well-known/did.json before paying.
+- status: 404
+  title: Not found / unknown axis
+  occurrences: 2
+  source_operations:
+  - get__api_fulfill
+  - get__api_gspc (?axis=)
+  causes:
+  - Unknown /api path
+  - Unknown axis name on /api/gspc
+  remediation: For /api/gspc the body lists every known axis; for other paths the hint names /api/mcp and the MCP
+    registry entry.
+- status: 501
+  title: Capability not implemented
+  occurrences: 13
+  source_operations:
+  - get__api_corpus-watch
+  - post__api_corpus-watch
+  - get__api_dashboard
+  - post__api_dashboard
+  - get__api_decide
+  - get__api_include
+  - get__api_mint
+  - post__api_report
+  - post__api_reported
+  - get__api_subscribe
+  - post__api_subscribe
+  - get__api_verify-batch
+  - get__api_verify-card
+  causes:
+  - The endpoint is a declared capability with no implementation; nothing is accepted, persisted or signed.
+  remediation: Do not retry; the state is by design until the provider publishes the capability. The OpenAPI marks
+    these x-csoai-lifecycle NOT_IMPLEMENTED.
+- status: 503
+  title: Retired or quarantined endpoint
+  occurrences: 19
+  source_operations:
+  - get__api_agentic-fix
+  - post__api_agentic-fix
+  - get__api_atlas
+  - post__api_atlas
+  - get__api_files
+  - post__api_files
+  - get__api_growth-loops
+  - get__api_learn-loop
+  - post__api_learn-loop
+  - get__api_memory
+  - post__api_memory
+  - get__api_operator
+  - post__api_operator
+  - get__api_prod-readiness
+  - get__api_sandbox
+  - post__api_sandbox
+  - get__api_synthesis
+  - get__api_witness
+  - post__api_witness
+  causes:
+  - Retired until its response can be derived from current evidence (QUARANTINED_PRE_RELEASE / RETIRED).
+  remediation: Do not retry; use the surfaces the message names. The provider states no evidence is manufactured
+    to fill the gap.
+- status: 401
+  title: Operator or OIDC credential required
+  occurrences: 5
+  source_operations:
+  - get__api_action-jobs
+  - patch__api_action-jobs
+  - post__api_action-jobs
+  - post__api_board-sign
+  - post__api_provider-canary
+  causes:
+  - 'operatorBearer: an operation-specific configured operator/writer credential, not interchangeable across operations'
+  - 'githubOidc: a GitHub Actions OIDC JWT failing issuer/audience/repository/workflow checks'
+  remediation: These are provider-internal write doors (board-sign, operator, evidence-intake …); there is no public
+    credential to obtain.
+- status: 405
+  title: Method not allowed
+  occurrences: 1
+  source_operations:
+  - post__api_trace
+  remediation: Use the documented method.
+json_rpc_errors:
+  a2a:
+  - code: -32001
+    reason: TASK_NOT_FOUND
+    observed: GetTask with an unknown id — "this agent keeps no task store; every SendMessage answers with a Message"
+  - code: -32009
+    reason: VERSION_NOT_SUPPORTED
+    observed: '0.3 method name tasks/get — send A2A-Version: 1.0 and the v1.0 name'
+  - code: -32004
+    reason: UnsupportedOperationError
+    declared_for:
+    - SendStreamingMessage
+    - ListTasks
+    - SubscribeToTask
+    - GetExtendedAgentCard
+  - code: -32003
+    reason: PushNotificationNotSupportedError
+    declared_for:
+    - '*TaskPushNotificationConfig'
+  mcp:
+  - note: Paid tools called without x_payment return the 402 challenge as structuredContent of a successful tools/call
+      result rather than a JSON-RPC error (per GET /mcp paid_tools.how and the initialize instructions).
+rate_limit_signal:
+  status: null
+  note: No 429 is declared anywhere in the contract and none was observed; see rate-limits/councilof-ai-rate-limits.yml.
+write_operations: 34

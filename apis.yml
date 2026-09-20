@@ -1,18 +1,166 @@
 aid: councilof-ai
 name: CSOAI Ltd
-description: 'CSOAI Ltd is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'CSOAI Ltd — public name Council of AI (UK Companies House 16939677, London; second domain csoai.org)
+  — is an independent AI-governance MEASUREMENT body: "measurement, not certification". It publishes the living
+  GSPC board (Governance · Safety · Provenance · Continuity) as a keyless, CORS-open JSON API, Ed25519-signed measurement
+  cards verifiable offline against a did:web:csoai.org key document, a Merkle public root with inclusion proofs,
+  an EU AI Act Article 50 machine-marking detector, and a dated corrections ledger. The estate is exposed to agents
+  three ways: a 141-operation OpenAPI 3.1 contract at https://councilof.ai/openapi.json (plus a 7-operation read-surfaces
+  spec), a remote MCP server at https://councilof.ai/mcp (13 tools with anonymous tools/list; npm stdio twin csoai-gspc-mcp;
+  MCP Registry io.github.CSOAI-ORG/gspc), and an A2A v1.0 agent card at /.well-known/agent-card.json with eight
+  skills. Ten REST doors and four MCP tools are metered per artefact by x402 (USDC on Base, amounts only inside
+  the 402 challenge); the board, verification and every preview are free and need no account.'
 url: https://raw.githubusercontent.com/api-evangelist/councilof-ai/refs/heads/main/apis.yml
+image: https://councilof.ai/og-image.png
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-19 (local-v3; was a2a-registry harvest stub)
+x-public-name: Council of AI
+x-company-number: GB 16939677
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
-- Company
-apis: []
+- AI Governance
+- AI Measurement
+- AI Safety
+- EU AI Act
+- Compliance
+- Provenance
+- Agents
+- A2A
+- MCP
+- x402
+- Agent Commerce
+- agent-native
+- United Kingdom
+tags_raw:
+- AI governance
+- AI measurement
+- AI safety
+- EU AI Act
+- Compliance
+- Provenance
+- Agents
+- A2A
+- MCP
+- x402
+- Agent commerce
+- Agent-native
+- United Kingdom
+apis:
+- aid: councilof-ai:council-of-ai-public-api
+  name: Council of AI Public API
+  description: 'Keyless REST API for the GSPC measurement estate: the living board (GET /api/gspc, one axis via
+    ?axis=), the quotable live state, axis register, methodology, signed-card and commission indexes, public root
+    and Merkle inclusion proofs, corrections and press feeds, an Article 50 C2PA-marking detector, XRPL asset evidence,
+    and ten x402-metered doors (request-attestation, proof bundle, evidence-bundle, eunomia-data, rwa/evidence,
+    wrapper, art50/marking-evidence, feeds/provider-diff, receipts/batch, free-door at amount 0) that answer HTTP
+    402 with the price and a signed offer until paid in USDC on Base. 141 operations across 112 paths, OpenAPI 3.1.0,
+    servers[] https://councilof.ai, CC-BY-4.0; 34 operations carry an x-csoai-lifecycle marker (quarantined / not
+    implemented). A second, read-only 7-operation spec is served at /api/openapi.json.'
+  humanURL: https://councilof.ai/api-docs/
+  baseURL: https://councilof.ai/api
+  tags:
+  - AI Governance
+  - AI Measurement
+  - x402
+  - Provenance
+  - EU AI Act
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-public-api-openapi.yml
+  - type: OpenAPI
+    name: Council of AI GSPC read surfaces (local copy of /api/openapi.json)
+    url: openapi/councilof-ai-gspc-read-surfaces-openapi.yml
+  - type: OpenAPI
+    name: Council of AI Public API OpenAPI (provider-hosted)
+    url: https://councilof.ai/openapi.json
+  - type: OpenAPI
+    name: Council of AI GSPC read surfaces OpenAPI (provider-hosted)
+    url: https://councilof.ai/api/openapi.json
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Overlay
+    url: overlays/councilof-ai-public-api-overlay.yaml
+  - type: Overlay
+    url: overlays/councilof-ai-gspc-read-surfaces-overlay.yaml
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+  image: https://councilof.ai/og-image.png
+  x-baseURL-note: 'The providers OpenAPI declares servers[] https://councilof.ai (the apex, which is also the website)
+    and every one of its 112 paths is under /api/; api-docs gives the example base https://councilof.ai/api/gspc.
+    The apis.yml base is therefore narrowed to https://councilof.ai/api to name the API surface rather than the
+    site root. The specs servers[] block is left exactly as published (repair-api-bases 2026-09-19: marketing-base-present).'
+- aid: councilof-ai:council-of-ai-gspc-mcp-server
+  name: Council of AI GSPC MCP Server
+  description: 'Remote Model Context Protocol server at https://councilof.ai/mcp (Streamable HTTP, protocol 2025-06-18,
+    serverInfo csoai-gspc-mcp 1.4.2) with a stdio twin on npm (csoai-gspc-mcp 0.2.2, "npx -y csoai-gspc-mcp"). Anonymous
+    initialize and tools/list return 13 tools with real inputSchemas: nine free readers (board totals, one axis,
+    verify a signed card, list cards, public root, one leaf, inclusion proof, x402 and MCP trust snapshots) and
+    four x402-metered evidence tools (commission_card, art50_marking_evidence, rwa_evidence, receipts_batch) that
+    return the 402 challenge as structuredContent until called with x_payment. Listed on the MCP Registry as io.github.CSOAI-ORG/gspc
+    1.4.2 and on Smithery; manifests at /.well-known/mcp.json and /.well-known/mcp/server-card.json; no OAuth metadata
+    — authentication.required false.'
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - MCP
+  - agent-native
+  - AI Governance
+  - x402
+  properties:
+  - type: MCPServer
+    url: mcp/councilof-ai-mcp.yml
+  - type: MCPServer
+    name: GSPC MCP endpoint (Streamable HTTP)
+    url: https://councilof.ai/mcp
+  - type: ToolCrosswalk
+    url: mcp/councilof-ai-tool-crosswalk.yml
+  - type: Documentation
+    url: https://councilof.ai/connect-gspc/
+  - type: Packages
+    url: packages/councilof-ai-packages.yml
+  image: https://councilof.ai/og-image.png
+- aid: councilof-ai:council-of-ai-measurement-agent-a2a
+  name: Council of AI Measurement Agent (A2A)
+  description: 'Agent2Agent v1.0 surface: an agent card served from https://councilof.ai/.well-known/agent-card.json
+    (application/a2a+json, version 1.1.0, supportedInterfaces[0] JSONRPC 1.0 at https://councilof.ai/api/a2a) advertising
+    eight skills — signed GSPC board, East-West crosswalk, measured badge, benchmark-quality register, Article 50
+    provenance detection, EU AI Act screening helper, x402 discovery + free door, estate index — routed to fixed
+    free handlers. Streaming, push notifications and the extended card are declared false; GetTask on an unknown
+    id returns -32001 TASK_NOT_FOUND and 0.3 method names return -32009. Three extension URIs are declared (signed-receipts
+    draft, x402 discovery, x402 Offer & Receipt), none required. Listed on a2aregistry.org.'
+  humanURL: https://councilof.ai/llms.txt
+  baseURL: https://councilof.ai/api/a2a
+  tags:
+  - A2A
+  - agent-native
+  - AI Governance
+  properties:
+  - type: AgentCard
+    url: a2a/councilof-ai-a2a.yml
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted)
+    url: https://councilof.ai/.well-known/agent-card.json
+  - type: Documentation
+    url: https://councilof.ai/api/a2a
+  image: https://councilof.ai/og-image.png
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -21,3 +169,90 @@ maintainers:
 common:
 - type: Website
   url: https://councilof.ai/
+- type: DeveloperPortal
+  url: https://councilof.ai/api-docs/
+- type: Documentation
+  url: https://councilof.ai/api-docs/
+- type: APIReference
+  url: https://councilof.ai/openapi.json
+- type: GettingStarted
+  url: https://councilof.ai/quickstart/
+- type: Support
+  url: https://councilof.ai/help-center/
+- type: Blog
+  url: https://councilof.ai/blog/
+- type: Pricing
+  url: https://councilof.ai/api/x402
+- type: Login
+  url: https://councilof.ai/login
+- type: TermsOfService
+  url: https://councilof.ai/terms
+- type: PrivacyPolicy
+  url: https://councilof.ai/privacy
+- type: StatusPage
+  url: https://councilof.ai/status/
+- type: ChangeLog
+  url: https://councilof.ai/feeds/corrections.xml
+- type: ChangeLog
+  url: changelog/councilof-ai-changelog.yml
+- type: LLMsTxt
+  url: llms/councilof-ai-llms.txt
+- type: LLMsTxt
+  url: https://councilof.ai/llms.txt
+- type: AgentCard
+  url: a2a/councilof-ai-a2a.yml
+- type: MCPServer
+  url: mcp/councilof-ai-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/councilof-ai-tool-crosswalk.yml
+- type: WellKnown
+  url: well-known/councilof-ai-well-known.yml
+- type: SecurityTxt
+  url: well-known/councilof-ai-security.txt
+- type: Security
+  url: security/councilof-ai-vulnerability-disclosure.yml
+- type: VulnerabilityDisclosure
+  url: security/councilof-ai-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/councilof-ai-domain-security.yml
+- type: Packages
+  url: packages/councilof-ai-packages.yml
+- type: SDKs
+  url: packages/councilof-ai-packages.yml
+- type: CLI
+  url: cli/councilof-ai-cli.yml
+- type: Components
+  url: components/councilof-ai-components.yml
+- type: Authentication
+  url: authentication/councilof-ai-authentication.yml
+- type: Conventions
+  url: conventions/councilof-ai-conventions.yml
+- type: ErrorCatalog
+  url: errors/councilof-ai-problem-types.yml
+- type: DataModel
+  url: data-model/councilof-ai-data-model.yml
+- type: Conformance
+  url: conformance/councilof-ai-conformance.yml
+- type: Lifecycle
+  url: lifecycle/councilof-ai-lifecycle.yml
+- type: Plans
+  url: plans/councilof-ai-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/councilof-ai-rate-limits.yml
+- type: Sandbox
+  url: sandbox/councilof-ai-sandbox.yml
+- type: Webhooks
+  url: asyncapi/councilof-ai-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AITransparency
+  url: https://councilof.ai/ai-transparency/
+- type: DataSubjectRequest
+  url: https://councilof.ai/privacy
+- type: Subprocessors
+  url: https://councilof.ai/privacy
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 45
+  pass: local-v3

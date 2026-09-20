@@ -1,0 +1,52 @@
+generated: '2026-09-19'
+method: probed
+source: https://councilof.ai/.well-known/x402.json + https://councilof.ai/api/x402 + live 402 challenges on GET /api/free-door, /api/request-attestation?subject=…, /api/proof?bundle=1 (2026-09-19)
+docs:
+- https://councilof.ai/llms.txt
+- https://councilof.ai/quickstart/
+- https://councilof.ai/legal/licensing/
+checked: '2026-09-19'
+summary: >-
+  There are no plans, tiers, seats or subscriptions. The board, verification, feeds, MCP free tools and the A2A
+  skills are free with no account ("Verification is free forever … No account, no API key, no tiers"); agents pay
+  PER ARTEFACT in USDC on Base through x402, and the provider's stated rule is that an amount appears ONLY inside
+  a door's 402 challenge — "never on this catalog, never in prose". /pricing is not a price list (it renders the
+  "Council OS" workspace). The amounts below were therefore READ FROM LIVE 402 CHALLENGES, which is the only
+  place the provider publishes them; they carry a dated launch campaign (normal 20000 atomic, offered 10000,
+  2026-09-11 → 2026-10-11) and may differ per door and per day. No purchase was made.
+plan_count: 0
+prices_published: challenge-only
+currency: USDC (6 decimals; amounts in atomic units)
+network: eip155:8453 (Base mainnet)
+billing_period: per request
+public_signup_pricing: false
+model: free reads + x402 pay-per-artefact; "Humans never pay to verify or to report. Regulators use the public rail at no charge." (measurement licence)
+free:
+  surfaces:
+  - GET /api/gspc and every read endpoint
+  - MCP — 9 free tools
+  - A2A — 8 skills
+  - feeds (RSS/Atom/JSON) and /root.json
+  - 'GET /api/proof?sha= (inclusion check)'
+  - all offline verifiers
+  - every 402 free preview
+  free_door: {url: 'https://councilof.ai/api/free-door', observed_amount_atomic: '0', note: 'a live x402 route priced at zero — settles and charges nothing'}
+metered_doors:
+- {door: 'GET /api/request-attestation?subject=<id>', paid_for: issuance, sku: request_attestation, tier: per_request, observed_amount_atomic: '10000', observed_amount_usdc: 0.01, normal_amount_atomic: '20000', pricing_basis: PROMO_EXISTING_DATA, campaign: 'csoai-launch-30d-20260911 (2026-09-11 → 2026-10-11)', observed: '2026-09-19'}
+- {door: 'GET /api/proof?bundle=1', paid_for: assembly, sku: issuance, tier: reserve, observed_amount_atomic: '10000', observed_amount_usdc: 0.01, normal_amount_atomic: '20000', pricing_basis: PROMO_EXISTING_DATA, campaign: 'csoai-launch-30d-20260911', observed: '2026-09-19'}
+- {door: 'GET /api/evidence-bundle?obligation=<article-50|dora|eu-cra|article-53>&bundle=1', paid_for: assembly, observed_amount_atomic: null, note: 'amount only in its 402; not fetched'}
+- {door: 'GET /api/eunomia-data?feed=1', paid_for: assembly, observed_amount_atomic: null}
+- {door: 'GET /api/rwa/evidence?asset=<symbol>', paid_for: issuance, observed_amount_atomic: null}
+- {door: 'GET /api/wrapper?id=<pair>', observed_amount_atomic: null}
+- {door: 'GET /api/art50/marking-evidence?url=<https-url>', paid_for: assembly, observed_amount_atomic: null, note: 'also payable by CSOAI LTD invoice per the MCP tool description'}
+- {door: 'GET /api/feeds/provider-diff?history=1', paid_for: cadence, observed_amount_atomic: null}
+- {door: 'GET /api/receipts/batch?from=<iso>', paid_for: assembly, observed_amount_atomic: null, note: 'also payable by invoice'}
+quarantined:
+- {door: 'GET /api/witness?sha256=', buyable: false, lifecycle: QUARANTINED_PRE_RELEASE, reason: 'paid witness issuance disabled until a release gate verifies leaf → signed root → sidecar → Rekor → OpenTimestamps'}
+what_money_buys:
+  statement: '"Agents pay per artefact: issuance, assembly, cadence — never a grade." Payment "never mints a MEASURED cell"; "nobody ranked pays"; there is no certified badge and no rank for sale (x-x402.not: [score, certificate, filled-cells, pay-to-pass, rank]).'
+enterprise:
+  contact: https://councilof.ai/contact/
+  licence: https://councilof.ai/legal/licensing/
+  note: 'Measurement licence v2.0 (2026-08-28): "A deal is not binding until Nick countersigns a licence manifest." Vendor data licensing is by negotiation; no price published.'
+revenue_truth: https://councilof.ai/api/revenue

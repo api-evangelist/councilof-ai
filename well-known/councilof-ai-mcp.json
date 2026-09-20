@@ -1,0 +1,69 @@
+{
+  "schema_version": "2026-07-28",
+  "name": "csoai",
+  "description": "Council of AI measurement tools exposed over MCP. Independent AI-governance measurement body — not certification, not accreditation. Live board: GET /api/gspc (quote totals.public_count).",
+  "servers": [
+    {
+      "name": "csoai-gspc-mcp",
+      "display_name": "GSPC Measurement Tools",
+      "url": "https://councilof.ai/mcp",
+      "fallback_url": "https://csoai.org/mcp",
+      "stdio": "npx -y csoai-gspc-mcp@0.2.1",
+      "dead_worker": "https://csoai-gspc-mcp.nicholastempleman.workers.dev/mcp is 404; not a door. Do not invent a new worker.",
+      "auth_required": false,
+      "registry": {
+        "name": "io.github.CSOAI-ORG/gspc",
+        "version": "1.4.0",
+        "url": "https://registry.modelcontextprotocol.io"
+      }
+    }
+  ],
+  "catalogue": "https://councilof.ai/mcp",
+  "gspc_board": "https://councilof.ai/api/gspc",
+  "server_card": "https://councilof.ai/.well-known/mcp/server-card.json",
+  "measured": {
+    "total_tools": 13,
+    "free_tools": 9,
+    "metered_tools": 4,
+    "server_count": 1,
+    "tools": [
+      "board_totals",
+      "get_axis",
+      "verify_card",
+      "list_cards",
+      "get_root",
+      "get_card",
+      "verify_inclusion",
+      "x402_trust",
+      "mcp_trust",
+      "commission_card",
+      "art50_marking_evidence",
+      "rwa_evidence",
+      "receipts_batch"
+    ],
+    "note": "POST /mcp tools/list: eight free readers plus four x402-metered evidence tools. mill-tool `measure` is dropped. witness_hash remains quarantined and is not advertised. MCP Registry server 1.4.0 points here. A listing does not prove paid settlement or delivery."
+  },
+  "planted": {
+    "tools": [
+      "board_totals",
+      "get_axis",
+      "verify_card",
+      "list_cards",
+      "get_root",
+      "get_card",
+      "verify_inclusion",
+      "x402_trust",
+      "mcp_trust",
+      "commission_card",
+      "art50_marking_evidence",
+      "rwa_evidence",
+      "receipts_batch"
+    ],
+    "url": "https://councilof.ai/mcp",
+    "note": "The product door: eight free readers plus four x402-metered evidence tools. Public-root trio is VALID / INVALID / UNCHECKABLE, never a GSPC grade. No 23rd axis. No jail run from MCP. mill-tool `measure` dropped."
+  },
+  "provider": {
+    "name": "CSOAI Ltd",
+    "url": "https://councilof.ai"
+  }
+}

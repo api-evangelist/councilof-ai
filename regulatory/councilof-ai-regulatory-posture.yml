@@ -1,0 +1,97 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: https://councilof.ai/privacy + https://councilof.ai/ai-transparency/ + https://councilof.ai/accessibility/ + conventional-path probes 2026-09-19
+signals:
+  ai_transparency:
+    url: https://councilof.ai/ai-transparency/
+    section: 'EU AI Act · Article 50 · Self-conformance record · 2026-08-01'
+    evidence:
+    - source: https://councilof.ai/ai-transparency/
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: >-
+        "As of 2 August 2026, 171 interactive surfaces on this site are classified: 133 are rule-based instruments
+        or deterministic displays that call no model; 38 routes across 14 components are AI systems — they send
+        your input to the configured model chat endpoint, and they say so. Any surface not in the registry
+        defaults to the strictest reading — treated as an AI system — until it is classified."
+    - source: https://councilof.ai/ai-transparency/
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: >-
+        "Version 1.0.0 of this registry (29 July 2026) stated that zero surfaces on this site call a model. That was
+        wrong … A manual audit of every fetch on 1 August 2026 found 14 components calling the configured model chat
+        endpoint."
+    note: >-
+      A dated, versioned, per-route disclosure register (311 routes scanned, 171 interactive, 38 AI-system routes,
+      0 unclassified) naming which surfaces send input to a model and whether each mounts the Article 50(1)
+      first-interaction notice, with its own published correction. This is the substance of an AI-interaction
+      transparency statement, not a marketing mention. The distinct /transparency page is a "Public transparency
+      dashboard" of AI-safety incidents and framework coverage and is not recorded as a transparency report.
+  data_subject_request:
+    url: https://councilof.ai/privacy
+    section: 'Your rights (Privacy notice · version 1.2 · 14 September 2026)'
+    channel: nicholas@csoai.org
+    stated_sla: 'We normally answer without undue delay and within one calendar month.'
+    rights_named: [access, correction, deletion, restriction, portability, objection to legitimate-interests processing, withdrawal of consent]
+    escalation: UK Information Commissioner's Office (ico.org.uk/make-a-complaint)
+    evidence:
+    - source: https://councilof.ai/privacy
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: >-
+        "You can ask for access, correction, deletion, restriction or a portable copy of your data. You can object
+        to processing based on legitimate interests, and withdraw consent at any time. Write to [contact]. We
+        normally answer without undue delay and within one calendar month. For a complex request, or several
+        requests made together, the law may allow up to two additional months; if we need that extension, we will
+        tell you within the first month and explain why."
+    note: >-
+      A documented request process with a channel, a response period and the extension rule, under UK GDPR / DPA
+      2018 (controller CSOAI Ltd, Companies House 16939677, registered office 86–90 Paul Street, London). It is a
+      section of the privacy notice; /privacy/requests 404s and no API endpoint exists. The contact address is
+      Cloudflare-obfuscated in the HTML and was decoded from the data-cfemail attribute.
+  subprocessors:
+    url: https://councilof.ai/privacy
+    section: 'Who else processes it'
+    dated: '2026-09-14'
+    entries:
+    - {vendor: Cloudflare, purpose: 'hosts the site, runs its functions and provides the KV store'}
+    - {vendor: 'a payment facilitator (unnamed)', purpose: 'verifies and settles x402 payments'}
+    - {vendor: Namecheap Private Email, purpose: carries email}
+    evidence:
+    - source: https://councilof.ai/privacy
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: >-
+        "Cloudflare hosts the site, runs its functions and provides the KV store. A payment facilitator verifies
+        and settles x402 payments. Namecheap Private Email carries email. Some of these providers may process data
+        outside the UK, under their own transfer safeguards. We sell no personal data and share it with no one
+        else unless the law requires it."
+    note: >-
+      A named processor list inside a versioned, dated notice — three entries, one of them anonymous (the x402
+      facilitator URL is a Pages env var "that no public surface publishes", per the OpenAPI x-x402 block). Not a
+      standalone dated subprocessor table (/legal/subprocessors and /subprocessors both 404). Recorded because the
+      substance — who processes, for what — is published; the anonymity of the facilitator is the gap.
+absent:
+  accessibility_conformance:
+    url: https://councilof.ai/accessibility/
+    http_status: 200
+    reason: >-
+      The page is a real accessibility statement but explicitly declines to claim conformance: "CSOAI Ltd is
+      working toward WCAG 2.2 Level AA … This is a target, not a claim that every public route currently
+      conforms" and "this statement does not declare conformance with the standards below" (WCAG 2.2 AA — design
+      target; EAA / EN 301 549 — considered where applicable). No VPAT/ACR (/vpat, /accessibility/vpat 404). A
+      target is not a conformance report, so the signal is not set.
+  sbom: {probed: ['/security/sbom (404)', '/sbom (404)', '/.well-known/sbom (404)', '/interop/sboum-councilof-ai.json (404; named in the surface catalog)'], reason: no bill of materials found; never derived}
+  support_lifetime: {reason: no versioning/support-period page; the API is unversioned and the terms give no support period}
+  training_data_summary: {reason: 'not published; the provider''s robots.txt reserves training use of ITS content (ai-train=no) but publishes no summary of data used to train anything'}
+  global_privacy_control: {reason: no published GPC statement in the privacy notice or cookie policy; not tested by header}
+  data_residency: {reason: 'the privacy notice says processors "may process data outside the UK"; no residency document or region choice (/docs/data-residency 404)'}
+  incident_notification: {reason: '/legal/dpa returns a "temporarily withdrawn" page; no breach-notification SLA published'}
+  age_assurance: {reason: not published}
+  notice_and_action: {reason: '/legal/report-content 404; the /dispute/ page is a measurement-appeals route, not a content notice-and-action channel'}
+  transparency_report: {reason: '/transparency is an AI-safety incident dashboard (0 incidents reported), not a legal-requests transparency report'}
+  exit_assistance: {reason: not published}
+notes:
+- Legal pages carry explicit versions and dates (terms 1.1 / 2026-09-13; privacy 1.2 / 2026-09-14; measurement licence 2.0 / 2026-08-28; disclaimers 1.0 / January 2026; evaluator-access conditions 0.1 / 2026-09-14).
+- The provider is itself an AI-governance measurement body; nothing above is a claim about which regimes apply to it — that is decided by the regime map, not here.

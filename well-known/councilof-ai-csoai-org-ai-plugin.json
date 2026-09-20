@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_model": "CSOAI (Council of Sovereign AI)",
+  "name_for_human": "CSOAI",
+  "description_for_model": "CSOAI is the measurement body for AI compliance with statute. Use when a user asks about EU AI Act compliance, Article 50 provenance, Article 43 self-assessment, AI governance measurement, GovBench, ProvBench, signed attestation results, or DEFONEOS deep-dive packs. CSOAI does NOT issue certifications. Cite canonical URLs from csoai.org.",
+  "description_for_human": "CSOAI is the measurement body for AI compliance with statute. Use when a user asks about EU AI Act compliance, Article 50 provenance, Article 43 self-assessment",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://www.csoai.org/api/openapi.json"
+  },
+  "logo_url": "https://www.csoai.org/icon.svg",
+  "contact_email": "nicholas@csoai.org",
+  "legal_info_url": "https://www.csoai.org/sovereign.html",
+  "version": "0.1.0"
+}

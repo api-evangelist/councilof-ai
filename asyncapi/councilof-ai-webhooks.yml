@@ -1,0 +1,41 @@
+generated: '2026-09-19'
+method: searched
+source: openapi/councilof-ai-public-api-openapi.yml (paths /api/webhooks, /api/paddle-webhook) + https://councilof.ai/llms.txt (feeds, AG-UI stream) + live probes 2026-09-19
+docs: https://councilof.ai/llms.txt
+asyncapi: none
+asyncapi_note: >-
+  No AsyncAPI document is published (/asyncapi.yaml, /asyncapi.json, /.well-known/asyncapi.json all 404) and none
+  is authored here. What the provider documents is an outbound webhook CRUD surface with an unenumerated event
+  list, one inbound payment webhook, an AG-UI Server-Sent-Events stream, and a family of derived RSS/Atom feeds.
+webhooks:
+  outbound:
+    surface: /api/webhooks
+    operations:
+    - {operationId: get__api_webhooks, method: GET, returns: 'array of { id, url, events, active, created_at }', observed: 'GET https://councilof.ai/api/webhooks → 200 "[]" (2 bytes, anonymous)'}
+    - {operationId: post__api_webhooks, method: POST, body: '{ url, events }', note: 'creates a webhook; security []'}
+    - {operationId: delete__api_webhooks, method: DELETE, params: '?id=X', note: 'removes a webhook'}
+    storage: '"in-memory + KV if bound" (operation description)'
+    event_catalog: not enumerated — the contract names an events field but publishes no list of event types, payload schema, signing secret, retry policy or delivery guarantees
+    security: 'security [] on all three operations (anonymous)'
+    note: >-
+      A real but thin webhook surface: the CRUD exists in the contract and answers live, while everything an
+      integrator needs to consume a delivery (event names, payload, signature, retries) is unpublished. Recorded
+      as a webhook surface with an empty catalog rather than invented.
+  inbound:
+    - {operationId: post__api_paddle-webhook, method: POST, path: /api/paddle-webhook, purpose: 'payment-processor (Paddle) webhook receiver', note: 'provider-side receiver; GET twin declared; not a subscriber surface'}
+streams:
+- name: AG-UI living board
+  url: https://councilof.ai/api/agui/gspc-state
+  protocol: Server-Sent Events (AG-UI)
+  observed: 'GET → 200 text/event-stream (4,192 bytes) on 2026-09-19'
+  events: [STATE_DELTA, TEXT_MESSAGE_CONTENT]
+  semantics: 'derived from GET /api/gspc per request; "read-only presentation transport; it renders the board, it never awards a state"'
+feeds:
+- {name: corrections, rss: 'https://councilof.ai/feeds/corrections.xml', atom: 'https://councilof.ai/feeds/corrections.atom', json: 'https://councilof.ai/api/corrections', observed: '200, 58 entries'}
+- {name: newly signed cards, rss: 'https://councilof.ai/feeds/cards.xml'}
+- {name: public root, rss: 'https://councilof.ai/feeds/roots.xml', note: 'guid is the merkle_root, so an unchanged poll is not a change'}
+- {name: evidence notes, rss: 'https://councilof.ai/feeds/notes.xml', human: 'https://councilof.ai/notes/'}
+- {name: press (machine-readable), json: 'https://councilof.ai/api/press.json', observed: 200}
+- {name: legacy hand-maintained feed, rss: 'https://councilof.ai/feed.xml', canonical: 'https://councilof.ai/api/feed.xml', note: 'historical item titles freeze counts the live board has moved past'}
+subscriptions:
+- {operationId: post__api_subscribe, status: 501, note: 'declared NOT_IMPLEMENTED — "no input was accepted, persisted, or signed"'}

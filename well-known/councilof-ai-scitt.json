@@ -1,0 +1,75 @@
+{
+  "_do_not_template_reason": "Hand-authored RFC 9943 SCITT discovery profile. Generic door generation must not invent a measurement, evidence pack, signed statement, transparency-service receipt, or registration.",
+  "do_not_template": true,
+  "schema": "csoai.scitt-profile/0.1",
+  "publisher": "Council of AI (CSOAI Ltd, UK Companies House 16939677)",
+  "implementation_status": "PLANNED",
+  "door": {
+    "endpoints": {
+      "discover": "https://councilof.ai/.well-known/scitt.json",
+      "root": "https://councilof.ai/root.json",
+      "verify": "https://councilof.ai/gspc-verify",
+      "corrections": "https://councilof.ai/api/corrections"
+    },
+    "evidence_pack": null,
+    "publisher": "Council of AI (CSOAI Ltd)"
+  },
+  "measurement": {
+    "axes_covered": 0,
+    "lid": "SCITT · no mapped axes · UNMAPPED",
+    "schema": "csoai.gspc-axes/0.5",
+    "status": "UNMAPPED",
+    "scope": "No SCITT conformance, registration, transparency-service integration, or evidence-pack measurement has been performed."
+  },
+  "standards": {
+    "scitt_architecture": "RFC 9943 — An Architecture for Trustworthy and Transparent Digital Supply Chains",
+    "scitt_reference_api": "draft-ietf-scitt-scrapi",
+    "mapping_status": "UNMAPPED"
+  },
+  "coordination": {
+    "mailing_lists": [
+      "scitt@ietf.org"
+    ],
+    "related_work": [
+      "draft-ietf-scitt-scrapi"
+    ],
+    "status": "reference only; no relationship, endorsement, or participation claim"
+  },
+  "statements": [],
+  "transparency_service": {
+    "status": "NOT_IMPLEMENTED",
+    "receipt": null,
+    "note": "No CSOAI SCITT Signed Statement or transparency-service receipt is published."
+  },
+  "independent_public_root": {
+    "relationship_to_scitt": "NONE",
+    "sha256": "9b426735bc7c0e94d32ce64ccd87605880c531350ca957ecccde5046bde505cd",
+    "card_count": 154,
+    "merkle_root": "2fe2a76f310ea79268c73a94543c91125fa7acc3bbf11ed489afdfeb845ea745",
+    "ed25519": "VERIFIED",
+    "rekor": {
+      "status": "WITNESSED",
+      "log_index": 2714574265
+    },
+    "ots": {
+      "status": "STAMPED_PENDING_BITCOIN",
+      "proof_sha256": "91dae23c5e4d8c4914fbfca77e8274e1ddfd71b00baadd8f58e43f3633bdfc99",
+      "bitcoin_blocks": []
+    },
+    "scope": "Exact root.json bytes and its 154 listed leaves AS OBSERVED ON 2026-09-04, and nothing else. This is a HISTORICAL pin: the root advances hourly, so the live root at current_root_url will normally have a different sha256, merkle_root and card_count. ed25519 VERIFIED refers to the pinned bytes named here, NOT to whatever is live. Not a SCITT receipt and not the separate signed-card corpus.",
+    "observed_at": "2026-09-04T00:00:00Z",
+    "is_current": false,
+    "current_root_url": "https://councilof.ai/root.json"
+  },
+  "verification": {
+    "evidence": null,
+    "status": "UNMAPPED",
+    "scitt_receipt": null,
+    "verifier_scope": "The CSOAI verifier can check supported CSOAI signatures. It does not establish SCITT registration or conformance."
+  },
+  "notes": [
+    "Discovery document only.",
+    "Measurement, not certification.",
+    "No universal evidence pack is available."
+  ]
+}

@@ -1,0 +1,40 @@
+generated: '2026-09-19'
+method: searched
+source: https://pypi.org/pypi/csoai-gspc/json (long_description, the package README) + GET https://councilof.ai/mcp install.python
+name: csoai-gspc
+package: packages/councilof-ai-packages.yml
+summary: >-
+  A first-party Python command-line reader and verifier for the GSPC board. It is deliberately a READER: "it
+  never caches a verdict, never prints a number the board did not return, and reports three states and only
+  three" (VALID / INVALID / UNCHECKABLE). `check` refetches the board and recomputes the slot and measured
+  counts from the axis array, exiting non-zero if the printed totals disagree — "so you can refute us with our
+  own payload."
+install:
+- method: pip
+  command: pip install "csoai-gspc[verify]"
+  note: The verify extra adds cryptography>=42 for Ed25519; without it `verify` returns UNCHECKABLE.
+- method: pip (minimal)
+  command: pip install csoai-gspc
+version: 0.2.20260915
+published: '2026-09-17'
+commands:
+- group: board
+  commands:
+  - {command: 'csoai-gspc check', does: 'Fetch GET /api/gspc, recompute slot/measured counts from the axis array, exit non-zero if the printed totals disagree.', output: 'JSON {agree, printed_slots, printed_measured, derived_slots, derived_measured, ...} then "OK — the printed totals are derived from the axis array, not typed."'}
+  - {command: 'csoai-gspc board', does: 'Every slot, its bench, its n, its frozen bank.'}
+  - {command: 'csoai-gspc axis <name>', does: 'One axis row (e.g. governance).'}
+- group: verification
+  commands:
+  - {command: 'csoai-gspc verify <sha256>', does: 'Verify one signed measurement card under the pinned key from did:web:csoai.org.', output: 'VALID — <id16> · id and signature check under the pinned key | INVALID | UNCHECKABLE'}
+  - {command: 'csoai-gspc root', does: 'The Merkle root over the published cards.'}
+  - {command: 'csoai-gspc snapshot', does: 'The dated snapshot bundled with the release — explicitly NOT the live GET.'}
+key_flows:
+- name: Refute the headline count
+  steps: ['csoai-gspc check', 'inspect agree/derived_* vs printed_*', 'non-zero exit means the board''s own totals disagree with its axis array']
+- name: Verify a card offline
+  steps: ['pip install "csoai-gspc[verify]"', 'csoai-gspc verify <sha256>', 'treat UNCHECKABLE as "could not check", never as "forged"']
+related_tools:
+- {name: csoai-gspc-mcp, kind: stdio MCP server, install: 'npx -y csoai-gspc-mcp', note: 'Same 13-tool contract as POST https://councilof.ai/mcp; a server, not a CLI.'}
+- {name: card-v0-verify.mjs, kind: zero-dependency offline verifier (JavaScript), url: 'https://councilof.ai/verifier/card-v0-verify.mjs', probed: 200, exit_codes: 'VALID 0 / INVALID 1 / UNCHECKABLE 2 (quickstart.json step 6)'}
+- {name: verify-card.mjs, kind: offline verifier for signed measurement cards, url: 'https://councilof.ai/signed/verify-card.mjs', probed: 200}
+- {name: csoai (PyPI), kind: 'CLI + MCP server + verifier', version: 0.2.2, note: 'Command surface not documented on a public page this run.'}

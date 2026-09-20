@@ -1,0 +1,110 @@
+generated: '2026-09-19'
+method: probed
+status: published
+source: https://councilof.ai/mcp
+docs: https://councilof.ai/api-docs/
+manifest: well-known/councilof-ai-mcp.json
+server_card: well-known/councilof-ai-mcp-server-card.json
+tools_file: mcp/councilof-ai-mcp-tools.json
+summary: >-
+  CSOAI Ltd (Council of AI) operates ONE remote MCP server at https://councilof.ai/mcp on the same host as its
+  website, OpenAPI and A2A endpoint, with a stdio twin published to npm as csoai-gspc-mcp. The remote door is
+  Streamable HTTP: a GET returns a self-describing JSON document (server csoai-gspc-mcp 1.4.2, release_train
+  pages-http, install recipes, the four paid tool names), and anonymous POST initialize / tools/list both
+  answered 200 as text/event-stream (protocolVersion 2025-06-18, capabilities.tools.listChanged false,
+  serverInfo csoai-gspc-mcp 1.4.2) with 13 tools carrying real inputSchemas. Nine tools are free readers of the
+  GSPC board, the signed-card index and the public Merkle root; four are x402-metered evidence tools that,
+  called without the x_payment argument, return the route's HTTP 402 challenge as structuredContent. No
+  account, API key or OAuth is involved anywhere; the server card states authentication.required false and no
+  RFC 8414/9728 metadata is served. The tool names and doctrine ("measurement, never certification"; VALID /
+  INVALID / UNCHECKABLE) are provider-specific — this is a provider-built server, not a platform-generated one.
+deployment:
+  mode: both
+  endpoint: https://councilof.ai/mcp
+  install: npx -y csoai-gspc-mcp
+  package: https://www.npmjs.com/package/csoai-gspc-mcp
+  auth: none
+  verified: probed
+  note: >-
+    Remote: a hosted HTTPS endpoint an MCP client POSTs to directly (GET /mcp says "Add https://councilof.ai/mcp
+    as a Streamable HTTP MCP server"). Local: "claude mcp add gspc -- npx -y csoai-gspc-mcp" (verbatim from GET
+    /mcp install.claude_code); npm csoai-gspc-mcp latest 0.2.2 published 2026-09-13, zero runtime dependencies.
+    The provider's own manifests pin "npx -y csoai-gspc-mcp@0.2.1" while npm's latest is 0.2.2. The stdio
+    package and the Pages HTTP implementation are released independently and the provider says to ask each
+    installed version for its own tools/list. auth is none in the connection sense; four tools are gated by
+    x402 payment (HTTP 402 challenge, USDC on Base eip155:8453), which is an economic gate on invocation, not
+    an authentication scheme.
+servers:
+- id: csoai-gspc-mcp
+  name: GSPC Measurement Tools
+  endpoint: https://councilof.ai/mcp
+  fallback_endpoint: https://csoai.org/mcp
+  fallback_note: >-
+    Named in /.well-known/mcp.json; GET https://csoai.org/mcp returns the identical document. The provider's
+    llms.txt says "Apex https://csoai.org/mcp may still require Infra secrets; prefer councilof.ai/mcp until
+    apex is green." Not probed with POST.
+  transport: streamable-http
+  http_methods: [GET, POST]
+  auth: none
+  payment: x402 v2 — USDC (0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913) on Base (eip155:8453), payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; the X-PAYMENT value travels as the x_payment tool ARGUMENT
+  status: live
+  probe:
+    fetched: '2026-09-19'
+    get:
+      http_status: 200
+      content_type: application/json
+      server_info: {name: csoai-gspc-mcp, version: 1.4.2, release_train: pages-http}
+    initialize:
+      http_status: 200
+      content_type: text/event-stream
+      protocol_version: '2025-06-18'
+      server_info: {name: csoai-gspc-mcp, version: 1.4.2}
+      capabilities: {tools: {listChanged: false}}
+      instructions_excerpt: 'GSPC MCP. 9 free read-only tools and 4 paid x402 tools. Call tools/list for the current definitions. Call a paid tool without x_payment for its payment challenge; payment comes from the caller''s wallet. … A 402 challenge is not settlement, delivery or revenue. Measurement, not certification; verification stays free.'
+    tools_list:
+      http_status: 200
+      content_type: text/event-stream
+      tool_count: 13
+      saved: mcp/councilof-ai-mcp-tools.json
+  listings:
+  - registry: MCP Registry (registry.modelcontextprotocol.io)
+    id: io.github.CSOAI-ORG/gspc
+    version: 1.4.2
+    published: '2026-09-14'
+    remotes: [{type: streamable-http, url: 'https://councilof.ai/mcp'}]
+    packages: [{registryType: npm, identifier: csoai-gspc-mcp, version: 0.2.2}]
+    repository: https://github.com/CSOAI-ORG/councilof-ai
+    history_note: >-
+      Eleven registry versions since 2026-08-16. 1.0.0–1.0.3 pointed at a workers.dev URL (now declared dead
+      by the provider) and at https://councilof.ai/api/assess; 1.1.0 onward (2026-08-29) point at
+      https://councilof.ai/mcp. The repository URL every version names returned HTTP 404 on 2026-09-19
+      (github.com/CSOAI-ORG and github.com/CSOAI-ORG/councilof-ai both 404) — the source is not publicly
+      reachable even though npm, PyPI and the registry all cite it.
+  - registry: Smithery
+    url: https://smithery.ai/server/csoai/gspc-mcp
+    note: '"Council of AI GSPC (HTTP)" csoai/gspc-mcp, published Sep 1 2026, homepage councilof.ai/connect-gspc; page rendered 200.'
+  - registry: /.well-known/mcp.json + /.well-known/mcp/server-card.json
+    note: Provider-hosted manifests (saved under well-known/).
+tool_count: 13
+free_tools: 9
+paid_tools: 4
+tools:
+- {name: board_totals, category: board, paid: false, description: 'Live GSPC board totals from GET /api/gspc — slot count and measured count as two labelled numbers, plus as_of dates; UNREACHABLE is a distinct state.'}
+- {name: get_axis, category: board, paid: false, inputs: [axis], description: 'One axis row (n, accuracy, interval, MEASURED/UNMEASURED, family, dates) from the live board.'}
+- {name: verify_card, category: verification, paid: false, inputs: [card], description: 'Verify a signed gspc.measurement-card: recompute the id from the canonical body, check the Ed25519 signature under the PINNED key did:web:csoai.org#card-attestation-1.'}
+- {name: list_cards, category: cards, paid: false, inputs: [axis, limit], description: 'The signed-card index (/signed/card_index.json) — declared n_cards vs rows carried, reported beside the /api/cards count, never reconciled.'}
+- {name: get_root, category: public-root, paid: false, description: 'GET /root.json — merkle_root, card_count, as_of; VALID / UNREACHABLE / UNCHECKABLE.'}
+- {name: get_card, category: public-root, paid: false, inputs: [sha256], description: 'One public-root card-v0 leaf by sha256 from /cards/{sha16}.json.'}
+- {name: verify_inclusion, category: public-root, paid: false, inputs: [sha256], description: 'Merkle inclusion check via GET /api/proof?sha= — VALID / INVALID / UNCHECKABLE.'}
+- {name: x402_trust, category: trust-snapshots, paid: false, description: 'Latest x402 catalog trust snapshot (counts of catalogued resources answering a correct 402 vs phantom).'}
+- {name: mcp_trust, category: trust-snapshots, paid: false, description: 'Latest MCP handshake trust snapshot (/interop/mcp-trust/latest.json).'}
+- {name: commission_card, category: x402-paid, paid: true, inputs: [subject, axis, x_payment], description: 'PAID (x402). Commission one signed card-v0 receipt for a named subject via /api/request-attestation; re-serves the signed cards on file; payment never mints a MEASURED cell.'}
+- {name: art50_marking_evidence, category: x402-paid, paid: true, inputs: [url, bytes_b64, manifest_b64, preview, x_payment], description: 'PAID (x402 or CSOAI LTD invoice). EU AI Act Article 50 marking-evidence pack — C2PA manifest / IPTC digitalSourceType detectability; preview=true is a free unsigned measurement.'}
+- {name: rwa_evidence, category: x402-paid, paid: true, inputs: [asset, preview, x_payment], description: 'PAID (x402). Signed evidence card of one XRPL issued asset''s on-ledger state; preview=true free.'}
+- {name: receipts_batch, category: x402-paid, paid: true, inputs: [from, to, preview, x_payment], description: 'PAID (x402 or invoice). Historical batch of the estate''s measurement receipts with Merkle inclusion paths; preview=true free.'}
+protocol_methods:
+  implemented: [initialize, tools/list, tools/call]
+  not_probed: [resources/list, prompts/list]
+notes:
+- The provider also publishes /api/mcp and /api/tools — its OWN probe registry of MCP servers (probe_host a developer laptop, probe_finished 2026-08-27) that still lists a four-tool 'measure / verify / jail-probe / enter-arena' shape the manifests say was dropped. The live tools/list above is authoritative; those endpoints are historical self-measurement, not the server contract.
+- Payment amounts appear only inside a 402 challenge (observed 2026-09-19 on GET /api/request-attestation and /api/proof?bundle=1 — 10000 atomic USDC, i.e. 0.01 USDC, under a dated launch campaign with normal 20000). No purchase was made.

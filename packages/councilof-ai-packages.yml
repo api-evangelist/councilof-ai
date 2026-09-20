@@ -1,0 +1,94 @@
+generated: '2026-09-19'
+method: searched
+source: registry metadata endpoints queried 2026-09-19 (registry.npmjs.org, pypi.org/pypi/<pkg>/json, registry.modelcontextprotocol.io) plus the install recipes in GET https://councilof.ai/mcp and llms.txt
+package_count: 4
+official_count: 4
+summary: >-
+  Four first-party packages, all authored as CSOAI Ltd / Council of AI and all citing councilof.ai or csoai.org:
+  an npm stdio MCP server (csoai-gspc-mcp), a PyPI board reader + card verifier with a CLI (csoai-gspc), a PyPI
+  CLI + MCP server + verifier (csoai) and a PyPI Inspect-AI receipts signer (inspect-signed-receipt). Every
+  registry answered; versions and dates below are read from registry metadata, not from prose. The npm package
+  is 6 days old and PyPI csoai-gspc was uploaded 2 days before this run — the opposite of an abandonment signal.
+  The GitHub repository every package names (github.com/CSOAI-ORG/councilof-ai) returned 404 on this run, so
+  the source is not publicly browsable even though the artefacts ship.
+packages:
+- language: javascript
+  registry: npm
+  name: csoai-gspc-mcp
+  url: https://www.npmjs.com/package/csoai-gspc-mcp
+  metadata: https://registry.npmjs.org/csoai-gspc-mcp
+  source: https://github.com/CSOAI-ORG/councilof-ai (directory mcp/gspc-server) — HTTP 404 on 2026-09-19
+  install: npx -y csoai-gspc-mcp
+  official: true
+  kind: mcp-server (stdio)
+  version: 0.2.2
+  published: '2026-09-13'
+  first_published: '2026-08-28'
+  versions: [0.1.0, 0.1.1, 0.2.0, 0.2.1, 0.2.2]
+  bin: csoai-gspc-mcp
+  note: >-
+    "Stdio MCP server for Council of AI's GSPC board and signed measurement evidence. Zero runtime dependencies."
+    The provider's /.well-known/mcp.json and server card pin @0.2.1; npm latest is 0.2.2, which the MCP Registry
+    entry io.github.CSOAI-ORG/gspc 1.4.2 (published 2026-09-14) also names. The stdio package and the hosted
+    /mcp door are released independently.
+- language: python
+  registry: pypi
+  name: csoai-gspc
+  url: https://pypi.org/project/csoai-gspc/
+  metadata: https://pypi.org/pypi/csoai-gspc/json
+  source: https://github.com/CSOAI-ORG/councilof-ai/tree/master/scripts/spray/pypi/csoai-gspc — HTTP 404 on 2026-09-19
+  install: pip install "csoai-gspc[verify]"
+  official: true
+  kind: sdk + cli
+  version: 0.2.20260915
+  published: '2026-09-17'
+  versions_note: date-stamped versions (0.2.20260905 … 0.2.20260915); classifier Development Status 4 - Beta; Apache-2.0
+  author: CSOAI Ltd <nicholas@csoai.org>
+  cli: csoai-gspc (check | board | axis <name> | verify <sha256> | root | snapshot) — see cli/councilof-ai-cli.yml
+  library: 'from csoai_gspc import fetch_board, check_totals, get_axis, fetch_card, verify_card, pinned_key'
+  note: The verify extra pulls in cryptography>=42 for the Ed25519 check; without it verification returns UNCHECKABLE rather than passing silently.
+- language: python
+  registry: pypi
+  name: csoai
+  url: https://pypi.org/project/csoai/
+  metadata: https://pypi.org/pypi/csoai/json
+  install: pip install csoai
+  official: true
+  kind: cli + mcp-server + verifier
+  version: 0.2.2
+  published: '2026-08-20'
+  author: Council of AI (CSOAI LTD, UK 16939677)
+  homepage: https://councilof.ai
+  note: 'Summary: "Council of AI — signed, deterministic AI-governance measurement: CLI + MCP server + agent-callable verifier". Named in the site footer ("PyPI · csoai"). Command surface not documented on a public page this run; recorded from registry metadata only.'
+- language: python
+  registry: pypi
+  name: inspect-signed-receipt
+  url: https://pypi.org/project/inspect-signed-receipt/
+  metadata: https://pypi.org/pypi/inspect-signed-receipt/json
+  install: pip install inspect-signed-receipt
+  official: true
+  kind: library
+  version: 0.2.0
+  published: '2026-08-20'
+  author: CSOAI Ltd (Council of AI) <nicholas@csoai.org>
+  source: https://github.com/CSOAI-ORG/inspect-receipts (not probed)
+  homepage: https://csoai.org
+  note: 'Ed25519-signed measurement receipts for Inspect AI eval runs, offline-verifiable against the published did:web key.'
+not_first_party:
+- registry: pypi
+  name: proofof-ai-mcp
+  version: 1.0.9
+  published: '2026-06-13'
+  author: MEOK AI Labs <nicholas@meok.ai>
+  note: Named in the councilof.ai footer and hosted under github.com/CSOAI-ORG, but authored and homed as MEOK AI Labs (meok.ai). Same maintainer, different brand; not recorded as a CSOAI Ltd package.
+- registry: pypi
+  name: a2a-governance-bridge-mcp
+  version: 1.1.14
+  published: '2026-06-27'
+  author: MEOK AI Labs <nicholas@meok.ai>
+  note: Registered on the MCP Registry as io.github.CSOAI-ORG/a2a-governance-bridge-mcp with remote https://api.meok.ai/v1/a2a/governance-bridge. MEOK AI Labs product; excluded for the same reason.
+searched:
+- {registry: npm, query: 'https://registry.npmjs.org/csoai-gspc', status: 404}
+- {registry: pypi, query: 'https://pypi.org/pypi/csoai-gspc-mcp/json', status: 404}
+- {registry: github, query: 'https://api.github.com/orgs/CSOAI-ORG/repos', status: 404, note: 'https://api.github.com/users/CSOAI-ORG also 404; github.com/CSOAI-ORG renders GitHub''s "Page not found".'}
+- {registry: mcp-registry, query: 'https://registry.modelcontextprotocol.io/v0/servers?search=gspc', status: 200, result: 'io.github.CSOAI-ORG/gspc, 11 versions, latest 1.4.2 (2026-09-14)'}

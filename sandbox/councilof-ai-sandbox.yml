@@ -1,0 +1,48 @@
+generated: '2026-09-19'
+method: searched
+source: https://councilof.ai/llms.txt + https://councilof.ai/quickstart.json + mcp/councilof-ai-mcp-tools.json + live 402 responses 2026-09-19
+docs:
+- https://councilof.ai/quickstart/
+- https://councilof.ai/api-docs/
+probed:
+- {url: 'https://councilof.ai/api/free-door', status: 402, fetched: '2026-09-19', note: 'accepts[0].amount "0" — the zero-priced live door that "settles, charges nothing; proves the rail".'}
+- {url: 'https://councilof.ai/api/request-attestation?subject=apievangelist-probe', status: 402, fetched: '2026-09-19', note: 'Body carries csoai.preview {signed_cards_on_file: 0, cards: [], free_preview: …} — the free preview delivered inside the challenge.'}
+- {url: 'https://councilof.ai/api/sandbox', status: 'declared 503 (QUARANTINED_PRE_RELEASE) in the OpenAPI; not exercised', fetched: '2026-09-19'}
+summary: >-
+  There is no separate test environment and no test-mode key: production is the sandbox, and every free read is
+  already production data. What the provider publishes instead is a rehearsal path for the one thing that
+  costs money — an x402 purchase: (1) every paid door answers a free 402 challenge that itself carries a free
+  preview of the deliverable; (2) preview=true / omitting bundle=1 returns an unsigned free version of the
+  artefact; (3) GET /api/free-door is a real x402 route priced at zero so a wallet can settle end-to-end and
+  charge nothing. The dedicated /api/sandbox endpoint is declared retired ("sandbox — retired until its response
+  can be derived from current evidence"), and the provider states that its own wallets' payments are recorded
+  as self-tests and never counted as buyers.
+test_vs_live:
+  separate_environment: false
+  key_prefixes: not applicable — no keys are issued
+  test_network: none — x402 settles on Base MAINNET (eip155:8453); the zero-amount door is the rehearsal, not a testnet
+  note: One host, no credentials. Keyless reads are live data.
+dry_run:
+  surfaces:
+  - operation: x402_free_door (GET /api/free-door)
+    cost: '0 USDC — a live 402 route whose accepts[].amount is "0"'
+    behaviour: '"Payable and priced at zero — it settles, and charges nothing. It belongs in resources rather than quarantined because it is a live 402 route" (x402.json). Indexed in the x402 Bazaar (PayAI).'
+  - operation: any paid door without payment (x402_request_attestation, x402_proof, x402_evidence_bundle, x402_eunomia_data, x402_rwa_evidence, x402_wrapper, x402_art50_marking_evidence, x402_feeds_provider_diff, x402_receipts_batch)
+    cost: free
+    behaviour: 'HTTP 402 with accepts[] (the only place an amount is published), a server-signed JWS offer, and a csoai.preview / csoai.free_preview block naming what the free path returns.'
+  - operation: preview=true (MCP art50_marking_evidence, rwa_evidence, receipts_batch; REST equivalents)
+    cost: free
+    behaviour: '"true = free unsigned measurement (no card sha, no signature)" / "free unsigned state" / "free: count, span, roots and batch sha256 without the leaves".'
+  - operation: omit bundle=1 (x402_proof, x402_evidence_bundle)
+    cost: free
+    behaviour: 'llms.txt: "Free preview: omit bundle=1 or add preview=1 as the 402 body documents."'
+self_test_accounting:
+  statement: '"Payments from the operator''s own wallets are recorded as self-tests and never counted as buyers or revenue. Authoritative flag: settled_usdc.excludes_self=true on /api/revenue." (quickstart.json)'
+fixtures:
+  published_test_values: none — the provider publishes no test cards, test wallets or fixture tokens; do not invent any
+  offline_verifiers:
+  - {url: 'https://councilof.ai/verifier/card-v0-verify.mjs', status: 200, note: 'zero-dependency card-v0 verifier; exit VALID 0 / INVALID 1 / UNCHECKABLE 2'}
+  - {url: 'https://councilof.ai/signed/verify-card.mjs', status: 200}
+  - {url: 'https://councilof.ai/signed/HOW-TO-VERIFY.md', status: 200, note: 'the verification rule, including the CPython float-rendering caveat that makes naive JS/Go verifiers report false failures'}
+retired:
+- {operation: get__api_sandbox / post__api_sandbox, lifecycle: QUARANTINED_PRE_RELEASE, declared_response: 503, note: '"retired until its response can be derived from current evidence" — no evidence is manufactured.'}

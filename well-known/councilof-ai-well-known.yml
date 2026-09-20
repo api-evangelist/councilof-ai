@@ -1,0 +1,187 @@
+generated: '2026-09-19'
+method: probed
+source: >-
+  Live GET probes of the named /.well-known/* paths on councilof.ai, www.councilof.ai and csoai.org on
+  2026-09-19 (UTC 2026-09-20 00:1x). Every row below is a request that was issued; every status is the one
+  returned. The MCP server host (https://councilof.ai/mcp) and the A2A host are the apex, so the RFC 9728
+  probe on the MCP host is the apex row.
+summary:
+  hosts_probed: 3
+  paths_probed: 27
+  documents_served: 13
+  note: >-
+    A dense, real well-known surface. councilof.ai serves an A2A agent card (application/a2a+json, on both the
+    canonical and the legacy path), an RFC 9116 security.txt with Contact/Expires/Canonical/Policy, an RFC 9727
+    API catalog (application/linkset+json; profile RFC 9727) that links the OpenAPI, the MCP server card, the
+    agent card and the x402 catalog, a /.well-known/mcp.json server manifest plus /.well-known/mcp/server-card.json,
+    an x402 v2 discovery index and a hand-authored RFC 9943 SCITT discovery profile that states
+    implementation_status PLANNED. No OAuth 2.0 / OIDC discovery and no RFC 9728 protected-resource metadata
+    on any host — the MCP server and A2A endpoint are anonymous, and the paid tools are gated by x402 payment
+    rather than by an authorization server. csoai.org (the company's second domain, did:web:csoai.org) serves
+    the did.json key document the cards are verified against, its own security.txt, an ai-plugin.json, an
+    api-catalog (served as application/octet-stream) and an older, different agent card.
+  pointer_basis: >-
+    WellKnown pointer emitted on the strength of 13 served documents; SecurityTxt pointer emitted because
+    /.well-known/security.txt is a real RFC 9116 document on two hosts.
+  false_positive_watch: >-
+    Unknown /.well-known/* and other non-API paths on councilof.ai return HTTP 404 with a 13,951-byte HTML
+    page, so a 200 here is a served document, not a catch-all. The site's own correction ledger
+    (C-2026-0917-02) records that until 17 September 2026 every URL answered 403 to non-browser clients
+    (Cloudflare Browser Integrity Check); re-probed with python-requests and default curl user agents on
+    2026-09-20, both now receive 200.
+hosts:
+- host: councilof.ai
+  role: Website, OpenAPI servers[] host, MCP server host (/mcp), A2A JSON-RPC host (/api/a2a)
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/a2a+json
+    bytes: 13018
+    file: ../a2a/councilof-ai-agent-card.json
+    standard: A2A Agent Card (v1.0, supportedInterfaces)
+    note: Saved verbatim under a2a/ and graded in a2a/councilof-ai-a2a.yml (conformant).
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    bytes: 13018
+    file: ../a2a/councilof-ai-agent-card.json
+    note: Legacy pre-0.3 path; byte-identical to agent-card.json.
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/plain
+    bytes: 192
+    file: councilof-ai-security.txt
+    standard: RFC 9116
+    fields: {Contact: 'mailto:nicholas@csoai.org', Expires: '2027-08-19T00:00:00Z', Preferred-Languages: en, Canonical: 'https://councilof.ai/.well-known/security.txt', Policy: 'https://councilof.ai/firewall-charter'}
+    note: The Policy URL is the "Measurement/Remediation Firewall Charter" (an auditor-independence commitment), not a vulnerability-disclosure policy; the Contact channel is real.
+  - path: /.well-known/api-catalog
+    status: 200
+    content_type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+    bytes: 897
+    file: councilof-ai-api-catalog.json
+    standard: RFC 9727 (api-catalog linkset)
+    note: Anchors /api/gspc (service-desc https://councilof.ai/api/openapi.json), /mcp (service-desc /.well-known/mcp/server-card.json), /api/a2a (service-desc the agent card, application/a2a+json) and /api/x402 (service-desc https://councilof.ai/openapi.json, service-meta /.well-known/x402.json).
+  - path: /.well-known/mcp.json
+    status: 200
+    content_type: application/json
+    bytes: 2358
+    file: councilof-ai-mcp.json
+    note: Provider MCP manifest (schema_version 2026-07-28); names the remote URL https://councilof.ai/mcp, fallback https://csoai.org/mcp, stdio "npx -y csoai-gspc-mcp@0.2.1", registry io.github.CSOAI-ORG/gspc, 13 tools (9 free, 4 x402-metered), and explicitly marks a dead worker URL as "not a door".
+  - path: /.well-known/mcp/server-card.json
+    status: 200
+    content_type: application/json
+    bytes: 2658
+    file: councilof-ai-mcp-server-card.json
+    note: MCP server card (schema_version 2024-11-05); provider CSOAI Ltd, company_number 16939677, jurisdiction GB; authentication.required false; license CC-BY-4.0; DOI 10.5281/zenodo.21991104.
+  - path: /.well-known/x402.json
+    status: 200
+    content_type: application/json
+    bytes: 15072
+    file: councilof-ai-x402.json
+    standard: x402 v2 discovery index (provider schema csoai.x402/0.2)
+    note: mode live, network eip155:8453 (Base), asset USDC 0x8335…2913, payTo 0x2126…ae31; resources[] of ten GET doors with accepts[]; Offer & Receipt extension declared (jws/EdDSA, kid did:web:csoai.org#board-attestation-1).
+  - path: /.well-known/scitt.json
+    status: 200
+    content_type: application/json
+    bytes: 3132
+    file: councilof-ai-scitt.json
+    standard: RFC 9943 SCITT discovery profile (hand-authored)
+    note: implementation_status PLANNED; transparency_service NOT_IMPLEMENTED; statements []. A declared intention, not a served SCITT surface.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    note: This host is also the MCP resource server (https://councilof.ai/mcp); no RFC 9728 metadata is served for it. The server card states authentication.required false.
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/asyncapi.json
+    status: 404
+  - path: /.well-known/sbom
+    status: 404
+  - path: /.well-known/skills
+    status: 404
+- host: www.councilof.ai
+  role: Alias of the apex; serves identical bytes (no redirect)
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/a2a+json
+    bytes: 13018
+    file: ../a2a/councilof-ai-agent-card.json
+    note: Identical to the apex document.
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    bytes: 13018
+    file: ../a2a/councilof-ai-agent-card.json
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/plain
+    bytes: 192
+    file: councilof-ai-security.txt
+  - path: /.well-known/api-catalog
+    status: 200
+    content_type: application/linkset+json
+    bytes: 897
+    file: councilof-ai-api-catalog.json
+  - path: /.well-known/mcp.json
+    status: 200
+    content_type: application/json
+    bytes: 2358
+    file: councilof-ai-mcp.json
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: csoai.org
+  role: The company's second domain (did:web:csoai.org); MCP fallback host named in mcp.json; serves the same OpenAPI and /mcp GET document byte-for-byte
+  documents:
+  - path: /.well-known/did.json
+    status: 200
+    content_type: application/json
+    bytes: 5116
+    file: councilof-ai-csoai-org-did.json
+    standard: W3C DID Core (did:web) with JsonWebKey2020 Ed25519 verification methods
+    note: The key document every signed card, board and x402 offer/receipt is verified against (site-release-1, estate-chain-1, board-attestation-1, card-attestation-1, …).
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/plain
+    bytes: 150
+    file: councilof-ai-csoai-org-security.txt
+    standard: RFC 9116
+    fields: {Contact: 'mailto:nicholas@csoai.org', Expires: '2027-02-01T00:00:00Z', Preferred-Languages: 'en-GB, en', Canonical: 'https://csoai.org/.well-known/security.txt'}
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    bytes: 1930
+    file: ../a2a/councilof-ai-csoai-org-agent-card.json
+    note: A different, older card (version 0.1.0, two skills, Ed25519 signatures[]); see a2a/councilof-ai-a2a.yml corroborating_probes.
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    bytes: 1892
+    note: Variant of the older card without a url field; not saved separately.
+  - path: /.well-known/api-catalog
+    status: 200
+    content_type: application/octet-stream
+    bytes: 1275
+    file: councilof-ai-csoai-org-api-catalog.json
+    note: An RFC 9727-shaped linkset served with the wrong media type; it links https://csoai.org/openapi.json, https://csoai.org/API_DOCUMENTATION.md (404 on probe), the agent.json, mcp.json and did.json, and a worker URL the councilof.ai manifest calls dead.
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    content_type: application/json
+    bytes: 972
+    file: councilof-ai-csoai-org-ai-plugin.json
+    note: Legacy OpenAI plugin manifest (schema_version v1, auth none) pointing at https://www.csoai.org/api/openapi.json; www.csoai.org did not resolve on probe (curl exit, status 000).
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404

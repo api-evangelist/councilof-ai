@@ -1,0 +1,156 @@
+generated: '2026-09-19'
+method: probed
+source: https://councilof.ai/.well-known/agent-card.json
+card:
+  file: a2a/councilof-ai-agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: councilof.ai
+  note: >-
+    Served from the apex host, which is also the OpenAPI servers[] host (https://councilof.ai), the MCP host
+    (https://councilof.ai/mcp) and the A2A JSON-RPC host (https://councilof.ai/api/a2a). www.councilof.ai serves
+    the identical bytes. The legacy /.well-known/agent.json path also answers 200 with the identical document
+    (13,018 bytes, application/json) rather than a 404, so both paths are live; the canonical one is recorded
+    here. The site's generic 404 for unknown /api/* paths is a real JSON 404 ({"error":"not_found", ...}),
+    and unknown non-API paths return a 13,951-byte HTML 404 page with HTTP 404, so the 200 on the card is a
+    served document and not an SPA catch-all. Content-Type is application/a2a+json, the A2A media type.
+    Ownership: provider.organization is "CSOAI Ltd" with provider.url https://councilof.ai; the OpenAPI on the
+    same host names info.contact "CSOAI Ltd" <nicholas@csoai.org>; security.txt, the MCP server card
+    (company_number 16939677, jurisdiction GB) and the Terms of Service (CSOAI Ltd, Companies House 16939677)
+    all agree. csoai.org is the same company's second domain (did:web:csoai.org signs the cards).
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://councilof.ai/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/a2a+json
+  body_bytes: 13018
+  body_parses_as: >-
+    JSON object with A2A v1.0 AgentCard shape (name, description, version, provider, supportedInterfaces[]
+    with url/protocolBinding/protocolVersion, documentationUrl, iconUrl, capabilities object with extensions[],
+    defaultInputModes, defaultOutputModes, skills[] of 8) plus provider extensions catalogUrl, doi and
+    explicitly_not.
+  corroborating_probes:
+  - url: https://councilof.ai/.well-known/agent.json
+    http_status: 200
+    note: Legacy path; byte-identical to agent-card.json (cmp). Content-Type application/json.
+  - url: https://www.councilof.ai/.well-known/agent-card.json
+    http_status: 200
+    note: Identical document on the www host.
+  - url: https://councilof.ai/api/a2a
+    method: GET
+    http_status: 200
+    note: >-
+      A self-describing JSON document for the JSON-RPC endpoint: binding JSONRPC, protocolVersion 1.0, the
+      eleven v1.0 method names with the error each returns, a version rule (send A2A-Version: 1.0; 0.3 method
+      names such as message/send get VersionNotSupportedError -32009) and a worked SendMessage example.
+  - url: https://councilof.ai/api/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"GetTask","params":{"id":"apievangelist-nonexistent-probe"}}'
+    headers: {A2A-Version: '1.0'}
+    http_status: 200
+    response: '{"jsonrpc":"2.0","id":1,"error":{"code":-32001,"message":"task not found: this agent keeps no task store; every SendMessage answers with a Message","data":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"TASK_NOT_FOUND","domain":"a2a-protocol.org", ...}]}}'
+    note: >-
+      A real A2A JSON-RPC responder: TaskNotFoundError (-32001) with a google.rpc.ErrorInfo detail, which is
+      the A2A v1.0 error shape. No message was sent and nothing was purchased.
+  - url: https://councilof.ai/api/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tasks/get","params":{"id":"x"}}'
+    http_status: 200
+    response: '{"jsonrpc":"2.0","id":1,"error":{"code":-32009,"message":"tasks/get is a 0.3 method name; send A2A-Version: 1.0 and the v1.0 name (for example SendMessage)", ...}}'
+    note: The 0.3-era method names are refused with VersionNotSupportedError (-32009), confirming a v1.0-only surface.
+  - url: https://csoai.org/.well-known/agent-card.json
+    http_status: 200
+    note: >-
+      The company's second domain serves a DIFFERENT, older card (name "Council of AI Measurement Agent",
+      version 0.1.0, url https://csoai.org, two skills, no protocolVersion anywhere, Ed25519 signatures[] under
+      did:web:csoai.org#site-release-1). Saved as a2a/councilof-ai-csoai-org-agent-card.json for the record;
+      it is not the primary card and is not graded here beyond the note that it would grade flavored (no
+      protocolVersion, no interface/url on the agent.json variant).
+  - url: https://www.a2aregistry.org/api/agents?search=Council%20of%20AI
+    http_status: 200
+    note: >-
+      Listed on a2aregistry.org as "Council of AI — Measurement Agent" (author CSOAI, wellKnownURI
+      https://councilof.ai/.well-known/agent-card.json, url https://councilof.ai/api/a2a, version 1.1.0,
+      protocolVersion 1.0, conformance true, created 2026-08-19, is_healthy true at 2026-09-20T00:24Z). The
+      registry listing was the lead that put this provider in the harvest backlog; the card above was fetched
+      directly from the provider's host.
+agent_card:
+  name: Council of AI — Measurement Agent
+  description: >-
+    Independent AI-governance MEASUREMENT body. Publishes the living GSPC board (Governance · Safety ·
+    Provenance · Continuity) with frozen item banks, published scoring code, and an Ed25519-signed board.
+    Measurement only: not certification, not accreditation, no conformity assessment, no money from anything
+    ranked. A2A v1.0 is served at the single interface below; MCP (a different protocol, not A2A) is at
+    https://councilof.ai/mcp.
+  version: 1.1.0
+  protocol_version: '1.0'
+  protocol_version_location: supportedInterfaces[0].protocolVersion (the A2A v1.0 card shape; there is no top-level protocolVersion, url or preferredTransport field in v1.0)
+  interfaces:
+  - {url: 'https://councilof.ai/api/a2a', protocolBinding: JSONRPC, protocolVersion: '1.0'}
+  provider:
+    organization: CSOAI Ltd
+    url: https://councilof.ai
+  documentation_url: https://councilof.ai/llms.txt
+  icon_url: https://councilof.ai/og-image.png
+  capabilities:
+    streaming: false
+    push_notifications: false
+    extended_agent_card: false
+    extensions:
+    - uri: https://councilof.ai/a2a/extensions/signed-receipts/v1/
+      required: false
+      note: Provider-authored draft extension (Ed25519 task-outcome receipts, did:web key trust); the card itself says it is declared but NOT yet emitted.
+    - uri: https://councilof.ai/.well-known/x402.json
+      required: false
+      note: x402 discovery index for the agent pay rail; free door amount 0 at /api/free-door; settlement on Base mainnet.
+    - uri: https://github.com/x402-foundation/x402/blob/69652a69798f0b08f95bef33318896e36e210f7e/specs/extensions/extension-offer-and-receipt.md
+      required: false
+      note: x402 Offer & Receipt extension (JWS/EdDSA, kid did:web:csoai.org#board-attestation-1) — conditionally emitted.
+  default_input_modes: [text/plain, application/json]
+  default_output_modes: [text/plain, application/json]
+  security_schemes: null
+  security: null
+  skill_count: 8
+  skills:
+  - {id: gspc-board, name: Signed GSPC Board}
+  - {id: east-west-crosswalk, name: East-West crosswalk & cross-border card}
+  - {id: measured-badge, name: Measured Badge}
+  - {id: benchmark-quality-register, name: Benchmark-quality register}
+  - {id: article50-detect, name: Article 50 provenance detection (free)}
+  - {id: eu-ai-act-screen, name: EU AI Act screening helper (deterministic, text-only)}
+  - {id: x402-discovery, name: x402 discovery + free door}
+  - {id: estate-index, name: Estate index (census, not evidence)}
+  provider_extensions:
+    catalogUrl: https://councilof.ai/interop/surface-catalog.json
+    doi: 10.5281/zenodo.21991104
+    explicitly_not: [certification, accreditation, conformity-assessment, legal-determination, enforcement]
+grade:
+  against: A2A 1.0.0
+  result: conformant
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    protocol_version_note: >-
+      Present as supportedInterfaces[0].protocolVersion = "1.0", which is where the A2A v1.0 AgentCard carries
+      it (v1.0 replaced the 0.3 top-level url/protocolVersion/preferredTransport trio with supportedInterfaces[]).
+      A checker that only reads a top-level protocolVersion will not find one on this card.
+    skills_is_array: true
+  optional_checks:
+    preferred_transport: false
+    preferred_transport_note: Not a v1.0 field; the transport is protocolBinding JSONRPC on the interface entry.
+    default_input_modes: true
+    default_output_modes: true
+    documentation_url: true
+    icon_url: true
+    provider: true
+    security_schemes: false
+  deviations:
+  - No securitySchemes/security declared — consistent with an anonymous JSON-RPC endpoint; paid skills are gated by x402 payment, not by authentication.
+  - Non-standard top-level fields catalogUrl, doi and explicitly_not (provider extensions; harmless).
+  - The A2A interface keeps no task store, so GetTask/CancelTask always return TaskNotFoundError and ListTasks/SubscribeToTask/GetExtendedAgentCard return UnsupportedOperationError, as the GET /api/a2a document states. Every SendMessage answers with a Message.
+  - The declared signed-receipts extension is self-described as not yet emitted.
+notes: >-
+  Streaming, push notifications and the extended card are all declared false and the endpoint's own method
+  table agrees. Skills route to fixed free handlers; the paid artefacts live on the x402 HTTP doors and the
+  MCP paid tools, not on A2A.

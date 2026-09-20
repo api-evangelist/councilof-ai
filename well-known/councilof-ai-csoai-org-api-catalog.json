@@ -1,0 +1,33 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://csoai.org/",
+      "service-desc": [
+        { "href": "https://csoai.org/openapi.json", "type": "application/vnd.oai.openapi+json" },
+        { "href": "https://csoai.org/API_DOCUMENTATION.md", "type": "text/markdown" }
+      ],
+      "service-meta": [
+        { "href": "https://csoai.org/.well-known/agent.json", "type": "application/json" },
+        { "href": "https://csoai.org/agent-card.json", "type": "application/json" },
+        { "href": "https://csoai.org/.well-known/mcp.json", "type": "application/json" },
+        { "href": "https://csoai.org/.well-known/did.json", "type": "application/did+ld+json" }
+      ],
+      "status": [
+        { "href": "https://csoai.org/api/health", "type": "application/json" }
+      ],
+      "documentation": [
+        { "href": "https://csoai.org/", "type": "text/html" },
+        { "href": "https://councilof.ai/verify", "type": "text/html" }
+      ]
+    },
+    {
+      "anchor": "https://csoai-gspc-mcp.nicholastempleman.workers.dev/mcp",
+      "service-desc": [
+        { "href": "https://csoai.org/.well-known/mcp.json", "type": "application/json" }
+      ],
+      "documentation": [
+        { "href": "https://github.com/CSOAI-ORG", "type": "text/html" }
+      ]
+    }
+  ]
+}

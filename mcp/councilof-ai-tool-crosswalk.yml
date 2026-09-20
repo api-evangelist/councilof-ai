@@ -1,0 +1,670 @@
+generated: '2026-09-19'
+method: derived
+source: Derived by binding the LIVE tools/list of https://councilof.ai/mcp (13 tools with inputSchema, saved verbatim
+  in mcp/councilof-ai-mcp-tools.json) to the operations of openapi/councilof-ai-public-api-openapi.yml (141 operations,
+  verbatim source in openapi/_original/) and openapi/councilof-ai-gspc-read-surfaces-openapi.yml (7 operations,
+  the /api/openapi.json the RFC 9727 api-catalog names). Every tool description names the HTTP surface it wraps,
+  so most bindings are stated by the provider rather than inferred.
+purpose: 'Make each MCP tool a first-class discovery unit bound to the REST operation that backs it. The three surfaces
+  (REST OpenAPI, MCP, A2A) are overlapping projections of one measurement core: MCP exposes 13 tools over a 141-operation
+  REST contract, A2A exposes 8 skills routed to fixed free handlers, and three MCP tools read static signed artefacts
+  that no OpenAPI operation declares.'
+surfaces:
+  rest_openapi: openapi/councilof-ai-public-api-openapi.yml (141 operations, 112 paths, servers[] https://councilof.ai)
+    + openapi/councilof-ai-gspc-read-surfaces-openapi.yml (7 read operations)
+  mcp: https://councilof.ai/mcp — Streamable HTTP, anonymous initialize + tools/list (probed 2026-09-19, 200, protocolVersion
+    2025-06-18, serverInfo csoai-gspc-mcp 1.4.2); stdio twin npm csoai-gspc-mcp 0.2.2
+  a2a: https://councilof.ai/api/a2a — A2A v1.0 JSON-RPC, 8 skills (see a2a/councilof-ai-a2a.yml); not a tool surface,
+    listed for completeness
+  gated: 'None of the three surfaces requires authentication. Four MCP tools and ten REST doors are x402 PAYMENT-gated:
+    called without x_payment / X-PAYMENT they return the HTTP 402 challenge (accepts[] with the amount), which is
+    itself a free, observable response.'
+crosswalk:
+- tool: board_totals
+  category: board
+  rest:
+  - get__api_gspc
+  also:
+  - getBoard (gspc-read-surfaces spec)
+  binding: rest
+  confidence: high
+  note: Tool description names GET https://councilof.ai/api/gspc; returns totals.axes / totals.measured_axes as
+    two labelled numbers.
+- tool: get_axis
+  category: board
+  rest:
+  - get__api_gspc
+  also:
+  - getBoard
+  binding: rest
+  confidence: high
+  note: 'Same endpoint with the documented ?axis=<name> query (api-docs: "GET /api/gspc?axis=<name> One axis (404
+    lists known axis)"). inputSchema: axis (string, required).'
+- tool: verify_card
+  category: verification
+  rest:
+  - get__api_verify-card
+  also:
+  - getVerifyRecipe
+  - getDid
+  binding: composite
+  confidence: medium
+  note: 'The tool recomputes the card id and checks the Ed25519 signature against the pinned key from https://csoai.org/.well-known/did.json
+    (getDid) under the rule in /signed/HOW-TO-VERIFY.md (getVerifyRecipe); GET /api/verify-card is the hosted equivalent.
+    inputSchema: card (object | JSON string | URL, required).'
+- tool: list_cards
+  category: cards
+  rest:
+  - get__api_cards
+  also:
+  - getCardIndex
+  binding: rest
+  confidence: high
+  note: 'Reads /signed/card_index.json (getCardIndex) and reports the /api/cards count beside it, never reconciled.
+    inputSchema: axis (string), limit (integer, default 10).'
+- tool: get_root
+  category: public-root
+  rest:
+  - get__api_root
+  also:
+  - getRoot (/root.json)
+  binding: rest
+  confidence: medium
+  note: Tool description names GET https://councilof.ai/root.json (getRoot in the read-surfaces spec). /api/root
+    is declared in the public spec with no description; bound with medium confidence.
+- tool: verify_inclusion
+  category: public-root
+  rest:
+  - x402_proof
+  also:
+  - getProof
+  binding: rest
+  confidence: high
+  note: 'GET /api/proof?sha=<64hex> is the free inclusion check; the same path with ?bundle=1 is the x402-metered
+    proof bundle. inputSchema: sha256 (string, required).'
+- tool: commission_card
+  category: x402-paid
+  rest:
+  - x402_request_attestation
+  binding: rest
+  confidence: high
+  paid: true
+  note: 'Tool description names https://councilof.ai/api/request-attestation. Without x_payment the tool returns
+    the 402 challenge (observed: accepts[0].amount 10000 atomic USDC = 0.01 USDC under campaign csoai-launch-30d-20260911,
+    normal 20000). inputSchema: subject (required), axis, x_payment.'
+- tool: art50_marking_evidence
+  category: x402-paid
+  rest:
+  - x402_art50_marking_evidence
+  binding: rest
+  confidence: high
+  paid: true
+  note: 'GET /api/art50/marking-evidence. inputSchema: url | bytes_b64 | manifest_b64 (C2PA manifest store), preview
+    (boolean, free unsigned), x_payment.'
+- tool: rwa_evidence
+  category: x402-paid
+  rest:
+  - x402_rwa_evidence
+  binding: rest
+  confidence: high
+  paid: true
+  note: 'GET /api/rwa/evidence?asset=. inputSchema: asset (required), preview, x_payment.'
+- tool: receipts_batch
+  category: x402-paid
+  rest:
+  - x402_receipts_batch
+  binding: rest
+  confidence: high
+  paid: true
+  note: 'GET /api/receipts/batch?from=&to=. inputSchema: from (ISO-8601, required), to, preview, x_payment.'
+mcp_only:
+- tool: get_card
+  reason: Reads https://councilof.ai/cards/{sha16}.json (public-root card-v0 leaves). Neither OpenAPI declares that
+    path; the read-surfaces spec declares /signed/cards/{id}.json (getCard), which is a different corpus (signed
+    measurement cards). Not bound to avoid conflating the two card stores the provider explicitly keeps apart.
+- tool: x402_trust
+  reason: Reads the static snapshot https://councilof.ai/interop/x402-trust/latest.json (probed 200). No OpenAPI
+    operation; GET /api/x402-trust-seller is a different, seller-side surface.
+- tool: mcp_trust
+  reason: Reads the static snapshot https://councilof.ai/interop/mcp-trust/latest.json. No OpenAPI operation.
+rest_only_count: 132
+rest_only_note: Operations in openapi/councilof-ai-public-api-openapi.yml with no MCP tool. 92 of the 141 operations
+  declare security [] (free, anonymous); 19 answer only 503 (retired / quarantined, x-csoai-lifecycle) and 13 only
+  501 (NOT_IMPLEMENTED capability-state), so the callable REST-only surface is smaller than the count suggests.
+rest_only:
+- operationId: get__api_a2a
+  method: GET
+  path: /api/a2a
+  lifecycle: null
+- operationId: post__api_a2a
+  method: POST
+  path: /api/a2a
+  lifecycle: null
+- operationId: get__api_action-jobs
+  method: GET
+  path: /api/action-jobs
+  lifecycle: null
+- operationId: patch__api_action-jobs
+  method: PATCH
+  path: /api/action-jobs
+  lifecycle: null
+- operationId: post__api_action-jobs
+  method: POST
+  path: /api/action-jobs
+  lifecycle: null
+- operationId: get__api_agentic-fix
+  method: GET
+  path: /api/agentic-fix
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: post__api_agentic-fix
+  method: POST
+  path: /api/agentic-fix
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_article50
+  method: GET
+  path: /api/article50
+  lifecycle: null
+- operationId: post__api_article50
+  method: POST
+  path: /api/article50
+  lifecycle: null
+- operationId: get__api_assess
+  method: GET
+  path: /api/assess
+  lifecycle: null
+- operationId: post__api_assess
+  method: POST
+  path: /api/assess
+  lifecycle: null
+- operationId: get__api_atlas
+  method: GET
+  path: /api/atlas
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: post__api_atlas
+  method: POST
+  path: /api/atlas
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_axis-register
+  method: GET
+  path: /api/axis-register
+  lifecycle: null
+- operationId: get__api_badge
+  method: GET
+  path: /api/badge
+  lifecycle: null
+- operationId: get__api_bank-complete
+  method: GET
+  path: /api/bank-complete
+  lifecycle: null
+- operationId: get__api_benchmark-quality
+  method: GET
+  path: /api/benchmark-quality
+  lifecycle: null
+- operationId: post__api_board-sign
+  method: POST
+  path: /api/board-sign
+  lifecycle: null
+- operationId: get__api_body-state
+  method: GET
+  path: /api/body-state
+  lifecycle: null
+- operationId: get__api_certificate-schema
+  method: GET
+  path: /api/certificate-schema
+  lifecycle: null
+- operationId: get__api_challenge
+  method: GET
+  path: /api/challenge
+  lifecycle: null
+- operationId: post__api_challenge
+  method: POST
+  path: /api/challenge
+  lifecycle: null
+- operationId: post__api_chat
+  method: POST
+  path: /api/chat
+  lifecycle: null
+- operationId: post__api_checkout
+  method: POST
+  path: /api/checkout
+  lifecycle: null
+- operationId: get__api_clarity
+  method: GET
+  path: /api/clarity
+  lifecycle: null
+- operationId: get__api_commission-queue
+  method: GET
+  path: /api/commission-queue
+  lifecycle: null
+- operationId: get__api_commissions
+  method: GET
+  path: /api/commissions
+  lifecycle: null
+- operationId: get__api_comparison
+  method: GET
+  path: /api/comparison
+  lifecycle: null
+- operationId: get__api_compute
+  method: GET
+  path: /api/compute
+  lifecycle: null
+- operationId: post__api_contact
+  method: POST
+  path: /api/contact
+  lifecycle: null
+- operationId: get__api_corpus-watch
+  method: GET
+  path: /api/corpus-watch
+  lifecycle: NOT_IMPLEMENTED
+- operationId: post__api_corpus-watch
+  method: POST
+  path: /api/corpus-watch
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_corrections
+  method: GET
+  path: /api/corrections
+  lifecycle: null
+- operationId: get__api_counters
+  method: GET
+  path: /api/counters
+  lifecycle: null
+- operationId: get__api_coverage
+  method: GET
+  path: /api/coverage
+  lifecycle: null
+- operationId: get__api_coverage-truth
+  method: GET
+  path: /api/coverage-truth
+  lifecycle: null
+- operationId: get__api_cross
+  method: GET
+  path: /api/cross
+  lifecycle: null
+- operationId: get__api_dashboard
+  method: GET
+  path: /api/dashboard
+  lifecycle: NOT_IMPLEMENTED
+- operationId: post__api_dashboard
+  method: POST
+  path: /api/dashboard
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_decide
+  method: GET
+  path: /api/decide
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_detect
+  method: GET
+  path: /api/detect
+  lifecycle: null
+- operationId: post__api_detect
+  method: POST
+  path: /api/detect
+  lifecycle: null
+- operationId: get__api_detector-interop
+  method: GET
+  path: /api/detector-interop
+  lifecycle: null
+- operationId: get__api_distribution-ledger
+  method: GET
+  path: /api/distribution-ledger
+  lifecycle: null
+- operationId: get__api_east-west-bench
+  method: GET
+  path: /api/east-west-bench
+  lifecycle: null
+- operationId: get__api_embed
+  method: GET
+  path: /api/embed
+  lifecycle: null
+- operationId: get__api_eu-ai-act
+  method: GET
+  path: /api/eu-ai-act
+  lifecycle: null
+- operationId: x402_eunomia_data
+  method: GET
+  path: /api/eunomia-data
+  lifecycle: null
+- operationId: x402_evidence_bundle
+  method: GET
+  path: /api/evidence-bundle
+  lifecycle: null
+- operationId: post__api_evidence-intake
+  method: POST
+  path: /api/evidence-intake
+  lifecycle: null
+- operationId: get__api_evidence-pack
+  method: GET
+  path: /api/evidence-pack
+  lifecycle: null
+- operationId: get__api_fabric
+  method: GET
+  path: /api/fabric
+  lifecycle: null
+- operationId: get__api_feed.xml
+  method: GET
+  path: /api/feed.xml
+  lifecycle: null
+- operationId: x402_feeds_provider_diff
+  method: GET
+  path: /api/feeds/provider-diff
+  lifecycle: null
+- operationId: get__api_files
+  method: GET
+  path: /api/files
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: post__api_files
+  method: POST
+  path: /api/files
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_findings
+  method: GET
+  path: /api/findings
+  lifecycle: null
+- operationId: get__api_fines
+  method: GET
+  path: /api/fines
+  lifecycle: null
+- operationId: x402_free_door
+  method: GET
+  path: /api/free-door
+  lifecycle: null
+- operationId: get__api_fulfill
+  method: GET
+  path: /api/fulfill
+  lifecycle: DOOR_CLOSED
+- operationId: get__api_growth-loops
+  method: GET
+  path: /api/growth-loops
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_hf-spaces
+  method: GET
+  path: /api/hf-spaces
+  lifecycle: null
+- operationId: get__api_hub-cards
+  method: GET
+  path: /api/hub-cards
+  lifecycle: null
+- operationId: get__api_include
+  method: GET
+  path: /api/include
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_interop-bulk
+  method: GET
+  path: /api/interop-bulk
+  lifecycle: null
+- operationId: get__api_lead
+  method: GET
+  path: /api/lead
+  lifecycle: null
+- operationId: post__api_lead
+  method: POST
+  path: /api/lead
+  lifecycle: null
+- operationId: get__api_learn-loop
+  method: GET
+  path: /api/learn-loop
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: post__api_learn-loop
+  method: POST
+  path: /api/learn-loop
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_learning-scenarios
+  method: GET
+  path: /api/learning-scenarios
+  lifecycle: null
+- operationId: get__api_locale
+  method: GET
+  path: /api/locale
+  lifecycle: null
+- operationId: get__api_mcp
+  method: GET
+  path: /api/mcp
+  lifecycle: null
+- operationId: get__api_memory
+  method: GET
+  path: /api/memory
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: post__api_memory
+  method: POST
+  path: /api/memory
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_methodology
+  method: GET
+  path: /api/methodology
+  lifecycle: null
+- operationId: get__api_mint
+  method: GET
+  path: /api/mint
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_observability
+  method: GET
+  path: /api/observability
+  lifecycle: null
+- operationId: get__api_og
+  method: GET
+  path: /api/og
+  lifecycle: null
+- operationId: get__api_openapi.json
+  method: GET
+  path: /api/openapi.json
+  lifecycle: null
+- operationId: get__api_operator
+  method: GET
+  path: /api/operator
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: post__api_operator
+  method: POST
+  path: /api/operator
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_otel
+  method: GET
+  path: /api/otel
+  lifecycle: null
+- operationId: get__api_owasp-report
+  method: GET
+  path: /api/owasp-report
+  lifecycle: null
+- operationId: get__api_paddle-webhook
+  method: GET
+  path: /api/paddle-webhook
+  lifecycle: null
+- operationId: post__api_paddle-webhook
+  method: POST
+  path: /api/paddle-webhook
+  lifecycle: null
+- operationId: get__api_pqc
+  method: GET
+  path: /api/pqc
+  lifecycle: null
+- operationId: get__api_press.json
+  method: GET
+  path: /api/press.json
+  lifecycle: null
+- operationId: get__api_prod-readiness
+  method: GET
+  path: /api/prod-readiness
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_provider-canary
+  method: GET
+  path: /api/provider-canary
+  lifecycle: null
+- operationId: post__api_provider-canary
+  method: POST
+  path: /api/provider-canary
+  lifecycle: null
+- operationId: get__api_receipt-status
+  method: GET
+  path: /api/receipt-status
+  lifecycle: null
+- operationId: get__api_refund
+  method: GET
+  path: /api/refund
+  lifecycle: null
+- operationId: post__api_refund
+  method: POST
+  path: /api/refund
+  lifecycle: null
+- operationId: get__api_registers
+  method: GET
+  path: /api/registers
+  lifecycle: null
+- operationId: get__api_regulation
+  method: GET
+  path: /api/regulation
+  lifecycle: null
+- operationId: get__api_regulator-findings
+  method: GET
+  path: /api/regulator-findings
+  lifecycle: null
+- operationId: get__api_report
+  method: GET
+  path: /api/report
+  lifecycle: null
+- operationId: post__api_report
+  method: POST
+  path: /api/report
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_reported
+  method: GET
+  path: /api/reported
+  lifecycle: null
+- operationId: post__api_reported
+  method: POST
+  path: /api/reported
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_revenue
+  method: GET
+  path: /api/revenue
+  lifecycle: null
+- operationId: get__api_router
+  method: GET
+  path: /api/router
+  lifecycle: null
+- operationId: get__api_sandbox
+  method: GET
+  path: /api/sandbox
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: post__api_sandbox
+  method: POST
+  path: /api/sandbox
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_security
+  method: GET
+  path: /api/security
+  lifecycle: null
+- operationId: get__api_specialists
+  method: GET
+  path: /api/specialists
+  lifecycle: null
+- operationId: get__api_state
+  method: GET
+  path: /api/state
+  lifecycle: null
+- operationId: get__api_subscribe
+  method: GET
+  path: /api/subscribe
+  lifecycle: NOT_IMPLEMENTED
+- operationId: post__api_subscribe
+  method: POST
+  path: /api/subscribe
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_summary
+  method: GET
+  path: /api/summary
+  lifecycle: null
+- operationId: get__api_swift
+  method: GET
+  path: /api/swift
+  lifecycle: null
+- operationId: get__api_synthesis
+  method: GET
+  path: /api/synthesis
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_tools
+  method: GET
+  path: /api/tools
+  lifecycle: null
+- operationId: get__api_trace
+  method: GET
+  path: /api/trace
+  lifecycle: null
+- operationId: post__api_trace
+  method: POST
+  path: /api/trace
+  lifecycle: METHOD_NOT_ALLOWED
+- operationId: get__api_verify
+  method: GET
+  path: /api/verify
+  lifecycle: null
+- operationId: post__api_verify
+  method: POST
+  path: /api/verify
+  lifecycle: null
+- operationId: get__api_verify-batch
+  method: GET
+  path: /api/verify-batch
+  lifecycle: NOT_IMPLEMENTED
+- operationId: get__api_verify-tally
+  method: GET
+  path: /api/verify-tally
+  lifecycle: null
+- operationId: post__api_verify-tally
+  method: POST
+  path: /api/verify-tally
+  lifecycle: null
+- operationId: get__api_wave-dashboard
+  method: GET
+  path: /api/wave-dashboard
+  lifecycle: null
+- operationId: delete__api_webhooks
+  method: DELETE
+  path: /api/webhooks
+  lifecycle: null
+- operationId: get__api_webhooks
+  method: GET
+  path: /api/webhooks
+  lifecycle: null
+- operationId: post__api_webhooks
+  method: POST
+  path: /api/webhooks
+  lifecycle: null
+- operationId: get__api_witness
+  method: GET
+  path: /api/witness
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: post__api_witness
+  method: POST
+  path: /api/witness
+  lifecycle: QUARANTINED_PRE_RELEASE
+- operationId: get__api_worker
+  method: GET
+  path: /api/worker
+  lifecycle: null
+- operationId: x402_wrapper
+  method: GET
+  path: /api/wrapper
+  lifecycle: null
+- operationId: get__api_x402
+  method: GET
+  path: /api/x402
+  lifecycle: null
+- operationId: get__api_x402-trust-seller
+  method: GET
+  path: /api/x402-trust-seller
+  lifecycle: null
+- operationId: get__api_xrpl
+  method: GET
+  path: /api/xrpl
+  lifecycle: null
+- operationId: get__api_yield
+  method: GET
+  path: /api/yield
+  lifecycle: null
+coverage:
+  mcp_tools: 13
+  bound_to_rest: 10
+  mcp_only: 3
+  rest_operations: 141
+  rest_with_tool: 9
+  rest_only: 132
+  a2a_skills: 8

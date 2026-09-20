@@ -64,5 +64,16 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-CSOAI Ltd is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
-- https://councilof.ai/
+Council of AI is the public name of CSOAI Ltd (Companies House 16939677, London), an independent AI-governance
+**measurement** body — "measurement, not certification". It publishes the living GSPC board (Governance · Safety ·
+Provenance · Continuity) as a keyless, CORS-open JSON API, Ed25519-signed measurement cards verifiable offline
+against a `did:web:csoai.org` key document, a Merkle public root with inclusion proofs, and a dated corrections
+ledger. The same estate is exposed to agents three ways: a 141-operation OpenAPI 3.1 contract at
+https://councilof.ai/openapi.json, a remote MCP server at https://councilof.ai/mcp (13 tools, anonymous
+`tools/list`, npm stdio twin `csoai-gspc-mcp`), and an A2A v1.0 agent card at
+https://councilof.ai/.well-known/agent-card.json with eight skills. Ten REST doors and four MCP tools are metered
+by x402 (USDC on Base); the board, verification and every preview are free.
+
+- Website: https://councilof.ai/ (second domain: https://csoai.org/)
+- API docs: https://councilof.ai/api-docs/ · Agent quickstart: https://councilof.ai/quickstart/ · llms.txt: https://councilof.ai/llms.txt
+- Profile: [apis.yml](apis.yml) — OpenAPI under `openapi/`, MCP under `mcp/`, A2A under `a2a/`, well-known documents under `well-known/`.

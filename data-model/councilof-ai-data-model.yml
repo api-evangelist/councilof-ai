@@ -1,0 +1,80 @@
+generated: '2026-09-19'
+method: derived
+source: openapi/councilof-ai-public-api-openapi.yml (2 component schemas) + openapi/councilof-ai-gspc-read-surfaces-openapi.yml + live GET /api/gspc, /root.json, /signed/card_index.json, /api/corrections, /api/state and the MCP tool descriptions (2026-09-19)
+docs:
+- https://councilof.ai/llms.txt
+- https://councilof.ai/signed/HOW-TO-VERIFY.md
+summary: >-
+  The contract declares only two schemas (X402PaymentRequired, X402Accept) and returns untyped application/json
+  elsewhere, so the entity graph below is derived from the live documents and the provider's own naming. The
+  core is a BOARD of AXES; a signed MEASUREMENT CARD backs a measured axis; a separate PUBLIC ROOT is a Merkle
+  tree over card-v0 LEAVES (the provider insists the three card corpora "share no members" and must never be
+  summed); an x402 PURCHASE is settled on chain and yields a RECEIPT/commission card; a CORRECTION ledger records
+  changes. Objects link by id fields (axis name, card sha256, merkle_root, transaction hash, payer address), not
+  by $ref; there is no expansion parameter — a client resolves the graph with follow-up GETs.
+id_style:
+  format: content-addressed hex and human slugs
+  prefixes:
+  - {entity: MeasurementCard, id: 'sha256 hex of the canonical body (id == sha256(preimage))', source: HOW-TO-VERIFY.md}
+  - {entity: CardLeaf (card-v0), id: 'sha256 hex; fetched by its first 16 hex at /cards/{sha16}.json', source: get_card tool}
+  - {entity: PublicRoot, id: merkle_root (hex) + as_of, source: /root.json}
+  - {entity: Axis, id: 'slug (governance, safety, …, humanoid-labour-index)', source: /api/gspc known list}
+  - {entity: Correction, id: 'C-YYYY-MMDD-NN', source: /api/corrections}
+  - {entity: Purchase, id: 'Base transaction hash + payer 0x address', source: privacy notice / x402.json}
+  - {entity: SigningKey, id: 'did:web:csoai.org#<kid>', source: did.json}
+entities:
+- name: Board
+  description: The living GSPC board (GET /api/gspc). Carries totals {axes, measured_axes, unmeasured_axes, quotable_axes, public_count, model_fleets, fact_runs, count_grammar, by_family}, axes[], domains[], limitations, doi and a site_attestation signature.
+  schemas: []
+  relationships:
+  - {has_many: Axis, via: 'axes[]'}
+  - {has_many: Domain, via: 'domains[]'}
+  - {belongs_to: SigningKey, via: site_attestation.signer (board-attestation-1)}
+- name: Axis
+  description: One slot on the board — family (gspc | financial), status MEASURED | UNMEASURED, n, accuracy, interval, leader / separation (SEPARATED | TIE), dates, frozen bank.
+  relationships:
+  - {belongs_to: Board}
+  - {has_many: MeasurementCard, via: axis field on the card}
+  - {has_one: Badge, via: 'GET /api/badge?axis='}
+- name: MeasurementCard
+  description: A signed gspc.measurement-card — body + id (sha256 of the canonical body) + Ed25519 signature under the pinned card-attestation-1 key. Indexed by /signed/card_index.json (n_cards, n_cells, cards[]); verified VALID | INVALID | UNCHECKABLE.
+  relationships:
+  - {belongs_to: Axis, via: axis}
+  - {belongs_to: SigningKey, via: pubkey == did:web:csoai.org#card-attestation-1}
+  - {has_one: CardIndexEntry, via: /signed/card_index.json}
+- name: PublicRoot
+  description: A Merkle envelope over card-v0 leaves (/root.json — as_of, card_count 305 on 2026-09-15, card_sha256[], merkle_root, sig_ed25519 when signed). Explicitly "separate from GSPC".
+  relationships:
+  - {has_many: CardLeaf, via: 'card_sha256[]'}
+  - {has_many: InclusionProof, via: 'GET /api/proof?sha='}
+- name: CardLeaf
+  description: A public-root card-v0 leaf (/cards/{sha16}.json); UNMEASURED cells stay visible. Distinct corpus from MeasurementCard.
+  relationships:
+  - {belongs_to: PublicRoot}
+- name: Purchase
+  description: An x402 settlement — transaction hash, payer wallet, network, amount, resource, time — stored as settled:tx:* and readable at GET /api/receipts?payer=0x…; yields a card-v0 commission receipt (surface ras.commission) and, conditionally, a signed offer/receipt JWS.
+  relationships:
+  - {belongs_to: Door, via: resource URL}
+  - {has_one: Receipt, via: x-payment-response / receipts by payer}
+  - {has_many: MeasurementCard, via: 'references to signed cards on file for the subject (up to 24)'}
+- name: Door
+  description: An x402-metered resource (ten GETs) described in /.well-known/x402.json resources[] and by x-payment-info in the OpenAPI; each publishes its amount only in its 402 (X402PaymentRequired.accepts[] of X402Accept).
+  schemas: [X402PaymentRequired, X402Accept]
+  relationships:
+  - {has_many: Purchase}
+  - {has_one: FreePreview, via: csoai.free_preview / preview=true}
+- name: Correction
+  description: A ledger entry {id, date, first_observed_at, what_was_wrong, why_it_was_wrong / how_caught, fix / what_changed, reached_the_public, status, evidence[]}; appended, never edited.
+  relationships:
+  - {references: [Board, MeasurementCard, PublicRoot], via: 'evidence[] paths'}
+- name: Webhook
+  description: '{ id, url, events, active, created_at } — created by POST /api/webhooks, removed by DELETE ?id='
+  relationships: []
+- name: SigningKey
+  description: 'A verificationMethod in https://csoai.org/.well-known/did.json (Ed25519 JsonWebKey2020): site-release-1, estate-chain-1, board-attestation-1, card-attestation-1.'
+  relationships:
+  - {has_many: MeasurementCard}
+  - {has_many: Board, via: site_attestation}
+  - {has_many: OfferReceiptJWS, via: kid}
+three_corpora_rule:
+  note: 'llms.txt: three artefacts carry a "card count" and "their identifier overlap is zero, so never add them, never reconcile them" — public/cards-bundle.json card_count (build aggregate), /root.json card_count (public-root leaves), /signed/card_index.json n_cards (signed index); /api/state card_chain.bodies_verified_valid is the only MEASURED one.'

@@ -1,0 +1,58 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Council of AI Public API
+  version: 1.0.0
+extends: ../openapi/councilof-ai-public-api-openapi.yml
+x-generated: '2026-09-19'
+x-method: generated
+x-source: >-
+  Generated from openapi/councilof-ai-public-api-openapi.yml (verbatim source in openapi/_original/) plus the
+  probed and searched artifacts in this repo. Captures API Evangelist annotations without mutating the provider's
+  contract. Nothing here adds an operation, parameter or price the provider did not publish.
+actions:
+- target: $.info
+  description: Link the provider's other machine-readable surfaces from the contract.
+  update:
+    x-agent-card: https://councilof.ai/.well-known/agent-card.json
+    x-a2a-endpoint: https://councilof.ai/api/a2a
+    x-mcp-server: https://councilof.ai/mcp
+    x-mcp-manifest: https://councilof.ai/.well-known/mcp.json
+    x-api-catalog: https://councilof.ai/.well-known/api-catalog
+    x-x402-discovery: https://councilof.ai/.well-known/x402.json
+    x-did-document: https://csoai.org/.well-known/did.json
+    x-llms-txt: https://councilof.ai/llms.txt
+    x-security-txt: https://councilof.ai/.well-known/security.txt
+    x-corrections-ledger: https://councilof.ai/api/corrections
+    x-status-page: https://councilof.ai/status/
+    termsOfService: https://councilof.ai/terms
+- target: $.info
+  description: Record the cross-cutting semantics the contract leaves implicit (see conventions/councilof-ai-conventions.yml).
+  update:
+    x-conventions:
+      auth_default: anonymous (92 of 141 operations declare security []); no public credential is issued
+      payment: x402 v2 — amount only inside a door's 402 accepts[]; PAYMENT-REQUIRED header; USDC on eip155:8453
+      idempotency: none documented (coverage none)
+      rate_limits: none published; cache-control public max-age=300 on the board
+      three_state_semantics: VALID | INVALID | UNCHECKABLE; MEASURED | UNMEASURED — never collapse UNCHECKABLE into INVALID
+      lifecycle_extension: x-csoai-lifecycle on 34 operations (QUARANTINED_PRE_RELEASE 19, NOT_IMPLEMENTED 13, DOOR_CLOSED 1, METHOD_NOT_ALLOWED 1)
+- target: $.paths['/api/gspc'].get
+  description: Document the axis filter that api-docs describes and the live 404 that enumerates known axes; the spec declares neither.
+  update:
+    x-apievangelist-documented-parameters:
+    - {name: axis, in: query, required: false, schema: {type: string}, description: 'One axis (api-docs: "GET /api/gspc?axis=<name> One axis (404 lists known axis)"). Observed 2026-09-19: an unknown value returns 404 {"error":"unknown axis","known":[…23 names…]}.'}
+    x-apievangelist-cache: 'cache-control: public, max-age=300 (observed)'
+- target: $.paths['/api/free-door'].get
+  update:
+    x-apievangelist-observed: 'HTTP 402 on 2026-09-19 with accepts[0].amount "0" and a server-signed JWS offer in extensions["offer-receipt"]; a zero-priced live rehearsal of the x402 rail.'
+- target: $.paths['/api/request-attestation'].get
+  update:
+    x-apievangelist-observed: 'HTTP 402 on 2026-09-19: amount "10000" atomic USDC (0.01), normal 20000, campaign csoai-launch-30d-20260911 (2026-09-11 → 2026-10-11), csoai.preview delivered free inside the challenge.'
+- target: $.paths['/api/webhooks'].post
+  update:
+    x-apievangelist-note: Webhook CRUD is declared and answers live, but no event catalog, payload schema, signature or retry policy is published (asyncapi/councilof-ai-webhooks.yml).
+- target: $.paths['/api/refund'].post
+  update:
+    x-apievangelist-reversibility: 'Declared reversal path ("record a refund or chargeback and revoke entitlement + cert"); no window, caller or preconditions published — grades documented, not verified.'
+- target: $.paths['/api/sandbox'].get
+  update:
+    x-apievangelist-note: 'Declared 503 QUARANTINED_PRE_RELEASE; the rehearsal path is preview=true / the free door (sandbox/councilof-ai-sandbox.yml).'

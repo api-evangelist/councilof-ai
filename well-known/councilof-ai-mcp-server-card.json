@@ -1,0 +1,66 @@
+{
+  "schema_version": "2024-11-05",
+  "name": "csoai-gspc-mcp",
+  "display_name": "Council of AI — GSPC Measurement Tools",
+  "description": "Independent AI-governance measurement body. Publishes the GSPC board (Governance · Safety · Provenance · Continuity). Quote totals.public_count from GET /api/gspc — do not type a count here. Frozen item banks, published scoring code, measurement board. Measurement only: not certification, not accreditation, no conformity assessment. MCP registry io.github.CSOAI-ORG/gspc server 1.4.0. POST /mcp lists eight free readers plus four x402-metered evidence tools; witness_hash is quarantined on HTTP. mill-tool `measure` dropped.",
+  "icon_url": "https://councilof.ai/favicon.ico",
+  "provider": {
+    "name": "CSOAI Ltd",
+    "url": "https://councilof.ai",
+    "company_number": "16939677",
+    "jurisdiction": "GB"
+  },
+  "endpoints": {
+    "mcp": {
+      "primary": "https://councilof.ai/mcp",
+      "fallback": "https://csoai.org/mcp",
+      "current": "https://councilof.ai/mcp",
+      "stdio": "npx -y csoai-gspc-mcp@0.2.1",
+      "note": "Live door is https://councilof.ai/mcp (GET 200). HTTP tools/list is twelve: eight free readers plus four x402-metered evidence tools. witness_hash is quarantined and not advertised. Worker https://csoai-gspc-mcp.nicholastempleman.workers.dev/mcp is 404; not a door. Registry server 1.4.0. mill-tool `measure` dropped."
+    },
+    "gspc_board": {
+      "url": "https://councilof.ai/api/gspc",
+      "method": "GET",
+      "description": "Live GSPC board. Per-axis n, leader, Wilson interval, separation (SEPARATED/TIE). Quote totals.public_count. Empty cells stay empty. Ties are ties. No auth required."
+    }
+  },
+  "capabilities": {
+    "tools": [
+      "board_totals",
+      "get_axis",
+      "verify_card",
+      "list_cards",
+      "get_root",
+      "get_card",
+      "verify_inclusion",
+      "x402_trust",
+      "mcp_trust",
+      "commission_card",
+      "art50_marking_evidence",
+      "rwa_evidence",
+      "receipts_batch"
+    ],
+    "total_tools": 13,
+    "free_tools": 9,
+    "metered_tools": 4,
+    "streaming": false,
+    "auth_required": false
+  },
+  "authentication": {
+    "required": false,
+    "note": "Public MCP — initialize and tools/list require no Authorization header."
+  },
+  "license": "CC-BY-4.0",
+  "doi": "10.5281/zenodo.21991104",
+  "explicitly_not": [
+    "certification",
+    "accreditation",
+    "conformity-assessment",
+    "legal-determination",
+    "enforcement"
+  ],
+  "discovery": {
+    "well_known_mcp": "https://councilof.ai/.well-known/mcp.json",
+    "agent_card": "https://councilof.ai/.well-known/agent-card.json"
+  }
+}

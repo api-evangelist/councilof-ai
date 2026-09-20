@@ -1,0 +1,28 @@
+generated: '2026-09-19'
+method: searched
+source: https://councilof.ai/badge.md + GET https://councilof.ai/api/embed (embed kit manifest) + https://councilof.ai/embed/verify
+summary: >-
+  Two embeddable, client-side surfaces distinct from the SDKs: a live SVG badge rendered from GET /api/gspc so
+  a pasted badge "cannot drift into a false claim", and a hosted verify widget. The embed kit manifest at
+  /api/embed names a loader script (embed.js). There is no "certified" badge by design — an unmeasured axis
+  renders grey as "unmeasured".
+families:
+- name: Live GSPC badges
+  kind: image (SVG) rendered server-side from the live board
+  loader: none — plain <img> / markdown
+  components:
+  - {name: board badge, url: 'https://councilof.ai/api/badge', probed: 200, content_type: image/svg+xml, markdown: '[![GSPC](https://councilof.ai/api/badge)](https://councilof.ai/gspc-verify)'}
+  - {name: axis badge, url: 'https://councilof.ai/api/badge?axis=<axis>', markdown: '[![governance](https://councilof.ai/api/badge?axis=governance)](https://councilof.ai/api/gspc)', note: 'Any axis the board carries.'}
+  docs: https://councilof.ai/badge.md
+  human: https://councilof.ai/badge
+- name: Verify widget
+  kind: hosted iframe page
+  components:
+  - {name: embed/verify, url: 'https://councilof.ai/embed/verify', probed: 200, bytes: 915, note: 'Hosted verification surface for a signed card (the human page is https://councilof.ai/gspc-verify).'}
+- name: Embed kit
+  kind: loader script + manifest
+  manifest: https://councilof.ai/api/embed
+  manifest_fields: {schema: csoai.embed-kit/1, badge: 'https://councilof.ai/api/badge', script: 'https://councilof.ai/embed.js', verify: 'https://councilof.ai/gspc-verify', human: 'https://councilof.ai/badge', kit: 'https://councilof.ai/embed', grammar: 'measurement, not certification'}
+  note: embed.js itself was not fetched this run.
+not_components:
+- {url: 'https://councilof.ai/api/include', status: 501, note: 'Declared NOT_IMPLEMENTED (capability-state) — "Produce a Merkle inclusion proof for a published card".'}

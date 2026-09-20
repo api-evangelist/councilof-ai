@@ -1,0 +1,26 @@
+generated: '2026-09-19'
+method: probed
+source: live unauthenticated responses on https://councilof.ai (2026-09-19) + https://councilof.ai/badge.md + https://councilof.ai/api-docs/ + openapi/councilof-ai-public-api-openapi.yml
+docs: https://councilof.ai/api-docs/
+limit_count: 0
+summary: >-
+  No rate limit is published anywhere: the OpenAPI declares no 429 and no RateLimit-* header on any of the 141
+  operations, api-docs says only that /api/gspc is "cached for 300s", and badge.md states "No account, no key, no
+  sign-up, and no rate limit to negotiate." Live responses carried no X-RateLimit-*/RateLimit-*/Retry-After
+  headers. The only throttling-adjacent signals are the edge cache (cache-control public, max-age=300 on the
+  board and the x402 catalog) and, until 2026-09-17, a Cloudflare Browser Integrity Check that returned 403 to
+  every non-browser client — recorded by the provider as correction C-2026-0917-02 and confirmed lifted on this
+  run (python-requests and default-curl user agents both 200). Metered doors are priced, not rate-limited: the
+  402 accepts[].maxTimeoutSeconds 300 is a payment-authorisation window, not a rate window.
+scopes: []
+observed:
+- {url: 'https://councilof.ai/api/gspc', status: 200, headers: {cache-control: 'public, max-age=300', access-control-allow-origin: '*', age: 218, last-modified: present}, rate_limit_headers: none}
+- {url: 'https://councilof.ai/api/x402', status: 200, headers: {cache-control: 'public, max-age=300'}, rate_limit_headers: none}
+- {url: 'https://councilof.ai/api/free-door', status: 402, headers: {cache-control: no-store, payment-required: present}, rate_limit_headers: none}
+- {url: 'https://councilof.ai/.well-known/agent-card.json', status: 200, user_agent: 'python-requests/2.32', note: 'no bot challenge on this run'}
+status_on_exhaustion: null
+headers: []
+retry_after: null
+edge:
+  provider: 'Cloudflare (server: cloudflare)'
+  note: 'A zone-level Browser Integrity Check blocked non-browser clients with HTTP 403 (error 1010) until 17 September 2026 per the provider''s own ledger; if it recurs, a 403 on a machine path is that policy, not a rate limit.'

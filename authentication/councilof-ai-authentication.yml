@@ -1,0 +1,65 @@
+generated: '2026-09-19'
+method: searched
+source: openapi/councilof-ai-public-api-openapi.yml
+docs: https://councilof.ai/api-docs/
+summary:
+  default: anonymous
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+  payment_gate: x402 (HTTP 402) on 10 REST doors and 4 MCP tools — an economic gate, not an authentication scheme
+  note: >-
+    The public surface needs no credential of any kind. api-docs: "Public · keyless · CORS-open … No account, no
+    API key, no tiers … Auth: none." 92 of 141 operations declare security [] and a further 44 declare no
+    security block; every read of the board, the signed cards, the root and the proofs is anonymous, as are MCP
+    initialize/tools/list and the A2A JSON-RPC endpoint. The three declared securitySchemes guard
+    provider-internal action-job and canary doors only (5 operations): there is no public sign-up that yields one of them. Paid
+    artefacts are unlocked by an x402 payment (X-PAYMENT header on REST, x_payment argument on MCP), settled by
+    the caller's own wallet in USDC on Base; the provider "holds no key for you and never settles on your
+    behalf" (quickstart.json step 4).
+schemes:
+- name: ed25519
+  type: apiKey
+  in: header
+  parameter: X-CSOAI-Signed-Card
+  description: Ed25519 signature of canonical body, under did:web:csoai.org#card-attestation-1
+  used_by: declared in components.securitySchemes; no operation references it in a security requirement
+  sources:
+  - openapi/councilof-ai-public-api-openapi.yml
+- name: githubOidc
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: GitHub Actions OIDC token satisfying the handler's issuer, audience, repository and workflow checks.
+  used_by: [post__api_board-sign]
+  note: Machine identity for the provider's own CI (board signing) — not obtainable by a third party.
+  sources:
+  - openapi/councilof-ai-public-api-openapi.yml
+- name: operatorBearer
+  type: http
+  scheme: bearer
+  description: Operation-specific configured operator or writer credential. Not interchangeable across operations.
+  used_by: [get__api_action-jobs, patch__api_action-jobs, post__api_action-jobs, post__api_provider-canary]
+  note: Provider-internal; no issuance path is documented.
+  sources:
+  - openapi/councilof-ai-public-api-openapi.yml
+payment:
+  protocol: x402 v2
+  rest_header: X-PAYMENT (challenge in the 402 body and the PAYMENT-REQUIRED response header)
+  mcp_argument: x_payment
+  network: eip155:8453 (Base)
+  asset: USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+  payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+  discovery: https://councilof.ai/.well-known/x402.json
+  catalog: https://councilof.ai/api/x402
+  observed: GET /api/free-door → 402 (amount "0"); GET /api/request-attestation?subject=… → 402 (amount "10000" atomic = 0.01 USDC, campaign-priced). No purchase made.
+signing_keys:
+  did_document: https://csoai.org/.well-known/did.json
+  keys: [did:web:csoai.org#site-release-1, did:web:csoai.org#estate-chain-1, did:web:csoai.org#board-attestation-1, did:web:csoai.org#card-attestation-1]
+  note: These are the PROVIDER's signing keys (verify responses, offers, receipts and cards against them); they are not client credentials.
+oauth: none
+oidc: none
+mcp_auth: none (server card authentication.required false; no RFC 8414/9728 metadata)
+a2a_auth: none (card declares no securitySchemes)

@@ -1,0 +1,26 @@
+generated: '2026-09-19'
+method: generated
+source: >-
+  openapi/councilof-ai-public-api-openapi.yml and openapi/councilof-ai-gspc-read-surfaces-openapi.yml (every
+  operationId verified against the specs), llms.txt, quickstart.json, /signed/HOW-TO-VERIFY.md and live responses
+  on 2026-09-19. Council of AI publishes no Agent Skills package or AGENTS.md of its own (probed: /AGENTS.md,
+  /skills/, /.well-known/skills all 404); its llms.txt is saved verbatim under llms/.
+skills:
+- file: councilof-ai-read-the-board.md
+  name: councilof-ai-read-the-board
+  method: generated
+  description: Read the live GSPC board keylessly, quote counts by field path, treat UNMEASURED as a first-class answer.
+  operations: 5
+  operation_ids: [get__api_gspc, get__api_state, get__api_axis-register, get__api_methodology, get__api_observability]
+- file: councilof-ai-verify-a-signed-card.md
+  name: councilof-ai-verify-a-signed-card
+  method: generated
+  description: Verify an Ed25519-signed measurement card and a Merkle inclusion proof offline against the pinned did:web key; VALID / INVALID / UNCHECKABLE.
+  operations: 7
+  operation_ids: [getDid, getVerifyRecipe, getCardIndex, getCard, getRoot, getProof, getBoard]
+- file: councilof-ai-commission-via-x402.md
+  name: councilof-ai-commission-via-x402
+  method: generated
+  description: Discover the x402 doors, read a 402 challenge and its free preview, rehearse on the zero-priced free door, then commission from your own wallet.
+  operations: 6
+  operation_ids: [get__api_x402, x402_free_door, x402_request_attestation, get__api_commissions, get__api_receipt-status, get__api_revenue]

@@ -1,0 +1,125 @@
+generated: '2026-09-19'
+method: searched
+source: https://councilof.ai/api-docs/ + https://councilof.ai/quickstart.json + https://councilof.ai/llms.txt + live responses 2026-09-19
+derived_from: openapi/councilof-ai-public-api-openapi.yml
+docs:
+- https://councilof.ai/api-docs/
+- https://councilof.ai/quickstart/
+- https://councilof.ai/signed/HOW-TO-VERIFY.md
+- https://councilof.ai/legal/licensing/
+base_url: https://councilof.ai
+api_style: REST over HTTPS, JSON responses, GET-dominant (107 of 141 operations are GET); plus JSON-RPC 2.0 on /mcp (MCP) and /api/a2a (A2A) and SSE on /api/agui/gspc-state
+media_type: application/json
+auth:
+  style: >-
+    Anonymous by default — "Public · keyless · CORS-open … No account, no API key, no tiers … Auth: none"
+    (api-docs). The three declared securitySchemes guard five provider-internal write doors. Metered artefacts
+    are unlocked by x402 payment, not by identity.
+  detail: authentication/councilof-ai-authentication.yml
+cors:
+  allow_origin: '*'
+  observed: access-control-allow-origin:* on GET /api/gspc, /api/x402 and the 402 challenges
+idempotency:
+  supported: false
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  retention: undocumented
+  description: >-
+    No Idempotency-Key header, parameter or body field exists on any of the 34 non-GET operations and none is
+    documented. The public surface is overwhelmingly read-only; the paid doors are GETs whose side effect is a
+    settlement, and replay protection there is on the PAYMENT: the privacy notice states settled transaction
+    hashes are stored (settled:tx:*) with the lawful basis "preventing a payment being replayed", and each x402
+    authorisation is single-use on chain ("settled_usdc … single-use"). That protects the rail from a replayed
+    payment; it does not give a client a documented safe-retry contract for an ambiguous outcome.
+  gaps:
+  - No idempotency key on POST /api/webhooks (create), POST /api/contact, POST /api/lead, POST /api/evidence-intake or the operator write doors.
+  - No documented client guidance for a timed-out paid GET (whether a second settlement buys a second artefact).
+dry_run_mode:
+  supported: true
+  status: documented
+  mechanism: free preview on every paid door
+  surfaces:
+  - 'preview=true (art50_marking_evidence, rwa_evidence, receipts_batch — "free unsigned measurement / state / count") — declared in the MCP inputSchemas and the 402 body''s csoai.free_preview'
+  - 'omit bundle=1 (x402_proof, x402_evidence_bundle) — llms.txt: "Free preview: omit bundle=1 or add preview=1 as the 402 body documents"'
+  - 'GET /api/free-door — a live 402 route priced at zero that "settles, charges nothing; proves the rail"'
+  - 'the 402 challenge itself is a free rehearsal: GET /api/request-attestation?subject=<id> returns csoai.preview with the signed cards already on file, free'
+  note: The dedicated /api/sandbox operation is declared QUARANTINED_PRE_RELEASE (503); see sandbox/councilof-ai-sandbox.yml.
+pagination:
+  style: none on the REST board; window parameters on the batch door; limit on one MCP tool
+  request_params:
+    limit: 'list_cards MCP tool (integer, default 10, newest first)'
+    from_to: 'x402_receipts_batch: from (ISO-8601, required), to (defaults to now), ≤200 leaves per batch'
+    axis: 'GET /api/gspc?axis=<name> narrows the board to one axis'
+  response_fields: 'whole documents (board, index, root); no cursor, no has_more'
+  docs: https://councilof.ai/api-docs/
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+request_tracing:
+  request_id_header: null
+  note: No request-id header observed on any response (cloudflare edge; cf-ray only).
+caching:
+  observed:
+  - {surface: 'GET /api/gspc', headers: 'cache-control: public, max-age=300; last-modified; age', note: 'api-docs: "cached for 300s"'}
+  - {surface: 'GET /api/x402', headers: 'cache-control: public, max-age=300'}
+  - {surface: '402 challenges', headers: 'cache-control: no-store'}
+versioning:
+  scheme: unversioned paths; per-document version numbers
+  mechanism: none on the wire (no version header, no /v1)
+  a2a_version_header: 'A2A-Version: 1.0 required for v1.0 method names; an absent header is served as 1.0; other versions get -32009'
+  current: 0.2+820f7aa0ad7a (OpenAPI) · 1.4.2 (MCP) · 1.1.0 (agent card)
+  detail: lifecycle/councilof-ai-lifecycle.yml
+  changelog: changelog/councilof-ai-changelog.yml
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  shapes:
+  - '404: {"error": "not_found", "path", "hint"} · 404 (unknown axis): {"error": "unknown axis", "known": [...]}'
+  - '402: x402 v2 PaymentRequired {x402Version, error, resource, accepts[], extensions, catalog, csoai} + PAYMENT-REQUIRED header'
+  - '501: {"schema": "csoai.capability-state/0.1", "state": "NOT_IMPLEMENTED", ...} · 503: {"schema": "csoai.retired-endpoint/0.1", "code": "RETIRED", ...}'
+  - 'JSON-RPC 2.0 error objects on /mcp and /api/a2a (-32001, -32009, -32004, -32003)'
+  detail: errors/councilof-ai-problem-types.yml
+three_state_semantics:
+  note: >-
+    A cross-cutting convention every surface repeats: verification answers are VALID / INVALID / UNCHECKABLE
+    and a board cell is MEASURED / UNMEASURED; "UNCHECKABLE" (could not check) is never collapsed into
+    "INVALID", an unmeasured axis is "a first-class answer — never an error and never a zero", and counts are
+    to be quoted by field path from the live payload, never frozen in prose. Clients should model these enums
+    explicitly.
+rate_limits:
+  signal_status: null
+  headers: []
+  documented: false
+  note: 'No limit published; badge.md: "no rate limit to negotiate". No RateLimit-*/Retry-After observed. See rate-limits/councilof-ai-rate-limits.yml.'
+reversibility:
+  status: documented
+  credit_note: >-
+    A reversal operation exists in the contract (POST /api/refund — "record a refund or chargeback and revoke
+    entitlement + cert") but no reversal WINDOW is stated anywhere for x402 purchases, so this grades
+    documented (0.4), not verified. No window is asserted here because none is published.
+  write_surface_summary: 34 non-GET operations; 10 x402-metered GET doors whose side effect is an on-chain settlement
+  surfaces:
+  - surface: x402 door purchases (request-attestation, proof bundle, evidence-bundle, eunomia-data, rwa/evidence, wrapper, art50/marking-evidence, feeds/provider-diff, receipts/batch)
+    reversal_operation: post__api_refund (declared; caller and preconditions unstated)
+    window: not stated
+    finality_note: >-
+      Settlement is on Base mainnet in USDC; /api/revenue: "Chain adjudicates, not the CRM." The privacy notice
+      says the transaction hash and payer are public on chain "whatever we do". Terms §10–11 disclaim outcomes
+      and cap liability at fees paid in 12 months. Pre-purchase safeguards are strong instead: the 402 carries a
+      free preview, a signed offer (verifiable offline) and "fresh_compute_excluded" pricing metadata, and the
+      free door lets a client rehearse settlement at amount 0.
+    docs: https://councilof.ai/quickstart/
+  - surface: POST /api/webhooks (create)
+    reversal_operation: delete__api_webhooks (DELETE /api/webhooks?id=<id>)
+    window: not stated (no restore after delete documented)
+  - surface: POST /api/contact, POST /api/lead, POST /api/evidence-intake (submissions)
+    reversal_operation: none in the contract; the privacy notice offers erasure on request ("deleted on a valid erasure request where no exemption applies", answered within one calendar month)
+    window: not stated
+  - surface: Published measurement results
+    reversal_operation: dispute / re-measurement (https://councilof.ai/dispute/ — "the answer is always a re-measurement, never a defence"; corrections are appended, never edited)
+    window: none stated; free and open to anyone with standing
+  read_only_surfaces: GSPC board, signed cards, root, proofs, feeds, MCP free tools and A2A skills are read-only — reversibility na for them.
+  docs: https://councilof.ai/dispute/

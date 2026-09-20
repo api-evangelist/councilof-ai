@@ -1,0 +1,136 @@
+generated: '2026-09-19'
+method: searched
+source: https://councilof.ai/.well-known/api-catalog + https://councilof.ai/.well-known/agent-card.json + https://councilof.ai/.well-known/x402.json + live probes 2026-09-19
+derived_from: openapi/councilof-ai-public-api-openapi.yml
+docs:
+- https://councilof.ai/api-docs/
+- https://councilof.ai/quickstart/
+- https://councilof.ai/signed/HOW-TO-VERIFY.md
+summary: >-
+  Council of AI's conformance profile is the agent-protocol and evidence-integrity stack rather than any
+  enterprise identity standard: A2A v1.0 (JSON-RPC binding, live and probed), MCP 2025-06-18 (anonymous
+  initialize + tools/list), x402 v2 payment challenges observed on the wire with a PAYMENT-REQUIRED header and a
+  server-signed JWS offer (the x402 Offer & Receipt extension), an RFC 9727 API catalog, RFC 9116 security.txt,
+  W3C did:web with Ed25519 JsonWebKey2020 keys, OpenAPI 3.1.0, a Content-Signal robots.txt, AG-UI SSE, and a
+  Merkle public root with a published verification recipe. Absent: OAuth 2.0/OIDC discovery, RFC 9728, RFC 9457,
+  RFC 8594. SCITT (RFC 9943) is declared PLANNED by the provider itself and is recorded as not conformed. The
+  domain-standard signatures for this market (AI-governance measurement sold to agents) are the x402 extension
+  keys inside the contract, the A2A extension URIs on the card, and the C2PA-manifest input on the Article 50
+  tool — all declared by the provider's own machine documents, not by prose.
+standards:
+- id: a2a
+  name: Agent2Agent protocol
+  version: '1.0'
+  conforms: true
+  evidence: >-
+    a2a/councilof-ai-agent-card.json — supportedInterfaces[0] {url https://councilof.ai/api/a2a, protocolBinding
+    JSONRPC, protocolVersion "1.0"}, capabilities object, skills[] of 8, application/a2a+json. POST GetTask with an
+    unknown id returned -32001 TASK_NOT_FOUND with google.rpc.ErrorInfo; a 0.3 method name returned -32009
+    VERSION_NOT_SUPPORTED. Graded conformant in a2a/councilof-ai-a2a.yml.
+  domain_standard_signature: true
+  note: The card declares three extension URIs (signed-receipts draft, x402 discovery, x402 Offer & Receipt) — the contract-level signature of agent commerce; none is required.
+- id: mcp
+  name: Model Context Protocol
+  version: '2025-06-18'
+  conforms: true
+  evidence: 'POST https://councilof.ai/mcp initialize returned protocolVersion "2025-06-18", serverInfo {csoai-gspc-mcp, 1.4.2}; tools/list returned 13 tools with inputSchema (mcp/councilof-ai-mcp-tools.json). Listed on the MCP Registry as io.github.CSOAI-ORG/gspc 1.4.2.'
+- id: json-rpc-2.0
+  conforms: true
+  evidence: Both /mcp and /api/a2a answer {"jsonrpc":"2.0", ...} with standard error objects.
+- id: x402
+  name: x402 HTTP payment protocol
+  version: v2 (x402Version 2)
+  conforms: true
+  verification: observed-challenge
+  evidence: >-
+    GET https://councilof.ai/api/free-door returned HTTP 402 with a PAYMENT-REQUIRED header (base64 of the body)
+    and a JSON body {x402Version 2, accepts[{scheme exact, network eip155:8453, asset 0x8335…2913 USDC, payTo
+    0x2126…ae31, amount "0", maxTimeoutSeconds 300}]}; GET /api/request-attestation?subject=… and
+    /api/proof?bundle=1 returned the same shape with amount "10000". The OpenAPI declares a top-level x-x402
+    block, x-payment-info {protocols: [x402]} on 10 operations and the X402PaymentRequired / X402Accept schemas.
+    Settlement itself was not exercised (no purchase made).
+  domain_standard_signature: true
+  spec_location: 'openapi: $.x-x402, $.paths[*].*.x-payment-info, $.components.schemas.X402PaymentRequired; discovery: /.well-known/x402.json'
+- id: x402-offer-receipt
+  name: x402 Offer & Receipt extension (v0.6), JWS profile
+  conforms: true
+  verification: partial
+  evidence: >-
+    The observed 402 on /api/free-door carried extensions["offer-receipt"].info.offers[0] = {format jws,
+    acceptIndex 0, signature <compact JWS, alg EdDSA, kid did:web:csoai.org#board-attestation-1>}. Receipts
+    (post-settlement) were not observed. The provider states eip712 is NOT emitted.
+- id: caip-2
+  name: CAIP-2 chain identifiers
+  conforms: true
+  evidence: network "eip155:8453" (Base) as a const in components.schemas.X402Accept and in /.well-known/x402.json.
+- id: rfc9727-api-catalog
+  conforms: true
+  evidence: >-
+    GET /.well-known/api-catalog → 200 application/linkset+json with profile RFC 9727, carrying service-desc
+    links for /api/gspc, /mcp, /api/a2a and /api/x402 (well-known/councilof-ai-api-catalog.json).
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: /.well-known/security.txt on councilof.ai (Contact, Expires 2027-08-19, Preferred-Languages, Canonical, Policy) and on csoai.org.
+- id: did-web
+  name: W3C DID Core, did:web method, JsonWebKey2020 (Ed25519)
+  conforms: true
+  evidence: https://csoai.org/.well-known/did.json — id did:web:csoai.org with verificationMethod entries site-release-1, estate-chain-1, board-attestation-1, card-attestation-1 (OKP/Ed25519). The OpenAPI securityScheme ed25519 names did:web:csoai.org#card-attestation-1.
+- id: openapi-3.1
+  conforms: true
+  evidence: Both specs declare openapi 3.1.0 and parse (141 + 7 operations); info.license CC-BY-4.0 / Apache-2.0.
+- id: content-signal-robots
+  name: Content-Signal (robots.txt) + RFC 9309
+  conforms: true
+  evidence: >-
+    robots.txt carries "Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference", cites Article 4(3)
+    of Directive (EU) 2019/790 as an express reservation of training rights, and states one group per agent
+    after a documented 2026-08-06 correction.
+- id: ag-ui
+  name: AG-UI (agent-user interaction protocol) over SSE
+  conforms: true
+  verification: observed
+  evidence: GET https://councilof.ai/api/agui/gspc-state → 200 text/event-stream (4,192 bytes); llms.txt describes STATE_DELTA + TEXT_MESSAGE_CONTENT events derived from /api/gspc per request.
+- id: merkle-inclusion-proofs
+  name: Merkle public root with inclusion proofs (provider scheme)
+  conforms: true
+  evidence: https://councilof.ai/root.json (card_count 305, merkle_root, as_of 2026-09-15) + GET /api/proof?sha= (free) + the verify_inclusion MCP tool; provider's own construction, not RFC 6962.
+- id: eu-ai-act-article-50-c2pa
+  name: EU AI Act Article 50 machine-marking evidence (C2PA manifest detection)
+  conforms: true
+  verification: declared-in-contract
+  evidence: 'The x402_art50_marking_evidence operation and the art50_marking_evidence MCP tool accept manifest_b64 "a detached C2PA manifest store" and detect "C2PA manifest store, assertion hashes, hard binding, claim signature; IPTC digitalSourceType". The provider''s own /ai-transparency/ page carries an Article 50(1) self-conformance record (171 surfaces classified, 38 AI routes).'
+  domain_standard_signature: true
+  note: Detection of a standard in third-party bytes, plus a first-party disclosure record — the market-specific signature for an AI-governance measurement body. Not a claim that CSOAI is itself Article 50 conformant.
+- id: rfc9943-scitt
+  name: SCITT architecture (RFC 9943) + draft-ietf-scitt-scrapi
+  conforms: false
+  evidence: '/.well-known/scitt.json is a hand-authored discovery profile with implementation_status PLANNED, transparency_service.status NOT_IMPLEMENTED, statements [] and mapping_status UNMAPPED. Declared, not implemented — recorded exactly as the provider states it.'
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme in either OpenAPI; /.well-known/oauth-authorization-server 404 on all three hosts. The surfaces are anonymous; payment, not identity, gates the metered tools.
+- id: oidc-discovery
+  conforms: false
+  evidence: /.well-known/openid-configuration 404 on councilof.ai, www.councilof.ai and csoai.org.
+- id: rfc8414-authorization-server-metadata
+  conforms: false
+  evidence: 404 on every host.
+- id: rfc9728-protected-resource-metadata
+  conforms: false
+  evidence: /.well-known/oauth-protected-resource 404 on the MCP host (councilof.ai) and on csoai.org; the server card declares authentication.required false.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: 'All 151 declared response bodies are application/json; observed 404s are {"error","path","hint"} objects. No application/problem+json anywhere. See errors/councilof-ai-problem-types.yml.'
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: >-
+    No Sunset/Deprecation header declared and zero operations carry deprecated true. Retirements are signalled
+    by x-csoai-lifecycle markers and 503/501 bodies instead (lifecycle/councilof-ai-lifecycle.yml).
+- id: rfc6585-rate-limit-429
+  conforms: false
+  evidence: No 429 declared or observed; badge.md states "no rate limit to negotiate".
+- id: soc2
+  conforms: false
+  evidence: 'Site footer on every page: "We are not certified to SOC 2 or ISO 42001." Recorded because an automated keyword probe of /trust/ (the MCP Trust Board page) initially mis-read that sentence as a certification; the trust-center artifact was removed and no Compliance pointer is emitted.'
+- id: iso42001
+  conforms: false
+  evidence: Same footer statement.

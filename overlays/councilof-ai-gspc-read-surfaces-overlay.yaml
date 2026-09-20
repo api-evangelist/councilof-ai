@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Council of AI GSPC read-surfaces API
+  version: 1.0.0
+extends: ../openapi/councilof-ai-gspc-read-surfaces-openapi.yml
+x-generated: '2026-09-19'
+x-method: generated
+x-source: >-
+  Generated from openapi/councilof-ai-gspc-read-surfaces-openapi.yml — the 7-operation spec at
+  https://councilof.ai/api/openapi.json that the RFC 9727 api-catalog names as the service-desc for /api/gspc.
+actions:
+- target: $.info
+  update:
+    x-api-catalog: https://councilof.ai/.well-known/api-catalog
+    x-superset-contract: https://councilof.ai/openapi.json
+    x-note: 'A read-only subset (board, proof, root, DID document, signed card index, one signed card, the verification recipe). The full 141-operation contract is openapi/councilof-ai-public-api-openapi.yml; this one overlaps it on /api/gspc and /api/proof and adds the static signed-artefact paths.'
+- target: $.paths['/.well-known/did.json'].get
+  update:
+    x-apievangelist-note: 'servers[] is https://councilof.ai but the DID document is served from https://csoai.org/.well-known/did.json (did:web:csoai.org); councilof.ai/.well-known/did.json was not probed separately. Verify against the csoai.org copy the provider''s own tools name.'
+- target: $.paths['/signed/HOW-TO-VERIFY.md'].get
+  update:
+    x-apievangelist-note: 'The recipe warns that CPython json.dumps renders integral floats as 0.0 while JS/Go/JCS render 0, so a naive non-Python verifier reports false INVALID results.'

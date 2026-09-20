@@ -1,0 +1,83 @@
+generated: '2026-09-19'
+method: searched
+source: https://councilof.ai/api/openapi.json + https://councilof.ai/openapi.json + https://councilof.ai/status/ + https://councilof.ai/feeds/corrections.xml + https://councilof.ai/terms
+derived_from: openapi/councilof-ai-public-api-openapi.yml
+docs:
+- https://councilof.ai/api-docs/
+- https://councilof.ai/terms
+- https://councilof.ai/legal/licensing/
+versioning:
+  scheme: unversioned paths; build-stamped document versions
+  current_version: >-
+    OpenAPI info.version "0.2+820f7aa0ad7a" (semver + git build metadata) for the public API; "0.1.0" for the
+    read-surfaces spec; MCP serverInfo.version 1.4.2 (registry 1.4.2, npm stdio 0.2.2); agent card version 1.1.0;
+    Terms of Service version 1.1 (13 September 2026); privacy notice version 1.2 (14 September 2026);
+    measurement licence version 2.0 (28 August 2026).
+  spec_url: https://councilof.ai/openapi.json
+  base_url: https://councilof.ai
+  policy_published: false
+  note: >-
+    No /v1 segment and no version header. The five surfaces each carry their own version number and none of
+    them share one. The provider's stated versioning discipline is "corrections appended, never edited"
+    (api/methodology doctrine) — change is recorded in a dated corrections ledger rather than in a versioning
+    policy.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  contract_lifecycle_markers:
+    QUARANTINED_PRE_RELEASE: 19
+    NOT_IMPLEMENTED: 13
+    DOOR_CLOSED: 1
+    METHOD_NOT_ALLOWED: 1
+    note: >-
+      Zero operations carry deprecated: true, but 34 of 141 carry a provider extension x-csoai-lifecycle and
+      answer only 503 ("retired until its response can be derived from current evidence") or 501 (capability
+      NOT_IMPLEMENTED). Observed live: GET /api/prod-readiness → 503 {"code":"RETIRED"} (a RETIRED body code; the contract marks such operations QUARANTINED_PRE_RELEASE), GET /api/include → 501
+      {"state":"NOT_IMPLEMENTED"}, GET /api/sandbox → declared 503 QUARANTINED_PRE_RELEASE. The x402 catalog
+      also carries a quarantined[] block (paid witness issuance) with a lifecycle QUARANTINED_PRE_RELEASE.
+      This is a real, machine-readable lifecycle signal inside the contract, but there is no published
+      deprecation POLICY (no notice period, no Sunset header), so no Deprecation pointer is emitted.
+  documented_retirements:
+  - what: 'mill-tool `measure` (MCP)'
+    evidence: '/.well-known/mcp.json note: "mill-tool `measure` is dropped"; the provider''s own /api/mcp probe registry still lists it from 2026-08-27.'
+  - what: 'witness_hash (MCP) / paid witness issuance (x402)'
+    evidence: 'server card: "witness_hash is quarantined on HTTP"; x402.json quarantined[]: paid witness issuance disabled until a release gate verifies leaf → signed root → sidecar → Rekor → OpenTimestamps.'
+  - what: 'Legacy docs pages (/docs, /security, /legal/dpa)'
+    evidence: 'Each returns 200 with a "temporarily withdrawn" notice: generated/prototype pages were removed from the public decision path "until each claim has a source, scope, date, and evidence state".'
+status_page:
+  url: https://councilof.ai/status/
+  provider: first-party
+  machine_readable_api: false
+  probed:
+  - {url: 'https://councilof.ai/status', status: 200, checked: '2026-09-19', note: 'Title "Service status | Council of AI"; meta description: "each row is read from the service itself and never typed into the page by hand". Rows are rendered client-side from the feeds (feed.xml, feeds/cards.xml, feeds/roots.xml, feeds/corrections.xml); no summary JSON.'}
+  - {url: 'https://councilof.ai/api/status', status: 404}
+  - {url: 'https://councilof.ai/api/observability', status: 200, note: 'Machine-readable estate health: per-connector as_of and age_hours, stalest_connector, root.card_count. A real health surface, distinct from the status page.'}
+  - {url: 'https://csoai.org/api/health', status: 200, note: '{"status":"ok","service":"councilof.ai", endpoints:[...]}'}
+changelog:
+  url: https://councilof.ai/feeds/corrections.xml
+  json: https://councilof.ai/api/corrections
+  artifact: changelog/councilof-ai-changelog.yml
+  note: >-
+    The dated change record is a CORRECTIONS ledger (58 entries, RSS + Atom + JSON, each with id, date,
+    what_was_wrong, how_caught, fix/what_changed, status) plus /api/press.json (a derived 7-day window). It is a
+    real, machine-readable, dated log; it records defects and fixes rather than feature releases.
+observed_change_cadence:
+  window: '2026-08-16 to 2026-09-17'
+  evidence:
+  - 'MCP Registry: 11 versions of io.github.CSOAI-ORG/gspc (1.0.0 2026-08-16 → 1.4.2 2026-09-14), remote URL moved from a workers.dev host and /api/assess to https://councilof.ai/mcp on 2026-08-29.'
+  - 'npm csoai-gspc-mcp: 5 versions 2026-08-28 → 2026-09-13.'
+  - 'PyPI csoai-gspc: date-stamped releases 2026-09-05 → 2026-09-15 (uploaded 2026-09-17).'
+  - 'Corrections ledger: 11 entries in the 7 days to 2026-09-17 (press.json corrections_this_window).'
+  note: A very actively changing surface — several releases a week across MCP, npm, PyPI and the ledger.
+terms:
+  url: https://councilof.ai/terms
+  version: '1.1'
+  last_updated: '2026-09-13'
+  change_notice: '"We may modify these Terms at any time. Changes are effective when posted. Material changes notified via website banner or email." (§14)'
+  governing_law: England and Wales (§15)
+sla:
+  published: false
+  note: 'Terms §10.1: services "AS IS" and "AS AVAILABLE"; no uptime commitment. Liability capped at fees paid in the preceding 12 months or £100 for free users (§11.1).'

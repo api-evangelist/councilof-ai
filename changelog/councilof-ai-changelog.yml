@@ -1,0 +1,211 @@
+generated: '2026-09-19'
+method: searched
+source: https://councilof.ai/api/corrections (JSON, 58 entries) + https://councilof.ai/feeds/corrections.xml (RSS)
+  + https://councilof.ai/api/press.json + MCP Registry / npm / PyPI version metadata
+checked: '2026-09-19'
+summary: 'Council of AI publishes no feature changelog; its dated change record is a CORRECTIONS LEDGER — 58 entries
+  as of 2026-09-17, each with an id (C-YYYY-MMDD-NN), date, first_observed_at, what was wrong, how it was caught,
+  the fix and a status — served as JSON, RSS and Atom, with a signed policy of "corrections appended, never edited".
+  /api/press.json derives a 7-day window from the newest committed artifact (11 corrections in the window 2026-09-11
+  → 2026-09-17). Release cadence is read from the registries: 11 MCP Registry versions, 5 npm versions and date-stamped
+  PyPI releases in five weeks.'
+scheme:
+  api_versioning: unversioned paths; OpenAPI info.version 0.2+<git-sha>; MCP server 1.4.2; agent card 1.1.0
+  changelog_kind: corrections ledger (defects and fixes), not a release log
+current_version:
+  openapi: 0.2+820f7aa0ad7a
+  mcp_server: 1.4.2
+  mcp_registry: 1.4.2 (2026-09-14)
+  npm_csoai_gspc_mcp: 0.2.2 (2026-09-13)
+  pypi_csoai_gspc: 0.2.20260915 (2026-09-17)
+  agent_card: 1.1.0
+  terms: 1.1 (2026-09-13)
+feeds:
+  rss: https://councilof.ai/feeds/corrections.xml
+  atom: https://councilof.ai/feeds/corrections.atom
+  json: https://councilof.ai/api/corrections
+  press: https://councilof.ai/api/press.json
+  cards: https://councilof.ai/feeds/cards.xml
+  roots: https://councilof.ai/feeds/roots.xml
+  probed:
+  - url: https://councilof.ai/feeds/corrections.xml
+    status: 200
+    entries: 58
+  - url: https://councilof.ai/api/corrections
+    status: 200
+    entries: 58
+  - url: https://councilof.ai/api/press.json
+    status: 200
+    window: 2026-09-11 → 2026-09-17
+  - url: https://councilof.ai/changelog
+    status: 404
+window:
+  from: '2026-09-11'
+  to: '2026-09-17'
+  entries: 11
+entries:
+- id: C-2026-0917-01
+  date: '2026-09-17'
+  kind: correction
+  breaking: false
+  reached_the_public: false
+  what_was_wrong: 'public/interop/ots/manifest.json claimed 566 OpenTimestamps proofs, every row asserting state
+    PENDING_BITCOIN_CONFIRMATION. Checked by deserialising each file it named, NONE of the 566 was a proof: each
+    was a calendar response fragment saved under the .ots…'
+  fix: Files that do not deserialize are quarantined as .ots.invalid rather than deleted. The manifest is generated
+    by scripts/ots_manifest_rebuild.py, which reads each file back and keeps only what parses, and carries a selftest
+    proving it rejects a non-proof and…
+  status: ''
+- id: C-2026-0917-02
+  date: '2026-09-17'
+  kind: correction
+  breaking: false
+  reached_the_public: true
+  what_was_wrong: 'Every public surface councilof.ai serves answers HTTP 403 to a plain standard-library HTTP client
+    while answering normally to a browser. Measured 17 September 2026: 21 of 21 published URLs, including /.well-known/did.json,
+    /.well-known/agent-card.json,…'
+  fix: The measurement is published at /interop/machine-reachability-2026-09-17.json and is reproducible by scripts/machine_reachability.py,
+    whose selftest proves it can report both outcomes. The twelve artifacts a stranger most needs are mirrored to
+    a host that…
+  status: ''
+- id: C-2026-0916-03
+  date: '2026-09-16'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: /interop/swift-measure.json published a per-bank page_state for seventeen banks — six OK, eight
+    HTTP_404, three HTTP_403 — in a file whose card was titled around the banks being measured. Eleven of those
+    seventeen URLs are newsroom index pages we chose…
+  fix: The file now states, at the top and on every row, that it records the HTTP state of seventeen URLs we chose
+    and nothing about the seventeen banks, with url_provenance GUESSED_BY_US_NOT_PRIMARY_SOURCE on each row and
+    a page_state_means sentence saying what the…
+  status: CORRECTED IN SOURCE AND RECORDED; THE COHORT REMAINS UNMEASURED
+- id: C-2026-0916-02
+  date: '2026-09-16'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: Three files published at /interop/ots/ as OpenTimestamps proofs were not OpenTimestamps proofs.
+    swift-measure.ots, cobol-measure.ots and stablecoins-extended.ots carried no .ots magic header and python-opentimestamps
+    rejects each with BadMagicError. The…
+  fix: 'Root cause was the producer: scripts/ots/ots-stamp.py wrote the calendar''s raw HTTP response fragment to
+    disk. A detached proof is magic header + version + file-hash-op + file digest + serialized timestamp. The script
+    is rewritten to build a…'
+  status: CORRECTED IN SOURCE AND RECORDED; PROOFS ARE PENDING, NOT ANCHORED
+- id: C-2026-0916-01
+  date: '2026-09-16'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: Two outbound emails on 16 September (to DBTA and Nieman Lab, 05:35-05:36Z) corrected an earlier
+    figure for the supersession ledger from 953 to 841 rows and asked the recipients to use 841. At that moment
+    the live file…
+  fix: 'Approaches sent after 09:47Z quote 953 with the read time. The two recipients of the 841 figure are not
+    written to again; this record is the correction, and the ledger they were pointed at now reads 953. Outreach
+    rule recorded: a figure quoted outward names…'
+  status: RECORDED; THE LIVE LEDGER IS AUTHORITATIVE AT ITS READ TIME
+- id: C-2026-0915-01
+  date: '2026-09-15'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: On GET /api/gspc, the governance axis's historical_measurement_record.note said the tuned governance
+    specialist "leads AND the lead is separated (McNemar p=0.0086 vs best base mistral:7b) — one of only 4 separated
+    leads on the board". The same payload read…
+  fix: The governance, care and affect notes in functions/api/_gspc_axes_a.ts and _gspc_axes_b.ts now state each
+    separation as an in-lane result on our own model, not a public ranking, and not counted in totals.separated_leads;
+    the typed count is gone. The care…
+  status: CORRECTED IN SOURCE AND RECORDED; VERIFY THE CURRENT LIVE ENDPOINT
+- id: C-2026-0914-03
+  date: '2026-09-14'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: The wrapper-parity roster pointed usdt0:arbitrum and usdt0:optimism at 0x2E1dBfbf44d8855fDE5D5fD6c978a9b10bc27627
+    and usdt0:ethereum at 0x48C04ed50508680b93561a5800E97e24C05e639F. None of these is a USDT0 token contract. Three
+    public.notice cards signed under…
+  fix: The roster now uses the addresses on docs.usdt0.to (Arbitrum 0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,
+    Optimism 0x01bFF41798a0BcF287b996046Ca68b395DbC1071). The staged atoms were re-staged from the corrected roster
+    and read UNCHECKABLE_NATIVE_ISSUANCE. The…
+  status: CORRECTED IN SOURCE AND RECORDED; VERIFY THE NEXT PUBLIC ROOT
+- id: C-2026-0914-02
+  date: '2026-09-14'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: On GET /api/gspc, the reserve-attestation axis note said '1 PASS, 6 FAIL, 9 UNCHECKABLE'. The
+    evidence file it cites, /interop/financial-measure-run-reserve-attestation.json (as_of 2026-09-07T11:30:35Z),
+    tallies 3 PASS, 4 FAIL, 9 UNCHECKABLE; 1/6/9 is the…
+  fix: Both notes in functions/api/_gspc_axes_fin.ts now quote their evidence files. functions/api/gspc.financial-tally.test.ts
+    reads every typed PASS/FAIL/UNCHECKABLE triple in a financial note and requires it to equal the cited evidence
+    file's tally, with failing…
+  status: CORRECTED IN SOURCE AND RECORDED; VERIFY THE CURRENT LIVE ENDPOINT
+- id: C-2026-0914-01
+  date: '2026-09-14'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: '44 signed third-party Hub measurement cards on the swarm axis (#2321, merged 2026-09-14T08:29Z,
+    and #2330, 09:41Z; runs gha-34818995409 and gha-34824895140) were graded by a prompt that could not be answered
+    wrongly. The frozen bank csoai/gspc-swarm (revision…'
+  fix: Signed bytes are not edited. The 44 cards are recorded in /interop/mill-cards-signed/WITHDRAWN.jsonl — withdrawn,
+    not superseded, because no sound card exists to replace them — derived from the bound bank bytes by scripts/withdraw_one_option_cards.py,
+    which…
+  status: WITHDRAWN IN SOURCE; VERIFY WITH python3 scripts/withdraw_one_option_cards.py
+- id: C-2026-0913-01
+  date: '2026-09-13'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: 'scripts/erc8004_census.py (merged in #2020, 2026-09-12T15:38Z) reported 8 ERC-8004 Identity Registry
+    registrations on Ethereum. The true count at the same floor-to-head range is 50,783. Cause: rpc.flashbots.net
+    serves a silently incomplete historical log…'
+  fix: '#2070 (merged 2026-09-13T02:29Z): known-event integrity anchors — one receipt-verified (block, tx) pair
+    per chain; an endpoint''s scan is trusted only if it returns the anchor event when the anchor block is in range
+    (negative test: flashbots is refused on the…'
+  status: CORRECTED IN SOURCE AND RECORDED; VERIFY WITH scripts/erc8004_census.py
+- id: C-2026-0912-01
+  date: '2026-09-12'
+  kind: correction
+  breaking: false
+  reached_the_public: null
+  what_was_wrong: The live SwarmBench v2b row claimed a statistically separated qwen2.5:7b leader by comparing a
+    stated 0.384 lower bound with a 0.372 upper bound for mistral:7b. The signed candidate cards show qwen3:4b at
+    0.4070 and qwen2.5:1.5b at 0.4000, both ahead of…
+  fix: 'The live serving layer now keeps the signed qwen2.5:7b point estimate and leader identity but marks statistical
+    separation UNTESTED. Its basis states the actual point ordering and the missing evidence: no published paired
+    item rows or compatible confidence…'
+  status: CORRECTED IN SOURCE AND RECORDED; VERIFY THE CURRENT LIVE ENDPOINT
+release_history:
+  mcp_registry_io_github_CSOAI_ORG_gspc:
+  - version: 1.0.0
+    date: '2026-08-16'
+    remote: workers.dev (now dead)
+  - version: 1.0.1
+    date: '2026-08-19'
+    remote: https://councilof.ai/api/assess
+  - version: 1.1.0
+    date: '2026-08-29'
+    remote: https://councilof.ai/mcp
+  - version: 1.2.0
+    date: '2026-09-04'
+    npm: 0.2.1
+  - version: 1.4.0
+    date: '2026-09-07'
+  - version: 1.4.2
+    date: '2026-09-14'
+    npm: 0.2.2
+    latest: true
+  npm_csoai_gspc_mcp:
+  - version: 0.1.0
+    date: '2026-08-28'
+  - version: 0.2.2
+    date: '2026-09-13'
+    latest: true
+notable:
+- id: C-2026-0917-02
+  date: '2026-09-17'
+  why_it_matters: 'Every public URL (including the agent card, x402.json, did.json, robots.txt and llms.txt) answered
+    HTTP 403 to non-browser clients because of a zone-level Cloudflare Browser Integrity Check. The provider measured
+    21/21 URLs, published the measurement and fixed it. Re-probed by API Evangelist on 2026-09-20 with python-requests
+    and default curl user agents: 200.'
