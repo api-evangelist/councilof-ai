@@ -32,7 +32,7 @@ tags:
 - A2A
 - MCP
 - x402
-- Agent Commerce
+- Agentic Commerce
 - agent-native
 - United Kingdom
 tags_raw:
@@ -49,6 +49,7 @@ tags_raw:
 - Agent commerce
 - Agent-native
 - United Kingdom
+- Agent Commerce
 apis:
 - aid: councilof-ai:council-of-ai-public-api
   name: Council of AI Public API
