@@ -1,0 +1,32 @@
+openapi: 3.2.0
+info:
+  title: Councilof Ai .well Known API
+  version: 0.1.0
+  contact:
+    name: CSOAI Ltd
+    url: https://councilof.ai
+    email: nicholas@csoai.org
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  description: 'Operations tagged .well Known across 2 of this provider''s published API definitions: councilof-ai-gspc-read-surfaces-openapi.json, councilof-ai-gspc-read-surfaces-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://councilof.ai
+tags:
+- name: .well Known
+paths:
+  /.well-known/did.json:
+    get:
+      operationId: getDid
+      summary: The DID document that publishes the signing keys
+      description: verificationMethod[] carries the Ed25519 keys (card-attestation-1 signs measurement cards; board-attestation-1 signs the root and mill cards). Pin, do not fetch at check time.
+      responses:
+        '200':
+          description: DID document.
+      tags:
+      - .well Known
+    servers:
+    - url: https://councilof.ai
+x-refined-from:
+- councilof-ai-gspc-read-surfaces-openapi.json
+- councilof-ai-gspc-read-surfaces-openapi.yml

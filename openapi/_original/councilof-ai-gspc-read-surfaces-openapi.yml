@@ -1,3 +1,5 @@
+# x-archived-from: councilof-ai-gspc-read-surfaces-openapi.yml
+# x-archived-on: 2026-09-26
 openapi: 3.1.0
 info:
   title: Council of AI — GSPC measurement (public read surfaces)

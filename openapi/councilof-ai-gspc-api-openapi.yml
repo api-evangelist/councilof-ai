@@ -1,0 +1,44 @@
+openapi: 3.2.0
+info:
+  title: Councilof Ai Gspc API
+  x-refined-note:
+  - x-guidance differs across the merged source definitions and was not carried
+  version: '1.0'
+  description: 'Operations tagged Gspc across 3 of this provider''s published API definitions: councilof-ai-gspc-read-surfaces-openapi.json, councilof-ai-public-api-openapi.json, councilof-ai-gspc-read-surfaces-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://councilof.ai
+tags:
+- name: Gspc
+paths:
+  /api/gspc:
+    get:
+      operationId: getBoard
+      summary: The living GSPC board — the one authority
+      description: Returns totals (print totals.lid and totals.public_count verbatim), state_enum, and one object per axis with status, kind, separation, and either a public leader or a public_leader_state explaining why the leader is withheld (EXCLUDED_OWN_MODEL, NO_SIGNED_CARD). Do not count the axes array; read totals.
+      responses:
+        '200':
+          description: Board payload (application/json).
+      tags:
+      - Gspc
+    servers:
+    - url: https://councilof.ai
+components:
+  securitySchemes:
+    ed25519:
+      description: Ed25519 signature of canonical body, under did:web:csoai.org#card-attestation-1
+      in: header
+      name: X-CSOAI-Signed-Card
+      type: apiKey
+    githubOidc:
+      bearerFormat: JWT
+      description: GitHub Actions OIDC token satisfying the handler's issuer, audience, repository and workflow checks.
+      scheme: bearer
+      type: http
+    operatorBearer:
+      description: Operation-specific configured operator or writer credential. Not interchangeable across operations.
+      scheme: bearer
+      type: http
+x-refined-from:
+- councilof-ai-gspc-read-surfaces-openapi.json
+- councilof-ai-public-api-openapi.json
+- councilof-ai-gspc-read-surfaces-openapi.yml

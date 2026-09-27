@@ -1,0 +1,44 @@
+openapi: 3.2.0
+info:
+  title: Councilof Ai Proof API
+  version: 0.1.0
+  contact:
+    name: CSOAI Ltd
+    url: https://councilof.ai
+    email: nicholas@csoai.org
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  description: 'Operations tagged Proof across 2 of this provider''s published API definitions: councilof-ai-gspc-read-surfaces-openapi.json, councilof-ai-gspc-read-surfaces-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://councilof.ai
+tags:
+- name: Proof
+paths:
+  /api/proof:
+    get:
+      operationId: getProof
+      summary: One free inclusion proof against the last published public root
+      description: Pass sha=. 200 with kind=inclusion (index, proof[], merkle_root, as_of) when the sha is a leaf; 404 error=not_found when it is not a leaf (the root binds the public-root card set, not every signed measurement card); 400 when sha is malformed. bundle=1 is an x402 (HTTP 402) paid re-serve, never required.
+      parameters:
+      - name: sha
+        in: query
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        description: Leaf sha256, lowercase hex.
+      responses:
+        '200':
+          description: Inclusion proof.
+        '400':
+          description: Malformed sha.
+        '404':
+          description: Not a leaf of the last published root.
+      tags:
+      - Proof
+    servers:
+    - url: https://councilof.ai
+x-refined-from:
+- councilof-ai-gspc-read-surfaces-openapi.json
+- councilof-ai-gspc-read-surfaces-openapi.yml
