@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Councilof Ai Proof API
+  title: Council of AI — GSPC measurement (public read surfaces)…
   version: 0.1.0
+  description: 'Independent AI-behaviour measurement by CSOAI Ltd. Measurement, not certification. Quote totals.lid and totals.public_count from GET /api/gspc verbatim; never compose a count. Three verification states exist: VALID, INVALID, UNCHECKABLE. Absence of a field means UNMEASURED. TIE is never a win. A withheld leader (public_leader_state) is a state, not a zero. Verify is free; a rank is never sold. Signature checks are not Actions: use /signed/HOW-TO-VERIFY.md.'
   contact:
     name: CSOAI Ltd
     url: https://councilof.ai
@@ -9,7 +10,6 @@ info:
   license:
     name: Apache-2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  description: 'Operations tagged Proof across 2 of this provider''s published API definitions: councilof-ai-gspc-read-surfaces-openapi.json, councilof-ai-gspc-read-surfaces-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://councilof.ai
 tags:
@@ -37,8 +37,3 @@ paths:
           description: Not a leaf of the last published root.
       tags:
       - Proof
-    servers:
-    - url: https://councilof.ai
-x-refined-from:
-- councilof-ai-gspc-read-surfaces-openapi.json
-- councilof-ai-gspc-read-surfaces-openapi.yml

@@ -1167,48 +1167,6 @@ paths:
         - x402
 components:
   schemas:
-    X402Accept:
-      properties:
-        amount:
-          description: atomic units (x402 v2)
-          pattern: ^[0-9]+$
-          type: string
-        asset:
-          const: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-          description: USDC contract, 6 decimals
-          type: string
-        extra:
-          description: EIP-712 domain of the asset
-          properties:
-            name:
-              type: string
-            version:
-              type: string
-          type: object
-        maxAmountRequired:
-          description: atomic units (x402 v1 name for the same figure)
-          pattern: ^[0-9]+$
-          type: string
-        maxTimeoutSeconds:
-          type: integer
-        network:
-          const: eip155:8453
-          description: CAIP-2
-          type: string
-        payTo:
-          const: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
-          type: string
-        scheme:
-          const: exact
-          type: string
-      required:
-      - scheme
-      - network
-      - asset
-      - payTo
-      - amount
-      - maxTimeoutSeconds
-      type: object
     X402PaymentRequired:
       properties:
         accepts:
@@ -1266,6 +1224,48 @@ components:
       required:
       - x402Version
       - accepts
+      type: object
+    X402Accept:
+      properties:
+        amount:
+          description: atomic units (x402 v2)
+          pattern: ^[0-9]+$
+          type: string
+        asset:
+          const: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+          description: USDC contract, 6 decimals
+          type: string
+        extra:
+          description: EIP-712 domain of the asset
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+          type: object
+        maxAmountRequired:
+          description: atomic units (x402 v1 name for the same figure)
+          pattern: ^[0-9]+$
+          type: string
+        maxTimeoutSeconds:
+          type: integer
+        network:
+          const: eip155:8453
+          description: CAIP-2
+          type: string
+        payTo:
+          const: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+          type: string
+        scheme:
+          const: exact
+          type: string
+      required:
+      - scheme
+      - network
+      - asset
+      - payTo
+      - amount
+      - maxTimeoutSeconds
       type: object
   securitySchemes:
     ed25519:

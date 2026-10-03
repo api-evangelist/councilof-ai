@@ -4,7 +4,7 @@ info:
   x-refined-note:
   - x-guidance differs across the merged source definitions and was not carried
   version: '1.0'
-  description: 'Operations tagged Gspc across 3 of this provider''s published API definitions: councilof-ai-gspc-read-surfaces-openapi.json, councilof-ai-public-api-openapi.json, councilof-ai-gspc-read-surfaces-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Gspc across 2 of this provider''s published API definitions: councilof-ai-gspc-read-surfaces-openapi.json, councilof-ai-public-api-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://councilof.ai
 tags:
@@ -41,4 +41,3 @@ components:
 x-refined-from:
 - councilof-ai-gspc-read-surfaces-openapi.json
 - councilof-ai-public-api-openapi.json
-- councilof-ai-gspc-read-surfaces-openapi.yml
