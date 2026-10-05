@@ -1,0 +1,45 @@
+slug: councilof-ai
+provider: Council of AI
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Assess
+  spec_file: councilof-ai-assess-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.8
+  evidence: POST /api/assess — a deterministic, text-only EU AI Act screening helper
+  reason: The operation explicitly screens against the EU AI Act, which is compliance with a sector-specific
+    regulation. Clear capability; slight ambiguity only over whether risk assessment (BC-120.20) is the
+    better home.
+- tag: Webhooks
+  spec_file: councilof-ai-webhooks-api-openapi.yml
+  capability_id: BC-4270.80
+  capability_id_l1: BC-4270
+  capability_name: Webhook & Event Subscription Management
+  confidence: 0.8
+  evidence: GET/POST /api/webhooks — webhook CRUD (in-memory + KV if bound).
+  reason: CRUD lifecycle over outbound webhook subscriptions exposed to API consumers maps to Webhook
+    & Event Subscription Management; it is plumbing but the candidate frame has an explicit capability
+    for it.
+- tag: Eu Ai Act
+  spec_file: councilof-ai-eu-ai-act-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.7
+  evidence: /api/eu-ai-act — evidence summary for the EU AI Act regime (Art 50, high-risk…
+  reason: The operation assembles evidence against a named sector regulation (EU AI Act, Art 50, high-risk
+    obligations), which is regulatory compliance management; moderate confidence as the vendor frames
+    it as measurement rather than compliance attestation.
