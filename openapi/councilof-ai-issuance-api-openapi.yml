@@ -4,22 +4,835 @@ info:
     email: nicholas@csoai.org
     name: CSOAI Ltd
     url: https://councilof.ai/
-  description: 'Verification is free forever. Agents pay per artefact: issuance, assembly, cadence — never a grade. 22 axes measured · 14 model fleets · 3 public leader scores · 8 fact runs · TIE is TIE · not a certificate. Operations with security [] are free and unauthenticated. Operations with x-payment-info are x402 doors; an amount appears only inside a door''s 402 challenge (documented as each door''s 402 example).'
+  description: 'Verification is free forever. Agents pay per artefact: issuance, assembly, cadence — never a grade. 23 axes measured · 14 model fleets · 0 separated leaders · 9 public leader scores · 9 fact runs · TIE is TIE · not a certificate. Operations with security [] are free and unauthenticated. Operations with x-payment-info are x402 doors; an amount appears only inside a door''s 402 challenge (documented as each door''s 402 example). Python''s default urllib User-Agent (Python-urllib/x.y) is refused at our CDN with 403 ''error code: 1010''. Send any User-Agent, e.g. urllib.request.Request(url, headers={''User-Agent'': ''my-check/1''}).'
   license:
     name: CC-BY-4.0
     url: https://creativecommons.org/licenses/by/4.0/
   title: Council of AI — Public Issuance API
-  version: 0.2+820f7aa0ad7a
-  x-guidance: 'Free board: GET /api/gspc — quote totals.lid verbatim, never compose a count. Paid doors are the operations carrying x-payment-info: GET without payment answers HTTP 402 with the x402 v2 challenge (accepts[0]: scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31); pay it and retry with the X-PAYMENT header. Required query parameters carry an example that reaches the 402. Free previews are named per door under x-csoai.free_preview. Catalog: https://councilof.ai/.well-known/x402.json and https://councilof.ai/api/x402. Verify is free: https://councilof.ai/gspc-verify. Offer & Receipt emission is conditional: a 402 carries server-signed offers only when the Pages signing key is available; a settled 200 carries a signed receipt only when settlement exposes the required payer and transaction evidence and that key is available. The extension uses JWS/EdDSA, kid did:web:csoai.org#board-attestation-1, published at https://csoai.org/.well-known/did.json. Check either without trusting this document: POST it to /api/receipts/verify, or run scripts/verify_receipt.py, which reads did.json and contacts nobody. 22 axes measured · 14 model fleets · 3 public leader scores · 8 fact runs · TIE is TIE · not a certificate.'
+  version: 0.3+4a141228c8ec
+  x-guidance: 'Free board: GET /api/gspc — quote totals.lid verbatim, never compose a count. Paid doors are the operations carrying x-payment-info: GET without payment answers HTTP 402 with the x402 v2 challenge (accepts[0]: scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31); pay it and retry with the X-PAYMENT header. Required query parameters carry an example that reaches the 402. Free previews are named per door under x-csoai.free_preview. Catalog: https://councilof.ai/.well-known/x402.json and https://councilof.ai/api/x402. Verify is free: https://councilof.ai/gspc-verify. Offer & Receipt emission is conditional: a 402 carries server-signed offers only when the Pages signing key is available; a settled 200 carries a signed receipt only when settlement exposes the required payer and transaction evidence and that key is available. The extension uses JWS/EdDSA, kid did:web:csoai.org#board-attestation-1, published at https://csoai.org/.well-known/did.json. Check either without trusting this document: POST it to /api/receipts/verify, or download https://councilof.ai/verifier/verify_receipt.py; default mode reads the public DID document, and a retained key document allows offline replay. 23 axes measured · 14 model fleets · 0 separated leaders · 9 public leader scores · 9 fact runs · TIE is TIE · not a certificate.'
 servers:
 - url: https://councilof.ai
 tags:
 - description: sells issuance of a signed artefact
   name: Issuance
 paths:
+  /api/measurement/fresh-capsule:
+    get:
+      description: 'Fresh measurement capsule: re-measures one declared-vs-observed claim about one MCP endpoint, live. Compares the endpoint''s own discovery documents with its initialize and tools/list answers for TOOLS, VERSION or PROTOCOL, each read hashed; no tool is ever called. States: CONSISTENT, INCONSISTENT, or UNCHECKABLE with the reason. Free unsigned preview; verification is free.'
+      operationId: x402_measurement_fresh_capsule
+      parameters:
+      - description: which declared-vs-observed claim to re-measure
+        example: TOOLS
+        in: query
+        name: dimension
+        required: true
+        schema:
+          enum:
+          - TOOLS
+          - VERSION
+          - PROTOCOL
+          type: string
+      - description: https URL of one MCP endpoint (Streamable HTTP)
+        example: https://example.com/mcp
+        in: query
+        name: endpoint
+        required: true
+        schema:
+          type: string
+      - description: 'Free preview: same request, no payment, no signature'
+        in: query
+        name: preview
+        required: false
+        schema:
+          const: '1'
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: 'Fresh measurement capsule: re-measures one declared-vs-observed claim about one MCP endpoint, live. Compares the endpoint''s own discovery documents with its initialize and tools/list answers for TOOLS, VERSION or PROTOCOL, each read hashed; no tool is ever called. States: CONSISTENT, INCONSISTENT, or UNCHECKABLE with the reason. Free unsigned preview; verification is free.'
+                type: object
+          description: 'Fresh measurement capsule: re-measures one declared-vs-observed claim about one MCP endpoint, live. Compares the endpoint''s own discovery documents with its initialize and tools/list answers for TOOLS, VERSION or PROTOCOL, each read hashed; no tool is ever called. States: CONSISTENT, INCONSISTENT, or UNCHECKABLE with the reason. Free unsigned preview; verification is free.'
+        '402':
+          content:
+            application/json:
+              example:
+                accepts:
+                - amount: '10000'
+                  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                  csoai_pricing:
+                    campaign_id: csoai-launch-30d-20260911
+                    ends_at: '2027-01-11T00:00:00Z'
+                    fresh_compute_excluded: true
+                    normal_amount_atomic: '20000'
+                    offered_amount_atomic: '10000'
+                    pricing_basis: PROMO_EXISTING_DATA
+                    product_id: csoai.product.request_attestation
+                    sku_id: request_attestation
+                    starts_at: '2026-09-11T00:00:00Z'
+                  description: 'Fresh measurement capsule: re-measures one declared-vs-observed claim (TOOLS, VERSION or PROTOCOL) about one MCP endpoint, live, at the discovery boundary only — the endpoint''s own discovery documents vs its initialize + tools/list answer. Returns CONSISTENT, INCONSISTENT or UNCHECKABLE with sha256 of every read and a board signature pinning the capsule id. Measurement, not endorsement; verification stays free.'
+                  extra:
+                    decimals: 6
+                    name: USD Coin
+                    symbol: USDC
+                    version: '2'
+                  maxAmountRequired: '10000'
+                  maxTimeoutSeconds: 300
+                  mimeType: application/json
+                  network: eip155:8453
+                  payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+                  resource: https://councilof.ai/api/measurement/fresh-capsule
+                  scheme: exact
+                error: Payment required
+                extensions:
+                  bazaar:
+                    info:
+                      input:
+                        method: GET
+                        queryParams:
+                          dimension: TOOLS
+                          endpoint: https://example.com/mcp
+                        type: http
+                      output:
+                        example:
+                          capsule:
+                            capsule_id: <hex>
+                            kind: measurement.contract_parity
+                            measurement_state: CONSISTENT
+                            schema: csoai.measurement-capsule/0.2
+                            subject_id: https://example.com/mcp
+                          signature:
+                            sig_ed25519: <hex or null>
+                        type: json
+                    schema:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      properties:
+                        input:
+                          additionalProperties: false
+                          properties:
+                            method:
+                              enum:
+                              - GET
+                              - HEAD
+                              - DELETE
+                              type: string
+                            queryParams:
+                              properties:
+                                dimension:
+                                  description: which declared-vs-observed claim to re-measure
+                                  enum:
+                                  - TOOLS
+                                  - VERSION
+                                  - PROTOCOL
+                                  type: string
+                                endpoint:
+                                  description: https URL of one MCP endpoint (Streamable HTTP)
+                                  type: string
+                              required:
+                              - endpoint
+                              - dimension
+                              type: object
+                            type:
+                              const: http
+                              type: string
+                          required:
+                          - type
+                          - method
+                          type: object
+                        output:
+                          properties:
+                            example:
+                              type: object
+                            type:
+                              type: string
+                          required:
+                          - type
+                          type: object
+                      required:
+                      - input
+                      type: object
+                  offer-receipt:
+                    info:
+                      offers:
+                      - acceptIndex: 0
+                        format: jws
+                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIxMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS9tZWFzdXJlbWVudC9mcmVzaC1jYXBzdWxlIiwic2NoZW1lIjoiZXhhY3QiLCJ2YWxpZFVudGlsIjoxNzkwNTcyNDkwLCJ2ZXJzaW9uIjoxfQ.O3EkrIZOGNCQ5kIiQPMTmdsNIN4FFot1ae5wxg6qk8rcldtodImgOMuQxSPrM6IN5Jh9N_2kgtMRl-eco2QVDQ
+                    schema:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      properties:
+                        offers:
+                          items:
+                            properties:
+                              acceptIndex:
+                                type: integer
+                              format:
+                                const: jws
+                                type: string
+                              signature:
+                                description: JWS compact serialization containing the offer payload
+                                type: string
+                            required:
+                            - format
+                            - signature
+                            type: object
+                          type: array
+                      required:
+                      - offers
+                      type: object
+                resource:
+                  description: 'Fresh measurement capsule: re-measures one declared-vs-observed claim about one MCP endpoint, live. Compares the endpoint''s own discovery documents with its initialize and tools/list answers for TOOLS, VERSION or PROTOCOL, each read hashed; no tool is ever called. States: CONSISTENT, INCONSISTENT, or UNCHECKABLE with the reason. Free unsigned preview; verification is free.'
+                  mimeType: application/json
+                  serviceName: CSOAI Fresh Capsule
+                  tags:
+                  - mcp
+                  - measurement
+                  - parity
+                  - evidence
+                  - x402
+                  url: https://councilof.ai/api/measurement/fresh-capsule
+                x402Version: 2
+              schema:
+                $ref: '#/components/schemas/X402PaymentRequired'
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
+          headers:
+            PAYMENT-REQUIRED:
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
+              schema:
+                type: string
+      summary: Fresh measurement capsule (one MCP endpoint, one claim)
+      tags:
+      - Issuance
+      x-csoai:
+        challenge:
+          amount_source: captured live 402 (challenges/measurement_fresh_capsule.json)
+          captured: true
+          payment_required_header_bytes: 2792
+        door: https://councilof.ai/api/measurement/fresh-capsule
+        free_preview: https://councilof.ai/api/measurement/fresh-capsule?endpoint=https://councilof.ai/mcp&dimension=TOOLS&preview=1
+        never:
+        - a rating
+        - a guarantee
+        - a verdict
+        - a rank
+        - an endorsement
+        - a certificate
+        - a call beyond the discovery boundary
+        paid_for: issuance
+        tier: fresh_capsule
+      x-payment-info:
+        protocols:
+        - x402
+  /api/ras/mcp-probe:
+    get:
+      description: 'MCP discovery probe receipt: one live, read-only discovery of a public https MCP endpoint, signed. Runs server/discover, else initialize and tools/list, and never calls a tool: protocol version requested and negotiated, tool count, tool-names sha256. States include LISTED, PARTIAL, AUTH_REQUIRED, NOT_MCP, TIMEOUT and UNREACHABLE, delivered as found. Verification is free at /api/verify.'
+      operationId: x402_ras_mcp_probe
+      parameters:
+      - description: public https MCP endpoint (Streamable HTTP); private, link-local and metadata addresses are refused
+        example: https://councilof.ai/mcp
+        in: query
+        name: url
+        required: true
+        schema:
+          const: https://councilof.ai/mcp
+          format: uri
+          pattern: ^https://
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: 'MCP discovery probe receipt: one live, read-only discovery of a public https MCP endpoint, signed. Runs server/discover, else initialize and tools/list, and never calls a tool: protocol version requested and negotiated, tool count, tool-names sha256. States include LISTED, PARTIAL, AUTH_REQUIRED, NOT_MCP, TIMEOUT and UNREACHABLE, delivered as found. Verification is free at /api/verify.'
+                type: object
+          description: 'MCP discovery probe receipt: one live, read-only discovery of a public https MCP endpoint, signed. Runs server/discover, else initialize and tools/list, and never calls a tool: protocol version requested and negotiated, tool count, tool-names sha256. States include LISTED, PARTIAL, AUTH_REQUIRED, NOT_MCP, TIMEOUT and UNREACHABLE, delivered as found. Verification is free at /api/verify.'
+        '402':
+          content:
+            application/json:
+              example:
+                accepts:
+                - amount: '20000'
+                  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                  csoai_pricing:
+                    campaign_id: null
+                    fresh_compute_excluded: true
+                    normal_amount_atomic: '20000'
+                    offered_amount_atomic: '20000'
+                    pricing_basis: STANDARD
+                    product_id: csoai.product.ras.mcp_probe
+                    sku_id: ras_fresh_read
+                  description: 'MCP discovery probe receipt — one live read-only discovery of a public https MCP endpoint (server/discover, else initialize + tools/list; no tool is ever called): state, requested vs negotiated protocol version, tool count and tool-names sha256, Ed25519-signed. A probe, not a grade.'
+                  extra:
+                    decimals: 6
+                    name: USD Coin
+                    symbol: USDC
+                    version: '2'
+                  maxAmountRequired: '20000'
+                  maxTimeoutSeconds: 300
+                  mimeType: application/json
+                  network: eip155:8453
+                  payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+                  resource: https://councilof.ai/api/ras/mcp-probe
+                  scheme: exact
+                error: Payment required
+                extensions:
+                  bazaar:
+                    info:
+                      input:
+                        method: GET
+                        queryParams:
+                          url: https://councilof.ai/mcp
+                        type: http
+                      output:
+                        example:
+                          kind: receipt
+                          receipt:
+                            sha256: <hex>
+                            sig_ed25519: <hex or null>
+                          result:
+                            kind: csoai.ras.mcp-probe/0.1
+                            protocol:
+                              negotiated: <version or null>
+                              requested:
+                              - '2026-07-28'
+                            state: RESPONDED | AUTH_REQUIRED | NOT_MCP | MCP_ERROR | UNREACHABLE | TIMEOUT
+                            tool_called: false
+                            tools:
+                              count: <int or null>
+                              names_sha256: <hex or null>
+                          schema: csoai.ras.mcp-probe/0.1
+                        type: json
+                    schema:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      properties:
+                        input:
+                          additionalProperties: false
+                          properties:
+                            method:
+                              enum:
+                              - GET
+                              - HEAD
+                              - DELETE
+                              type: string
+                            queryParams:
+                              properties:
+                                url:
+                                  description: public https MCP endpoint (Streamable HTTP); private, link-local and metadata addresses are refused
+                                  format: uri
+                                  pattern: ^https://
+                                  type: string
+                              required:
+                              - url
+                              type: object
+                            type:
+                              const: http
+                              type: string
+                          required:
+                          - type
+                          - method
+                          type: object
+                        output:
+                          properties:
+                            example:
+                              type: object
+                            type:
+                              type: string
+                          required:
+                          - type
+                          type: object
+                      required:
+                      - input
+                      type: object
+                  offer-receipt:
+                    info:
+                      offers:
+                      - acceptIndex: 0
+                        format: jws
+                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIyMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS9yYXMvbWNwLXByb2JlIiwic2NoZW1lIjoiZXhhY3QiLCJ2YWxpZFVudGlsIjoxNzkwNTcyNDkyLCJ2ZXJzaW9uIjoxfQ.LySHQKngtio5NXkmOrf7oQ4NN7boJsFS9cAdOj6o3lTBw8EQyntfOCK2evGj5dCw7d47jFnQVGmS56-Zn2ivAg
+                    schema:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      properties:
+                        offers:
+                          items:
+                            properties:
+                              acceptIndex:
+                                type: integer
+                              format:
+                                const: jws
+                                type: string
+                              signature:
+                                description: JWS compact serialization containing the offer payload
+                                type: string
+                            required:
+                            - format
+                            - signature
+                            type: object
+                          type: array
+                      required:
+                      - offers
+                      type: object
+                resource:
+                  description: 'MCP discovery probe receipt: one live, read-only discovery of a public https MCP endpoint, signed. Runs server/discover, else initialize and tools/list, and never calls a tool: protocol version requested and negotiated, tool count, tool-names sha256. States include LISTED, PARTIAL, AUTH_REQUIRED, NOT_MCP, TIMEOUT and UNREACHABLE, delivered as found. Verification is free at /api/verify.'
+                  mimeType: application/json
+                  serviceName: CSOAI MCP Probe
+                  tags:
+                  - mcp
+                  - probe
+                  - discovery
+                  - receipt
+                  - x402
+                  url: https://councilof.ai/api/ras/mcp-probe
+                x402Version: 2
+              schema:
+                $ref: '#/components/schemas/X402PaymentRequired'
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
+          headers:
+            PAYMENT-REQUIRED:
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
+              schema:
+                type: string
+      summary: MCP discovery probe (per endpoint)
+      tags:
+      - Issuance
+      x-csoai:
+        challenge:
+          amount_source: captured live 402 (challenges/ras_mcp_probe.json)
+          captured: true
+          payment_required_header_bytes: 2700
+        door: https://councilof.ai/api/ras/mcp-probe?url=https://councilof.ai/mcp
+        free_preview: https://councilof.ai/evidence/mcp-remote-census/
+        never:
+        - a tool call
+        - a grade
+        - a rank
+        - a safety judgement
+        - a certificate
+        - a board cell
+        paid_for: issuance
+        tier: ras_mcp_probe
+      x-payment-info:
+        protocols:
+        - x402
+  /api/ras/supply:
+    get:
+      description: 'Token supply read receipt: one fresh totalSupply() read of an issuer-listed EVM deployment, signed. The address is parsed from the issuer''s own page on the request (USDC). States: STATE_PROOF_VERIFIED on Ethereum (EIP-1186 proof checked against the block stateRoot), OPERATOR_API elsewhere, or UNCHECKABLE with the reason. Not a reserve attestation. Verification is free at /api/verify.'
+      operationId: x402_ras_supply
+      parameters:
+      - description: asset whose issuer publishes a deployment list the reader parses
+        example: USDC
+        in: query
+        name: asset
+        required: true
+        schema:
+          const: USDC
+          enum:
+          - USDC
+          type: string
+      - description: EVM ledger named on the issuer's list
+        example: ethereum
+        in: query
+        name: ledger
+        required: true
+        schema:
+          const: ethereum
+          enum:
+          - ethereum
+          - arbitrum
+          - avalanche
+          - base
+          - celo
+          - hyperevm
+          - linea
+          - optimism
+          - polygon
+          - sonic
+          - unichain
+          - zksync
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: 'Token supply read receipt: one fresh totalSupply() read of an issuer-listed EVM deployment, signed. The address is parsed from the issuer''s own page on the request (USDC). States: STATE_PROOF_VERIFIED on Ethereum (EIP-1186 proof checked against the block stateRoot), OPERATOR_API elsewhere, or UNCHECKABLE with the reason. Not a reserve attestation. Verification is free at /api/verify.'
+                type: object
+          description: 'Token supply read receipt: one fresh totalSupply() read of an issuer-listed EVM deployment, signed. The address is parsed from the issuer''s own page on the request (USDC). States: STATE_PROOF_VERIFIED on Ethereum (EIP-1186 proof checked against the block stateRoot), OPERATOR_API elsewhere, or UNCHECKABLE with the reason. Not a reserve attestation. Verification is free at /api/verify.'
+        '402':
+          content:
+            application/json:
+              example:
+                accepts:
+                - amount: '20000'
+                  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                  csoai_pricing:
+                    campaign_id: null
+                    fresh_compute_excluded: true
+                    normal_amount_atomic: '20000'
+                    offered_amount_atomic: '20000'
+                    pricing_basis: STANDARD
+                    product_id: csoai.product.ras.supply
+                    sku_id: ras_fresh_read
+                  description: Token supply read receipt — one fresh totalSupply() read of an issuer-listed EVM deployment (USDC, address parsed from the issuer page on the request); on Ethereum the EIP-1186 storage proof is checked against the block stateRoot, elsewhere it is labelled OPERATOR_API. Not a reserve attestation.
+                  extra:
+                    decimals: 6
+                    name: USD Coin
+                    symbol: USDC
+                    version: '2'
+                  maxAmountRequired: '20000'
+                  maxTimeoutSeconds: 300
+                  mimeType: application/json
+                  network: eip155:8453
+                  payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+                  resource: https://councilof.ai/api/ras/supply
+                  scheme: exact
+                error: Payment required
+                extensions:
+                  bazaar:
+                    info:
+                      input:
+                        method: GET
+                        queryParams:
+                          asset: USDC
+                          ledger: ethereum
+                        type: http
+                      output:
+                        example:
+                          kind: receipt
+                          receipt:
+                            sha256: <hex>
+                            sig_ed25519: <hex or null>
+                          result:
+                            evidence_kind: STATE_PROOF_VERIFIED | OPERATOR_API | REJECTED
+                            height:
+                              number: <int>
+                              state_root: <0x…>
+                            kind: csoai.ras.supply-read/0.1
+                            proof:
+                              account_proof_verified: true
+                              storage_proof_verified: true
+                            supply:
+                              base_units: <int>
+                              decimals: 6
+                          schema: csoai.ras.supply/0.1
+                        type: json
+                    schema:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      properties:
+                        input:
+                          additionalProperties: false
+                          properties:
+                            method:
+                              enum:
+                              - GET
+                              - HEAD
+                              - DELETE
+                              type: string
+                            queryParams:
+                              properties:
+                                asset:
+                                  description: asset whose issuer publishes a deployment list the reader parses
+                                  enum:
+                                  - USDC
+                                  type: string
+                                ledger:
+                                  description: EVM ledger named on the issuer's list
+                                  enum:
+                                  - ethereum
+                                  - arbitrum
+                                  - avalanche
+                                  - base
+                                  - celo
+                                  - hyperevm
+                                  - linea
+                                  - optimism
+                                  - polygon
+                                  - sonic
+                                  - unichain
+                                  - zksync
+                                  type: string
+                              required:
+                              - asset
+                              - ledger
+                              type: object
+                            type:
+                              const: http
+                              type: string
+                          required:
+                          - type
+                          - method
+                          type: object
+                        output:
+                          properties:
+                            example:
+                              type: object
+                            type:
+                              type: string
+                          required:
+                          - type
+                          type: object
+                      required:
+                      - input
+                      type: object
+                  offer-receipt:
+                    info:
+                      offers:
+                      - acceptIndex: 0
+                        format: jws
+                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIyMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS9yYXMvc3VwcGx5Iiwic2NoZW1lIjoiZXhhY3QiLCJ2YWxpZFVudGlsIjoxNzkwNTcyNDkzLCJ2ZXJzaW9uIjoxfQ.BYjcJNVRlK3VeUG4dyWCrr8krNGgoaTUqXcqRGMkwe-8Us7uHbz3FGd-44JkJB5Et0smaXjnRe0MqUUHUS44Cw
+                    schema:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      properties:
+                        offers:
+                          items:
+                            properties:
+                              acceptIndex:
+                                type: integer
+                              format:
+                                const: jws
+                                type: string
+                              signature:
+                                description: JWS compact serialization containing the offer payload
+                                type: string
+                            required:
+                            - format
+                            - signature
+                            type: object
+                          type: array
+                      required:
+                      - offers
+                      type: object
+                resource:
+                  description: 'Token supply read receipt: one fresh totalSupply() read of an issuer-listed EVM deployment, signed. The address is parsed from the issuer''s own page on the request (USDC). States: STATE_PROOF_VERIFIED on Ethereum (EIP-1186 proof checked against the block stateRoot), OPERATOR_API elsewhere, or UNCHECKABLE with the reason. Not a reserve attestation. Verification is free at /api/verify.'
+                  mimeType: application/json
+                  serviceName: CSOAI Supply Read
+                  tags:
+                  - stablecoin
+                  - supply
+                  - eip-1186
+                  - evidence
+                  - x402
+                  url: https://councilof.ai/api/ras/supply
+                x402Version: 2
+              schema:
+                $ref: '#/components/schemas/X402PaymentRequired'
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
+          headers:
+            PAYMENT-REQUIRED:
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
+              schema:
+                type: string
+      summary: Token supply read with state proof (per deployment)
+      tags:
+      - Issuance
+      x-csoai:
+        challenge:
+          amount_source: captured live 402 (challenges/ras_supply.json)
+          captured: true
+          payment_required_header_bytes: 2932
+        door: https://councilof.ai/api/ras/supply?asset=USDC&ledger=ethereum
+        free_preview: https://councilof.ai/evidence/cross-ledger-usdc/
+        never:
+        - a reserve attestation
+        - a proof of backing
+        - a rate
+        - a grade
+        - a certificate
+        paid_for: issuance
+        tier: ras_supply
+      x-payment-info:
+        protocols:
+        - x402
+  /api/ras/x402-check:
+    get:
+      description: 'x402 challenge conformance receipt: one live GET of a public x402 resource, checked and signed. The rule is the daily census''s: HTTP 402, a PAYMENT-REQUIRED header, x402Version 2 and extensions.bazaar in the body. States: CONFORMANT, NOT_CONFORMANT, TIMEOUT, UNREACHABLE or BLOCKED, delivered as found. Verification is free at /api/verify.'
+      operationId: x402_ras_x402_check
+      parameters:
+      - description: public https x402 resource URL, exactly as a buyer would GET it
+        example: https://councilof.ai/api/free-door
+        in: query
+        name: url
+        required: true
+        schema:
+          const: https://councilof.ai/api/free-door
+          format: uri
+          pattern: ^https://
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: 'x402 challenge conformance receipt: one live GET of a public x402 resource, checked and signed. The rule is the daily census''s: HTTP 402, a PAYMENT-REQUIRED header, x402Version 2 and extensions.bazaar in the body. States: CONFORMANT, NOT_CONFORMANT, TIMEOUT, UNREACHABLE or BLOCKED, delivered as found. Verification is free at /api/verify.'
+                type: object
+          description: 'x402 challenge conformance receipt: one live GET of a public x402 resource, checked and signed. The rule is the daily census''s: HTTP 402, a PAYMENT-REQUIRED header, x402Version 2 and extensions.bazaar in the body. States: CONFORMANT, NOT_CONFORMANT, TIMEOUT, UNREACHABLE or BLOCKED, delivered as found. Verification is free at /api/verify.'
+        '402':
+          content:
+            application/json:
+              example:
+                accepts:
+                - amount: '20000'
+                  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                  csoai_pricing:
+                    campaign_id: null
+                    fresh_compute_excluded: true
+                    normal_amount_atomic: '20000'
+                    offered_amount_atomic: '20000'
+                    pricing_basis: STANDARD
+                    product_id: csoai.product.ras.x402_check
+                    sku_id: ras_fresh_read
+                  description: x402 challenge conformance receipt — one live GET of a public x402 resource scored by the daily census rule (HTTP 402, PAYMENT-REQUIRED header, x402Version 2 and extensions.bazaar in the body), Ed25519-signed. A non-conformant result is delivered as found.
+                  extra:
+                    decimals: 6
+                    name: USD Coin
+                    symbol: USDC
+                    version: '2'
+                  maxAmountRequired: '20000'
+                  maxTimeoutSeconds: 300
+                  mimeType: application/json
+                  network: eip155:8453
+                  payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+                  resource: https://councilof.ai/api/ras/x402-check
+                  scheme: exact
+                error: Payment required
+                extensions:
+                  bazaar:
+                    info:
+                      input:
+                        method: GET
+                        queryParams:
+                          url: https://councilof.ai/api/free-door
+                        type: http
+                      output:
+                        example:
+                          kind: receipt
+                          receipt:
+                            sha256: <hex>
+                            sig_ed25519: <hex or null>
+                          result:
+                            kind: csoai.ras.x402-check/0.1
+                            row:
+                              conformant: true
+                              has_bazaar_extension: true
+                              payment_required_header: true
+                              status: 402
+                              x402_version: 2
+                            rule: Conformant = HTTP 402 AND a PAYMENT-REQUIRED response header AND x402Version 2 in the body AND an extensions.bazaar block.
+                            state: CONFORMANT | NOT_CONFORMANT | UNREACHABLE
+                          schema: csoai.ras.x402-check/0.1
+                        type: json
+                    schema:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      properties:
+                        input:
+                          additionalProperties: false
+                          properties:
+                            method:
+                              enum:
+                              - GET
+                              - HEAD
+                              - DELETE
+                              type: string
+                            queryParams:
+                              properties:
+                                url:
+                                  description: public https x402 resource URL, exactly as a buyer would GET it
+                                  format: uri
+                                  pattern: ^https://
+                                  type: string
+                              required:
+                              - url
+                              type: object
+                            type:
+                              const: http
+                              type: string
+                          required:
+                          - type
+                          - method
+                          type: object
+                        output:
+                          properties:
+                            example:
+                              type: object
+                            type:
+                              type: string
+                          required:
+                          - type
+                          type: object
+                      required:
+                      - input
+                      type: object
+                  offer-receipt:
+                    info:
+                      offers:
+                      - acceptIndex: 0
+                        format: jws
+                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIyMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS9yYXMveDQwMi1jaGVjayIsInNjaGVtZSI6ImV4YWN0IiwidmFsaWRVbnRpbCI6MTc5MDU3MjQ5MiwidmVyc2lvbiI6MX0.rkQRTxf-1C1VXYLVWPN62i4xVqlcbrlx6HAUueqitV33RGRFzlTLRo1Lke6PDBsxClPm89D3n7zciCSF41VYDw
+                    schema:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      properties:
+                        offers:
+                          items:
+                            properties:
+                              acceptIndex:
+                                type: integer
+                              format:
+                                const: jws
+                                type: string
+                              signature:
+                                description: JWS compact serialization containing the offer payload
+                                type: string
+                            required:
+                            - format
+                            - signature
+                            type: object
+                          type: array
+                      required:
+                      - offers
+                      type: object
+                resource:
+                  description: 'x402 challenge conformance receipt: one live GET of a public x402 resource, checked and signed. The rule is the daily census''s: HTTP 402, a PAYMENT-REQUIRED header, x402Version 2 and extensions.bazaar in the body. States: CONFORMANT, NOT_CONFORMANT, TIMEOUT, UNREACHABLE or BLOCKED, delivered as found. Verification is free at /api/verify.'
+                  mimeType: application/json
+                  serviceName: CSOAI x402 Check
+                  tags:
+                  - x402
+                  - conformance
+                  - bazaar
+                  - receipt
+                  - probe
+                  url: https://councilof.ai/api/ras/x402-check
+                x402Version: 2
+              schema:
+                $ref: '#/components/schemas/X402PaymentRequired'
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
+          headers:
+            PAYMENT-REQUIRED:
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
+              schema:
+                type: string
+      summary: x402 challenge conformance check (per resource)
+      tags:
+      - Issuance
+      x-csoai:
+        challenge:
+          amount_source: captured live 402 (challenges/ras_x402_check.json)
+          captured: true
+          payment_required_header_bytes: 2720
+        door: https://councilof.ai/api/ras/x402-check?url=https://councilof.ai/api/free-door
+        free_preview: https://councilof.ai/api/x402/index
+        never:
+        - a payment to the target
+        - a judgement of the seller
+        - a grade
+        - a certificate
+        paid_for: issuance
+        tier: ras_x402_check
+      x-payment-info:
+        protocols:
+        - x402
   /api/request-attestation:
     get:
-      description: A card-v0 commission receipt for one named subject, signed when the Pages signing key is available, plus references to up to 24 signed measurement cards whose model field contains the requested subject text. reserve_count reports the full match count. Payment never mints a MEASURED cell.
+      description: 'One named subject gets a card-v0 commission receipt, content-addressed, signed by did:web:csoai.org#board-attestation-1. Without that key: sig_ed25519:null, unsigned_reason. Check csoai.signer before paying. Paid reserve: up to 24 card-v1 references from dated /signed/card-matrix.json only; reserve_count covers that corpus. The interop root in the free preview is not included in the paid reserve. States: SIGNED or UNSIGNED. Payment never creates a MEASURED board cell. Verification is free.'
       operationId: x402_request_attestation
       parameters:
       - description: Subject to commission (model id, instrument id, or card sha)
@@ -41,9 +854,9 @@ paths:
           content:
             application/json:
               schema:
-                description: A card-v0 commission receipt for one named subject, signed when the Pages signing key is available, plus references to up to 24 signed measurement cards whose model field contains the requested subject text. reserve_count reports the full match count. Payment never mints a MEASURED cell.
+                description: 'One named subject gets a card-v0 commission receipt, content-addressed, signed by did:web:csoai.org#board-attestation-1. Without that key: sig_ed25519:null, unsigned_reason. Check csoai.signer before paying. Paid reserve: up to 24 card-v1 references from dated /signed/card-matrix.json only; reserve_count covers that corpus. The interop root in the free preview is not included in the paid reserve. States: SIGNED or UNSIGNED. Payment never creates a MEASURED board cell. Verification is free.'
                 type: object
-          description: A card-v0 commission receipt for one named subject, signed when the Pages signing key is available, plus references to up to 24 signed measurement cards whose model field contains the requested subject text. reserve_count reports the full match count. Payment never mints a MEASURED cell.
+          description: 'One named subject gets a card-v0 commission receipt, content-addressed, signed by did:web:csoai.org#board-attestation-1. Without that key: sig_ed25519:null, unsigned_reason. Check csoai.signer before paying. Paid reserve: up to 24 card-v1 references from dated /signed/card-matrix.json only; reserve_count covers that corpus. The interop root in the free preview is not included in the paid reserve. States: SIGNED or UNSIGNED. Payment never creates a MEASURED board cell. Verification is free.'
         '402':
           content:
             application/json:
@@ -53,7 +866,7 @@ paths:
                   asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
                   csoai_pricing:
                     campaign_id: csoai-launch-30d-20260911
-                    ends_at: '2026-10-11T00:00:00Z'
+                    ends_at: '2027-01-11T00:00:00Z'
                     fresh_compute_excluded: true
                     normal_amount_atomic: '20000'
                     offered_amount_atomic: '10000'
@@ -61,8 +874,7 @@ paths:
                     product_id: csoai.product.request_attestation
                     sku_id: request_attestation
                     starts_at: '2026-09-11T00:00:00Z'
-                    tier: per_request
-                  description: A card-v0 commission receipt for one named subject, signed when the Pages signing key is available, plus references to up to 24 signed measurement cards whose model field contains the requested subject text. reserve_count reports the full match count. Payment never mints a MEASURED cell.
+                  description: 'One named subject gets a card-v0 commission receipt: SHA-256 content-addressed and Ed25519-signed by did:web:csoai.org#board-attestation-1 when available, otherwise sig_ed25519:null with unsigned_reason. Check csoai.signer before paying. Paid reserve returns up to 24 card-v1 references from dated /signed/card-matrix.json only; reserve_count covers that corpus. The separate interop root in the free preview is not included in the paid reserve. Payment never creates a MEASURED board cell.'
                   extra:
                     decimals: 6
                     name: USD Coin
@@ -73,7 +885,7 @@ paths:
                   mimeType: application/json
                   network: eip155:8453
                   payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
-                  resource: https://councilof.ai/api/request-attestation
+                  resource: https://councilof.ai/api/request-attestation?subject=model-or-subject-id
                   scheme: exact
                 error: Payment required
                 extensions:
@@ -144,7 +956,7 @@ paths:
                       offers:
                       - acceptIndex: 0
                         format: jws
-                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIxMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS9yZXF1ZXN0LWF0dGVzdGF0aW9uIiwic2NoZW1lIjoiZXhhY3QiLCJ2YWxpZFVudGlsIjoxNzg5MzE1MTc3LCJ2ZXJzaW9uIjoxfQ.DtunHm4mvTVLpUH9Kb0tiV8cClXdHxJcw9jRklSGmPFKMv2E6_5pbtTf_Ct355hshvsySCaAin5cOjrTLtZ0BA
+                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIxMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS9yZXF1ZXN0LWF0dGVzdGF0aW9uP3N1YmplY3Q9bW9kZWwtb3Itc3ViamVjdC1pZCIsInNjaGVtZSI6ImV4YWN0IiwidmFsaWRVbnRpbCI6MTc5MDU3MjQ4OCwidmVyc2lvbiI6MX0.zL5rg2TLzQsqsU7IEBADZdCJuWRJ7xonUNJ_thzL3pLQ9dbLq7zkIqc7kBhxQfm_5OgD2KxCO5tyDBAn3_bGBQ
                     schema:
                       $schema: https://json-schema.org/draft/2020-12/schema
                       properties:
@@ -168,7 +980,7 @@ paths:
                       - offers
                       type: object
                 resource:
-                  description: A card-v0 commission receipt for one named subject, signed when the Pages signing key is available, plus references to up to 24 signed measurement cards whose model field contains the requested subject text. reserve_count reports the full match count. Payment never mints a MEASURED cell.
+                  description: 'One named subject gets a card-v0 commission receipt, content-addressed, signed by did:web:csoai.org#board-attestation-1. Without that key: sig_ed25519:null, unsigned_reason. Check csoai.signer before paying. Paid reserve: up to 24 card-v1 references from dated /signed/card-matrix.json only; reserve_count covers that corpus. The interop root in the free preview is not included in the paid reserve. States: SIGNED or UNSIGNED. Payment never creates a MEASURED board cell. Verification is free.'
                   mimeType: application/json
                   serviceName: CSOAI Request Attest
                   tags:
@@ -176,14 +988,14 @@ paths:
                   - ras
                   - measurement
                   - x402
-                  url: https://councilof.ai/api/request-attestation
+                  url: https://councilof.ai/api/request-attestation?subject=model-or-subject-id
                 x402Version: 2
               schema:
                 $ref: '#/components/schemas/X402PaymentRequired'
-          description: Payment required — the x402 v2 challenge. The same JSON is base64-encoded in the PAYMENT-REQUIRED response header. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free.
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
           headers:
             PAYMENT-REQUIRED:
-              description: base64(JSON) of this challenge body
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
               schema:
                 type: string
       summary: Commission a signed card (request-attestation)
@@ -193,7 +1005,7 @@ paths:
         challenge:
           amount_source: captured live 402 (challenges/request_attestation.json)
           captured: true
-          payment_required_header_bytes: 7064
+          payment_required_header_bytes: 2864
         door: https://councilof.ai/api/request-attestation?subject=model-or-subject-id
         free_preview: https://councilof.ai/api/request-attestation?subject=<id>
         never:
@@ -208,7 +1020,7 @@ paths:
         - x402
   /api/rwa/evidence:
     get:
-      description: 'A signed XRPL evidence card for RLUSD: AccountRoot flags, Domain, two-way TOML check, and cited raw-fetch hashes. Historical state — not a rating or a guarantee. preview=1 is free unsigned. Paid signed card requires asset (HTTP 402).'
+      description: 'RWA asset evidence: one signed card of one XRPL issued asset''s on-ledger state, read live per request. Reads the AccountRoot flags, Domain, the two-way xrp-ledger.toml check and the gateway obligation, each raw fetch hashed. States: PROBED, UNCHECKABLE (an unreachable source is never a failure) or UNMEASURED. Free unsigned preview; verification is free. preview=1 is free unsigned. Paid signed card requires asset (HTTP 402).'
       operationId: x402_rwa_evidence
       parameters:
       - description: XRPL issued-asset symbol (see /api/xrpl) or issuer r-address
@@ -231,9 +1043,9 @@ paths:
           content:
             application/json:
               schema:
-                description: 'A signed XRPL evidence card: AccountRoot flags, Domain, two-way TOML check, and cited raw-fetch hashes. Historical state — not a rating or a guarantee.'
+                description: 'RWA asset evidence: one signed card of one XRPL issued asset''s on-ledger state, read live per request. Reads the AccountRoot flags, Domain, the two-way xrp-ledger.toml check and the gateway obligation, each raw fetch hashed. States: PROBED, UNCHECKABLE (an unreachable source is never a failure) or UNMEASURED. Free unsigned preview; verification is free.'
                 type: object
-          description: 'A signed XRPL evidence card: AccountRoot flags, Domain, two-way TOML check, and cited raw-fetch hashes. Historical state — not a rating or a guarantee.'
+          description: 'RWA asset evidence: one signed card of one XRPL issued asset''s on-ledger state, read live per request. Reads the AccountRoot flags, Domain, the two-way xrp-ledger.toml check and the gateway obligation, each raw fetch hashed. States: PROBED, UNCHECKABLE (an unreachable source is never a failure) or UNMEASURED. Free unsigned preview; verification is free.'
         '402':
           content:
             application/json:
@@ -243,7 +1055,7 @@ paths:
                   asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
                   csoai_pricing:
                     campaign_id: csoai-launch-30d-20260911
-                    ends_at: '2026-10-11T00:00:00Z'
+                    ends_at: '2027-01-11T00:00:00Z'
                     fresh_compute_excluded: true
                     normal_amount_atomic: '20000'
                     offered_amount_atomic: '10000'
@@ -251,7 +1063,6 @@ paths:
                     product_id: csoai.product.request_attestation
                     sku_id: request_attestation
                     starts_at: '2026-09-11T00:00:00Z'
-                    tier: per_request
                   description: 'A signed XRPL evidence card for RLUSD: AccountRoot flags, Domain, two-way TOML check, and cited raw-fetch hashes. Historical state — not a rating or a guarantee.'
                   extra:
                     decimals: 6
@@ -334,7 +1145,7 @@ paths:
                       offers:
                       - acceptIndex: 0
                         format: jws
-                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIxMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS9yd2EvZXZpZGVuY2UiLCJzY2hlbWUiOiJleGFjdCIsInZhbGlkVW50aWwiOjE3ODkzMTUxNzgsInZlcnNpb24iOjF9.D69jVlO8tHeoilx9Ek6YULEV_pcFjV85i8J5C3KSWl4yfW-n8efmu-10TSSxsPD3CBpA74yDk_GreoIHzvxbCg
+                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIxMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS9yd2EvZXZpZGVuY2U_YXNzZXQ9UkxVU0QiLCJzY2hlbWUiOiJleGFjdCIsInZhbGlkVW50aWwiOjE3OTA1NzI0ODksInZlcnNpb24iOjF9.AZhJ9LgzaVkarDnkinK3Fu0MwS0FmSpgspxOwNcfnhMwWwX1rcegxlE4WowoTuPsQRI9MH29GtJ85BxmlieYBQ
                     schema:
                       $schema: https://json-schema.org/draft/2020-12/schema
                       properties:
@@ -358,7 +1169,7 @@ paths:
                       - offers
                       type: object
                 resource:
-                  description: 'A signed XRPL evidence card for RLUSD: AccountRoot flags, Domain, two-way TOML check, and cited raw-fetch hashes. Historical state — not a rating or a guarantee.'
+                  description: 'RWA asset evidence: one signed card of one XRPL issued asset''s on-ledger state, read live per request. Reads the AccountRoot flags, Domain, the two-way xrp-ledger.toml check and the gateway obligation, each raw fetch hashed. States: PROBED, UNCHECKABLE (an unreachable source is never a failure) or UNMEASURED. Free unsigned preview; verification is free.'
                   mimeType: application/json
                   serviceName: CSOAI RWA Evidence
                   tags:
@@ -371,10 +1182,10 @@ paths:
                 x402Version: 2
               schema:
                 $ref: '#/components/schemas/X402PaymentRequired'
-          description: Payment required — the x402 v2 challenge. The same JSON is base64-encoded in the PAYMENT-REQUIRED response header. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free.
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
           headers:
             PAYMENT-REQUIRED:
-              description: base64(JSON) of this challenge body
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
               schema:
                 type: string
       summary: XRPL asset evidence card (per request)
@@ -384,7 +1195,7 @@ paths:
         challenge:
           amount_source: captured live 402 (challenges/rwa_evidence.json)
           captured: true
-          payment_required_header_bytes: 6736
+          payment_required_header_bytes: 2432
         door: https://councilof.ai/api/rwa/evidence?asset=RLUSD
         free_preview: https://councilof.ai/api/rwa/evidence?asset=<symbol>&preview=1
         never:
@@ -400,7 +1211,7 @@ paths:
         - x402
   /api/wrapper:
     get:
-      description: 'A signed wrapped-asset parity card for usdc.e:arbitrum: wrapped totalSupply on its chain and the canonical token''s bridge-escrow balance on the origin chain, both at pinned finalized blocks, raw reads sha256''d. A ratio — not a rate, a grade or a reserve attestation. preview=1 is free unsigned. Paid signed card requires id (HTTP 402).'
+      description: 'Wrapped-asset parity evidence: one signed card of one bridged or wrapped token pair, read live from public RPC. Reads the wrapped totalSupply and the origin-chain bridge-escrow balance at finalized blocks whose hash a second RPC operator confirmed, raw reads hashed. States: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free. preview=1 is free unsigned. Paid signed card requires id (HTTP 402 when the pair is readable; an UNMEASURED pair answers HTTP 200 preview-only and is never sold).'
       operationId: x402_wrapper
       parameters:
       - description: roster id <wrapped-symbol>:<chain>, e.g. usdc.e:arbitrum (free ledger lists them)
@@ -423,9 +1234,9 @@ paths:
           content:
             application/json:
               schema:
-                description: 'A signed wrapped-asset parity card: wrapped totalSupply on its chain and the canonical token''s bridge-escrow balance on the origin chain at pinned finalized blocks, raw reads sha256''d, BigInt ratio. A read — not a rate, a grade or a reserve attestation.'
+                description: 'Wrapped-asset parity evidence: one signed card of one bridged or wrapped token pair, read live from public RPC. Reads the wrapped totalSupply and the origin-chain bridge-escrow balance at finalized blocks whose hash a second RPC operator confirmed, raw reads hashed. States: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
                 type: object
-          description: 'A signed wrapped-asset parity card: wrapped totalSupply on its chain and the canonical token''s bridge-escrow balance on the origin chain at pinned finalized blocks, raw reads sha256''d, BigInt ratio. A read — not a rate, a grade or a reserve attestation.'
+          description: 'Wrapped-asset parity evidence: one signed card of one bridged or wrapped token pair, read live from public RPC. Reads the wrapped totalSupply and the origin-chain bridge-escrow balance at finalized blocks whose hash a second RPC operator confirmed, raw reads hashed. States: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
         '402':
           content:
             application/json:
@@ -435,7 +1246,7 @@ paths:
                   asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
                   csoai_pricing:
                     campaign_id: csoai-launch-30d-20260911
-                    ends_at: '2026-10-11T00:00:00Z'
+                    ends_at: '2027-01-11T00:00:00Z'
                     fresh_compute_excluded: true
                     normal_amount_atomic: '20000'
                     offered_amount_atomic: '10000'
@@ -443,7 +1254,6 @@ paths:
                     product_id: csoai.product.request_attestation
                     sku_id: request_attestation
                     starts_at: '2026-09-11T00:00:00Z'
-                    tier: per_request
                   description: 'A signed wrapped-asset parity card for usdc.e:arbitrum: wrapped totalSupply on its chain and the canonical token''s bridge-escrow balance on the origin chain, both at pinned finalized blocks, raw reads sha256''d. A ratio — not a rate, a grade or a reserve attestation.'
                   extra:
                     decimals: 6
@@ -527,7 +1337,7 @@ paths:
                       offers:
                       - acceptIndex: 0
                         format: jws
-                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIxMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS93cmFwcGVyIiwic2NoZW1lIjoiZXhhY3QiLCJ2YWxpZFVudGlsIjoxNzg5MzE1MTc4LCJ2ZXJzaW9uIjoxfQ.SdV8dTMTTepF1pLyCWf88nwHGQKx59EwZZEN8HmnokeS5GYLhYoc9v-bJr-QUJd8mJkTw4kt5YsCUWSEk0u0Dg
+                        signature: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6Y3NvYWkub3JnI2JvYXJkLWF0dGVzdGF0aW9uLTEifQ.eyJhbW91bnQiOiIxMDAwMCIsImFzc2V0IjoiMHg4MzM1ODlmQ0Q2ZURiNkUwOGY0YzdDMzJENGY3MWI1NGJkQTAyOTEzIiwibmV0d29yayI6ImVpcDE1NTo4NDUzIiwicGF5VG8iOiIweDIxMjY4NjQwNEE3RDFFMWZEODhGMzVlRDYyMDBjM2FGN0E3OGFlMzEiLCJyZXNvdXJjZVVybCI6Imh0dHBzOi8vY291bmNpbG9mLmFpL2FwaS93cmFwcGVyP2lkPXVzZGMuZSUzQWFyYml0cnVtIiwic2NoZW1lIjoiZXhhY3QiLCJ2YWxpZFVudGlsIjoxNzkwNTcyNDg5LCJ2ZXJzaW9uIjoxfQ.2584pXOS1ebdlLjNTKyNkkbzpvF4ALC1Pxy5KW8VNympOPBA9VOYT2wDVs3IaGmVbViG-y1PTexsJ4A0aLp8Cw
                     schema:
                       $schema: https://json-schema.org/draft/2020-12/schema
                       properties:
@@ -551,7 +1361,7 @@ paths:
                       - offers
                       type: object
                 resource:
-                  description: 'A signed wrapped-asset parity card for usdc.e:arbitrum: wrapped totalSupply on its chain and the canonical token''s bridge-escrow balance on the origin chain, both at pinned finalized blocks, raw reads sha256''d. A ratio — not a rate, a grade or a reserve attestation.'
+                  description: 'Wrapped-asset parity evidence: one signed card of one bridged or wrapped token pair, read live from public RPC. Reads the wrapped totalSupply and the origin-chain bridge-escrow balance at finalized blocks whose hash a second RPC operator confirmed, raw reads hashed. States: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
                   mimeType: application/json
                   serviceName: CSOAI Wrapped-Asset Parity
                   tags:
@@ -564,10 +1374,10 @@ paths:
                 x402Version: 2
               schema:
                 $ref: '#/components/schemas/X402PaymentRequired'
-          description: Payment required — the x402 v2 challenge. The same JSON is base64-encoded in the PAYMENT-REQUIRED response header. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free.
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
           headers:
             PAYMENT-REQUIRED:
-              description: base64(JSON) of this challenge body
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
               schema:
                 type: string
       summary: Wrapped-asset parity card (per pair)
@@ -577,7 +1387,7 @@ paths:
         challenge:
           amount_source: captured live 402 (challenges/wrapper.json)
           captured: true
-          payment_required_header_bytes: 7100
+          payment_required_header_bytes: 2648
         door: https://councilof.ai/api/wrapper?id=usdc.e:arbitrum
         free_preview: https://councilof.ai/api/wrapper?id=<wrapped-symbol:chain>&preview=1
         never:
@@ -592,8 +1402,260 @@ paths:
       x-payment-info:
         protocols:
         - x402
+  /api/wrapper/asset/dai:
+    get:
+      description: 'Wrapped-asset parity evidence for DAI: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free. preview=1 is free unsigned. The unpaid GET answers HTTP 402 when at least one pair is readable, HTTP 200 preview-only when every pair is UNMEASURED.'
+      operationId: x402_wrapper_asset_dai
+      parameters:
+      - description: 'Free preview: same request, no payment, no signature'
+        in: query
+        name: preview
+        required: false
+        schema:
+          const: '1'
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: 'Wrapped-asset parity evidence for DAI: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
+                type: object
+          description: 'Wrapped-asset parity evidence for DAI: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
+        '402':
+          content:
+            application/json:
+              example:
+                accepts:
+                - amount: '20000'
+                  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                  extra:
+                    decimals: 6
+                    name: USD Coin
+                    symbol: USDC
+                    version: '2'
+                  maxAmountRequired: '20000'
+                  maxTimeoutSeconds: 300
+                  network: eip155:8453
+                  payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+                  scheme: exact
+                error: Payment required
+                extensions:
+                  bazaar:
+                    info:
+                      input:
+                        method: GET
+                        type: http
+                resource:
+                  description: 'Wrapped-asset parity evidence for DAI: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free. preview=1 is free unsigned. The unpaid GET answers HTTP 402 when at least one pair is readable, HTTP 200 preview-only when every pair is UNMEASURED.'
+                  mimeType: application/json
+                  url: https://councilof.ai/api/wrapper/asset/dai
+                x402Version: 2
+              schema:
+                $ref: '#/components/schemas/X402PaymentRequired'
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
+          headers:
+            PAYMENT-REQUIRED:
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
+              schema:
+                type: string
+      summary: issuance door — /api/wrapper/asset/dai
+      tags:
+      - Issuance
+      x-csoai:
+        challenge:
+          amount_source: functions/api/_skus.ts default band request_attestation.per_request (owner env override not visible offline)
+          captured: false
+        door: https://councilof.ai/api/wrapper/asset/dai
+        free_preview: https://councilof.ai/api/wrapper/asset/dai?preview=1
+        paid_for: issuance
+      x-payment-info:
+        protocols:
+        - x402
+  /api/wrapper/asset/usdc:
+    get:
+      description: 'Wrapped-asset parity evidence for USDC: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free. preview=1 is free unsigned. The unpaid GET answers HTTP 402 when at least one pair is readable, HTTP 200 preview-only when every pair is UNMEASURED.'
+      operationId: x402_wrapper_asset_usdc
+      parameters:
+      - description: 'Free preview: same request, no payment, no signature'
+        in: query
+        name: preview
+        required: false
+        schema:
+          const: '1'
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: 'Wrapped-asset parity evidence for USDC: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
+                type: object
+          description: 'Wrapped-asset parity evidence for USDC: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
+        '402':
+          content:
+            application/json:
+              example:
+                accepts:
+                - amount: '20000'
+                  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                  extra:
+                    decimals: 6
+                    name: USD Coin
+                    symbol: USDC
+                    version: '2'
+                  maxAmountRequired: '20000'
+                  maxTimeoutSeconds: 300
+                  network: eip155:8453
+                  payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+                  scheme: exact
+                error: Payment required
+                extensions:
+                  bazaar:
+                    info:
+                      input:
+                        method: GET
+                        type: http
+                resource:
+                  description: 'Wrapped-asset parity evidence for USDC: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free. preview=1 is free unsigned. The unpaid GET answers HTTP 402 when at least one pair is readable, HTTP 200 preview-only when every pair is UNMEASURED.'
+                  mimeType: application/json
+                  url: https://councilof.ai/api/wrapper/asset/usdc
+                x402Version: 2
+              schema:
+                $ref: '#/components/schemas/X402PaymentRequired'
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
+          headers:
+            PAYMENT-REQUIRED:
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
+              schema:
+                type: string
+      summary: issuance door — /api/wrapper/asset/usdc
+      tags:
+      - Issuance
+      x-csoai:
+        challenge:
+          amount_source: functions/api/_skus.ts default band request_attestation.per_request (owner env override not visible offline)
+          captured: false
+        door: https://councilof.ai/api/wrapper/asset/usdc
+        free_preview: https://councilof.ai/api/wrapper/asset/usdc?preview=1
+        paid_for: issuance
+      x-payment-info:
+        protocols:
+        - x402
+  /api/wrapper/asset/usdt:
+    get:
+      description: 'Wrapped-asset parity evidence for USDT: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free. preview=1 is free unsigned. The unpaid GET answers HTTP 402 when at least one pair is readable, HTTP 200 preview-only when every pair is UNMEASURED.'
+      operationId: x402_wrapper_asset_usdt
+      parameters:
+      - description: 'Free preview: same request, no payment, no signature'
+        in: query
+        name: preview
+        required: false
+        schema:
+          const: '1'
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: 'Wrapped-asset parity evidence for USDT: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
+                type: object
+          description: 'Wrapped-asset parity evidence for USDT: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free.'
+        '402':
+          content:
+            application/json:
+              example:
+                accepts:
+                - amount: '20000'
+                  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                  extra:
+                    decimals: 6
+                    name: USD Coin
+                    symbol: USDC
+                    version: '2'
+                  maxAmountRequired: '20000'
+                  maxTimeoutSeconds: 300
+                  network: eip155:8453
+                  payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+                  scheme: exact
+                error: Payment required
+                extensions:
+                  bazaar:
+                    info:
+                      input:
+                        method: GET
+                        type: http
+                resource:
+                  description: 'Wrapped-asset parity evidence for USDT: every roster pair of that asset, read live in one request. One signed card per pair: wrapped supply, escrow balance where an escrow exists, finalized blocks whose hash a second RPC operator confirmed. States per pair: ESCROW_PARITY_READ, UNCHECKABLE_NATIVE_ISSUANCE, INDEXED_CUSTODIAL or UNMEASURED. All UNMEASURED answers 200 preview-only and is never sold. Free preview; verification is free. preview=1 is free unsigned. The unpaid GET answers HTTP 402 when at least one pair is readable, HTTP 200 preview-only when every pair is UNMEASURED.'
+                  mimeType: application/json
+                  url: https://councilof.ai/api/wrapper/asset/usdt
+                x402Version: 2
+              schema:
+                $ref: '#/components/schemas/X402PaymentRequired'
+          description: 'Payment required — the x402 v2 challenge. The PAYMENT-REQUIRED response header carries its minimal v2 subset (x402Version, error, resource, accepts[] payment fields); extensions and the csoai sidecar are in this body only. Pay accepts[0] (scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31; amount in atomic units) and retry the same request with the X-PAYMENT header. Verification of the artefact stays free. The example is a captured challenge: its amount and any csoai_pricing dates are as captured, not a standing price. Amounts are set per request in the challenge and can change, so read accepts[] from a live 402 on every call.'
+          headers:
+            PAYMENT-REQUIRED:
+              description: 'base64(JSON) of the minimal v2 PaymentRequired: x402Version, error, resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra) — under 4 KiB'
+              schema:
+                type: string
+      summary: issuance door — /api/wrapper/asset/usdt
+      tags:
+      - Issuance
+      x-csoai:
+        challenge:
+          amount_source: functions/api/_skus.ts default band request_attestation.per_request (owner env override not visible offline)
+          captured: false
+        door: https://councilof.ai/api/wrapper/asset/usdt
+        free_preview: https://councilof.ai/api/wrapper/asset/usdt?preview=1
+        paid_for: issuance
+      x-payment-info:
+        protocols:
+        - x402
 components:
   schemas:
+    X402Accept:
+      properties:
+        amount:
+          description: atomic units (x402 v2)
+          pattern: ^[0-9]+$
+          type: string
+        asset:
+          const: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+          description: USDC contract, 6 decimals
+          type: string
+        extra:
+          description: EIP-712 domain of the asset
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+          type: object
+        maxAmountRequired:
+          description: atomic units (x402 v1 name for the same figure)
+          pattern: ^[0-9]+$
+          type: string
+        maxTimeoutSeconds:
+          type: integer
+        network:
+          const: eip155:8453
+          description: CAIP-2
+          type: string
+        payTo:
+          const: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
+          type: string
+        scheme:
+          const: exact
+          type: string
+      required:
+      - scheme
+      - network
+      - asset
+      - payTo
+      - amount
+      - maxTimeoutSeconds
+      type: object
     X402PaymentRequired:
       properties:
         accepts:
@@ -652,48 +1714,6 @@ components:
       - x402Version
       - accepts
       type: object
-    X402Accept:
-      properties:
-        amount:
-          description: atomic units (x402 v2)
-          pattern: ^[0-9]+$
-          type: string
-        asset:
-          const: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-          description: USDC contract, 6 decimals
-          type: string
-        extra:
-          description: EIP-712 domain of the asset
-          properties:
-            name:
-              type: string
-            version:
-              type: string
-          type: object
-        maxAmountRequired:
-          description: atomic units (x402 v1 name for the same figure)
-          pattern: ^[0-9]+$
-          type: string
-        maxTimeoutSeconds:
-          type: integer
-        network:
-          const: eip155:8453
-          description: CAIP-2
-          type: string
-        payTo:
-          const: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
-          type: string
-        scheme:
-          const: exact
-          type: string
-      required:
-      - scheme
-      - network
-      - asset
-      - payTo
-      - amount
-      - maxTimeoutSeconds
-      type: object
   securitySchemes:
     ed25519:
       description: Ed25519 signature of canonical body, under did:web:csoai.org#card-attestation-1
@@ -718,15 +1738,36 @@ x-x402:
   catalog: https://councilof.ai/api/x402
   doors:
   - /api/free-door
+  - /api/discover/chainlink
+  - /api/discover/ondo
+  - /api/discover/ondo-ousg
   - /api/request-attestation
   - /api/evidence-bundle
-  - /api/eunomia-data
+  - /api/signed-data-feed
   - /api/proof
   - /api/rwa/evidence
   - /api/wrapper
+  - /api/wrapper/changes
+  - /api/wrapper/asset/usdc
+  - /api/wrapper/asset/usdt
+  - /api/wrapper/asset/dai
   - /api/art50/marking-evidence
   - /api/feeds/provider-diff
   - /api/receipts/batch
+  - /api/measurement/fresh-capsule
+  - /api/pop/stablecoins
+  - /api/pop/swift
+  - /api/pop/xrpl
+  - /api/pop/x402-bazaar
+  - /api/pop/mcp-registry
+  - /api/pop/a2a
+  - /api/pop/ots-proofs
+  - /api/pop/layer0
+  - /api/pop/corrections
+  - /api/pop/claim-watch
+  - /api/ras/mcp-probe
+  - /api/ras/x402-check
+  - /api/ras/supply
   facilitator:
     configured: true
     note: the facilitator URL is a Cloudflare Pages env var (X402_FACILITATOR_URL) that no public surface publishes; /api/x402 reports only whether one is configured
@@ -754,10 +1795,10 @@ x-x402:
     spec_commit: 69652a69798f0b08f95bef33318896e36e210f7e
     supported: true
     verify_hosted: https://councilof.ai/api/receipts/verify
-    verify_offline: scripts/verify_receipt.py
+    verify_offline: https://councilof.ai/verifier/verify_receipt.py
     why_no_eip712: the edge holds one Ed25519 signing key (a Cloudflare Pages secret) and no secp256k1 signer; eip712 would require a key nobody has provisioned, so we emit none rather than a format we cannot produce
   payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
-  public_operations: 104
+  public_operations: 120
   quarantined:
   - buyable: false
     free_status: https://councilof.ai/api/witness/status?sha256=<64-hex>
@@ -766,7 +1807,8 @@ x-x402:
     url: https://councilof.ai/api/witness?sha256=<64-hex>
   revenue_truth: https://councilof.ai/api/revenue
   schema_of_source:
-    catalog: csoai.x402-catalog/0.2
+    catalog: csoai.x402-catalog/0.3
     well_known: csoai.x402/0.2
   scheme: exact
+  unauthenticated_facades: 42
   well_known: https://councilof.ai/.well-known/x402.json

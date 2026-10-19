@@ -4,13 +4,13 @@ info:
     email: nicholas@csoai.org
     name: CSOAI Ltd
     url: https://councilof.ai/
-  description: 'Verification is free forever. Agents pay per artefact: issuance, assembly, cadence — never a grade. 22 axes measured · 14 model fleets · 3 public leader scores · 8 fact runs · TIE is TIE · not a certificate. Operations with security [] are free and unauthenticated. Operations with x-payment-info are x402 doors; an amount appears only inside a door''s 402 challenge (documented as each door''s 402 example).'
+  description: 'Verification is free forever. Agents pay per artefact: issuance, assembly, cadence — never a grade. 23 axes measured · 14 model fleets · 0 separated leaders · 9 public leader scores · 9 fact runs · TIE is TIE · not a certificate. Operations with security [] are free and unauthenticated. Operations with x-payment-info are x402 doors; an amount appears only inside a door''s 402 challenge (documented as each door''s 402 example). Python''s default urllib User-Agent (Python-urllib/x.y) is refused at our CDN with 403 ''error code: 1010''. Send any User-Agent, e.g. urllib.request.Request(url, headers={''User-Agent'': ''my-check/1''}).'
   license:
     name: CC-BY-4.0
     url: https://creativecommons.org/licenses/by/4.0/
   title: Council of AI — Public Registers API
-  version: 0.2+820f7aa0ad7a
-  x-guidance: 'Free board: GET /api/gspc — quote totals.lid verbatim, never compose a count. Paid doors are the operations carrying x-payment-info: GET without payment answers HTTP 402 with the x402 v2 challenge (accepts[0]: scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31); pay it and retry with the X-PAYMENT header. Required query parameters carry an example that reaches the 402. Free previews are named per door under x-csoai.free_preview. Catalog: https://councilof.ai/.well-known/x402.json and https://councilof.ai/api/x402. Verify is free: https://councilof.ai/gspc-verify. Offer & Receipt emission is conditional: a 402 carries server-signed offers only when the Pages signing key is available; a settled 200 carries a signed receipt only when settlement exposes the required payer and transaction evidence and that key is available. The extension uses JWS/EdDSA, kid did:web:csoai.org#board-attestation-1, published at https://csoai.org/.well-known/did.json. Check either without trusting this document: POST it to /api/receipts/verify, or run scripts/verify_receipt.py, which reads did.json and contacts nobody. 22 axes measured · 14 model fleets · 3 public leader scores · 8 fact runs · TIE is TIE · not a certificate.'
+  version: 0.3+4a141228c8ec
+  x-guidance: 'Free board: GET /api/gspc — quote totals.lid verbatim, never compose a count. Paid doors are the operations carrying x-payment-info: GET without payment answers HTTP 402 with the x402 v2 challenge (accepts[0]: scheme exact, network eip155:8453, USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913, payTo 0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31); pay it and retry with the X-PAYMENT header. Required query parameters carry an example that reaches the 402. Free previews are named per door under x-csoai.free_preview. Catalog: https://councilof.ai/.well-known/x402.json and https://councilof.ai/api/x402. Verify is free: https://councilof.ai/gspc-verify. Offer & Receipt emission is conditional: a 402 carries server-signed offers only when the Pages signing key is available; a settled 200 carries a signed receipt only when settlement exposes the required payer and transaction evidence and that key is available. The extension uses JWS/EdDSA, kid did:web:csoai.org#board-attestation-1, published at https://csoai.org/.well-known/did.json. Check either without trusting this document: POST it to /api/receipts/verify, or download https://councilof.ai/verifier/verify_receipt.py; default mode reads the public DID document, and a retained key document allows offline replay. 23 axes measured · 14 model fleets · 0 separated leaders · 9 public leader scores · 9 fact runs · TIE is TIE · not a certificate.'
 servers:
 - url: https://councilof.ai
 tags:
@@ -59,15 +59,36 @@ x-x402:
   catalog: https://councilof.ai/api/x402
   doors:
   - /api/free-door
+  - /api/discover/chainlink
+  - /api/discover/ondo
+  - /api/discover/ondo-ousg
   - /api/request-attestation
   - /api/evidence-bundle
-  - /api/eunomia-data
+  - /api/signed-data-feed
   - /api/proof
   - /api/rwa/evidence
   - /api/wrapper
+  - /api/wrapper/changes
+  - /api/wrapper/asset/usdc
+  - /api/wrapper/asset/usdt
+  - /api/wrapper/asset/dai
   - /api/art50/marking-evidence
   - /api/feeds/provider-diff
   - /api/receipts/batch
+  - /api/measurement/fresh-capsule
+  - /api/pop/stablecoins
+  - /api/pop/swift
+  - /api/pop/xrpl
+  - /api/pop/x402-bazaar
+  - /api/pop/mcp-registry
+  - /api/pop/a2a
+  - /api/pop/ots-proofs
+  - /api/pop/layer0
+  - /api/pop/corrections
+  - /api/pop/claim-watch
+  - /api/ras/mcp-probe
+  - /api/ras/x402-check
+  - /api/ras/supply
   facilitator:
     configured: true
     note: the facilitator URL is a Cloudflare Pages env var (X402_FACILITATOR_URL) that no public surface publishes; /api/x402 reports only whether one is configured
@@ -95,10 +116,10 @@ x-x402:
     spec_commit: 69652a69798f0b08f95bef33318896e36e210f7e
     supported: true
     verify_hosted: https://councilof.ai/api/receipts/verify
-    verify_offline: scripts/verify_receipt.py
+    verify_offline: https://councilof.ai/verifier/verify_receipt.py
     why_no_eip712: the edge holds one Ed25519 signing key (a Cloudflare Pages secret) and no secp256k1 signer; eip712 would require a key nobody has provisioned, so we emit none rather than a format we cannot produce
   payTo: '0x212686404A7D1E1fD88F35eD6200c3aF7A78ae31'
-  public_operations: 104
+  public_operations: 120
   quarantined:
   - buyable: false
     free_status: https://councilof.ai/api/witness/status?sha256=<64-hex>
@@ -107,7 +128,8 @@ x-x402:
     url: https://councilof.ai/api/witness?sha256=<64-hex>
   revenue_truth: https://councilof.ai/api/revenue
   schema_of_source:
-    catalog: csoai.x402-catalog/0.2
+    catalog: csoai.x402-catalog/0.3
     well_known: csoai.x402/0.2
   scheme: exact
+  unauthenticated_facades: 42
   well_known: https://councilof.ai/.well-known/x402.json

@@ -2153,34 +2153,6 @@ apis:
     url: asyncapi/councilof-ai-webhooks.yml
   - type: Sandbox
     url: sandbox/councilof-ai-sandbox.yml
-- aid: councilof-ai:councilof-ai-proof-api
-  name: Council of AI Proof API
-  description: The Proof API from Council of AI — 1 operation(s) for proof.
-  humanURL: https://councilof.ai/api-docs/
-  baseURL: https://councilof.ai/api
-  tags:
-  - Proof
-  properties:
-  - type: OpenAPI
-    url: openapi/councilof-ai-proof-api-openapi.yml
-  - type: Documentation
-    url: https://councilof.ai/api-docs/
-  - type: APIReference
-    url: https://councilof.ai/openapi.json
-  - type: GettingStarted
-    url: https://councilof.ai/quickstart/
-  - type: Authentication
-    url: authentication/councilof-ai-authentication.yml
-  - type: Conventions
-    url: conventions/councilof-ai-conventions.yml
-  - type: ErrorCatalog
-    url: errors/councilof-ai-problem-types.yml
-  - type: DataModel
-    url: data-model/councilof-ai-data-model.yml
-  - type: Webhooks
-    url: asyncapi/councilof-ai-webhooks.yml
-  - type: Sandbox
-    url: sandbox/councilof-ai-sandbox.yml
 - aid: councilof-ai:councilof-ai-provider-canary-api
   name: Council of AI Provider Canary API
   description: The Provider Canary API from Council of AI — 1 operation(s) for provider canary.
@@ -2463,34 +2435,6 @@ apis:
     url: asyncapi/councilof-ai-webhooks.yml
   - type: Sandbox
     url: sandbox/councilof-ai-sandbox.yml
-- aid: councilof-ai:councilof-ai-root-json-api
-  name: Council of AI Root.json API
-  description: The Root.json API from Council of AI — 1 operation(s) for root.json.
-  humanURL: https://councilof.ai/api-docs/
-  baseURL: https://councilof.ai/api
-  tags:
-  - Root.json
-  properties:
-  - type: OpenAPI
-    url: openapi/councilof-ai-root-json-api-openapi.yml
-  - type: Documentation
-    url: https://councilof.ai/api-docs/
-  - type: APIReference
-    url: https://councilof.ai/openapi.json
-  - type: GettingStarted
-    url: https://councilof.ai/quickstart/
-  - type: Authentication
-    url: authentication/councilof-ai-authentication.yml
-  - type: Conventions
-    url: conventions/councilof-ai-conventions.yml
-  - type: ErrorCatalog
-    url: errors/councilof-ai-problem-types.yml
-  - type: DataModel
-    url: data-model/councilof-ai-data-model.yml
-  - type: Webhooks
-    url: asyncapi/councilof-ai-webhooks.yml
-  - type: Sandbox
-    url: sandbox/councilof-ai-sandbox.yml
 - aid: councilof-ai:councilof-ai-router-api
   name: Council of AI Router API
   description: The Router API from Council of AI — 1 operation(s) for router.
@@ -2557,34 +2501,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/councilof-ai-security-api-openapi.yml
-  - type: Documentation
-    url: https://councilof.ai/api-docs/
-  - type: APIReference
-    url: https://councilof.ai/openapi.json
-  - type: GettingStarted
-    url: https://councilof.ai/quickstart/
-  - type: Authentication
-    url: authentication/councilof-ai-authentication.yml
-  - type: Conventions
-    url: conventions/councilof-ai-conventions.yml
-  - type: ErrorCatalog
-    url: errors/councilof-ai-problem-types.yml
-  - type: DataModel
-    url: data-model/councilof-ai-data-model.yml
-  - type: Webhooks
-    url: asyncapi/councilof-ai-webhooks.yml
-  - type: Sandbox
-    url: sandbox/councilof-ai-sandbox.yml
-- aid: councilof-ai:councilof-ai-signed-api
-  name: Council of AI Signed API
-  description: The Signed API from Council of AI — 3 operation(s) for signed.
-  humanURL: https://councilof.ai/api-docs/
-  baseURL: https://councilof.ai/api
-  tags:
-  - Signed
-  properties:
-  - type: OpenAPI
-    url: openapi/councilof-ai-signed-api-openapi.yml
   - type: Documentation
     url: https://councilof.ai/api-docs/
   - type: APIReference
@@ -2999,34 +2915,6 @@ apis:
     url: asyncapi/councilof-ai-webhooks.yml
   - type: Sandbox
     url: sandbox/councilof-ai-sandbox.yml
-- aid: councilof-ai:councilof-ai-well-known-api
-  name: Council of AI .well Known API
-  description: The .well Known API from Council of AI — 1 operation(s) for .well known.
-  humanURL: https://councilof.ai/api-docs/
-  baseURL: https://councilof.ai/api
-  tags:
-  - .well Known
-  properties:
-  - type: OpenAPI
-    url: openapi/councilof-ai-well-known-api-openapi.yml
-  - type: Documentation
-    url: https://councilof.ai/api-docs/
-  - type: APIReference
-    url: https://councilof.ai/openapi.json
-  - type: GettingStarted
-    url: https://councilof.ai/quickstart/
-  - type: Authentication
-    url: authentication/councilof-ai-authentication.yml
-  - type: Conventions
-    url: conventions/councilof-ai-conventions.yml
-  - type: ErrorCatalog
-    url: errors/councilof-ai-problem-types.yml
-  - type: DataModel
-    url: data-model/councilof-ai-data-model.yml
-  - type: Webhooks
-    url: asyncapi/councilof-ai-webhooks.yml
-  - type: Sandbox
-    url: sandbox/councilof-ai-sandbox.yml
 - aid: councilof-ai:councilof-ai-witness-api
   name: Council of AI Witness API
   description: The Witness API from Council of AI — 1 operation(s) for witness.
@@ -3181,6 +3069,567 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/councilof-ai-yield-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-arena-api
+  name: Council of AI Arena API
+  description: The Arena API from Council of AI — 1 operation(s) for arena.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Arena
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-arena-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-booking-webhook-api
+  name: Council of AI Booking Webhook API
+  description: The Booking Webhook API from Council of AI — 1 operation(s) for booking webhook.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Booking Webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-booking-webhook-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-claims-api
+  name: Council of AI Claims API
+  description: The Claims API from Council of AI — 5 operation(s) for claims.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Claims
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-claims-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-door-settles-api
+  name: Council of AI Door Settles API
+  description: The Door Settles API from Council of AI — 1 operation(s) for door settles.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Door Settles
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-door-settles-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-evidence-api
+  name: Council of AI Evidence API
+  description: The Evidence API from Council of AI — 1 operation(s) for evidence.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Evidence
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-evidence-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-footprint-api
+  name: Council of AI Footprint API
+  description: The Footprint API from Council of AI — 1 operation(s) for footprint.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Footprint
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-footprint-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-momentum-api
+  name: Council of AI Momentum API
+  description: The Momentum API from Council of AI — 1 operation(s) for momentum.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Momentum
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-momentum-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-owm-api
+  name: Council of AI Owm API
+  description: The Owm API from Council of AI — 1 operation(s) for owm.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Owm
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-owm-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-receipts-api
+  name: Council of AI Receipts API
+  description: The Receipts API from Council of AI — 3 operation(s) for receipts.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Receipts
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-receipts-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-route-api
+  name: Council of AI Route API
+  description: The Route API from Council of AI — 1 operation(s) for route.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Route
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-route-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-rulings-api
+  name: Council of AI Rulings API
+  description: The Rulings API from Council of AI — 1 operation(s) for rulings.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Rulings
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-rulings-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-sign-api
+  name: Council of AI Sign API
+  description: The Sign API from Council of AI — 1 operation(s) for sign.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Sign
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-sign-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-sov-town-api
+  name: Council of AI Sov Town API
+  description: The Sov Town API from Council of AI — 1 operation(s) for sov town.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Sov Town
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-sov-town-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-usage-api
+  name: Council of AI Usage API
+  description: The Usage API from Council of AI — 1 operation(s) for usage.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Usage
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-usage-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-waitlist-api
+  name: Council of AI Waitlist API
+  description: The Waitlist API from Council of AI — 1 operation(s) for waitlist.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Waitlist
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-waitlist-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-wrapper-api
+  name: Council of AI Wrapper API
+  description: The Wrapper API from Council of AI — 1 operation(s) for wrapper.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Wrapper
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-wrapper-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-x402-listing-402index-api
+  name: Council of AI X402 Listing 402index API
+  description: >-
+    The X402 Listing 402index API from Council of AI — 1 operation(s) for x402 listing 402index.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - X402 Listing 402index
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-x402-listing-402index-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-x402-listing-api
+  name: Council of AI X402 Listing API
+  description: The X402 Listing API from Council of AI — 1 operation(s) for x402 listing.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - X402 Listing
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-x402-listing-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-x402-quotes-api
+  name: Council of AI X402 Quotes API
+  description: The X402 Quotes API from Council of AI — 1 operation(s) for x402 quotes.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - X402 Quotes
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-x402-quotes-api-openapi.yml
+  - type: Documentation
+    url: https://councilof.ai/api-docs/
+  - type: APIReference
+    url: https://councilof.ai/openapi.json
+  - type: GettingStarted
+    url: https://councilof.ai/quickstart/
+  - type: Authentication
+    url: authentication/councilof-ai-authentication.yml
+  - type: Conventions
+    url: conventions/councilof-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/councilof-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/councilof-ai-data-model.yml
+  - type: Webhooks
+    url: asyncapi/councilof-ai-webhooks.yml
+  - type: Sandbox
+    url: sandbox/councilof-ai-sandbox.yml
+- aid: councilof-ai:councilof-ai-xl-api
+  name: Council of AI Xl API
+  description: The Xl API from Council of AI — 1 operation(s) for xl.
+  humanURL: https://councilof.ai/connect-gspc/
+  baseURL: https://councilof.ai/mcp
+  tags:
+  - Xl
+  properties:
+  - type: OpenAPI
+    url: openapi/councilof-ai-xl-api-openapi.yml
   - type: Documentation
     url: https://councilof.ai/api-docs/
   - type: APIReference
