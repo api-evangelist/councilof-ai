@@ -14,7 +14,7 @@ edges:
     registered_name: ai.councilof/gspc
     register_id: ai.councilof/gspc
     detected_by: sweep-agent-tools.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   mcp_registry:
     servers:
     - ai.councilof/gspc
@@ -45,13 +45,14 @@ edges:
   relationship: compatible
   shape: a2a
   evidence_kind: own-wellknown
-  degree: conformant
+  degree: flavored
   report_only: true
   a2a_card:
-    grade: conformant
+    grade: flavored
     verdict: live
     protocol_version: '1.0'
-    deviations: []
+    deviations:
+    - no-protocolVersion
     card_subject: api
   contract_reference:
     register: provider's own /.well-known/agent-card.json
@@ -63,7 +64,7 @@ edges:
     matched_domain: councilof.ai
     matched_by: own-domain
     detected_by: sweep-ai-agents.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-ai-agents.py
   first_seen: '2026-10-15'
 - partner_name: a2aregistry.org
@@ -99,7 +100,7 @@ edges:
     sample_agents:
     - Council of AI — Measurement Agent
     detected_by: sweep-ai-agents.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-ai-agents.py
   first_seen: '2026-10-15'
 generated: '2026-10-14'
