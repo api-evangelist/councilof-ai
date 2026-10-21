@@ -69,3 +69,40 @@
     detected: '2026-10-19'
   status: not-a-workflow
   arazzo: null
+- slug: councilof-ai-x402-protocol-live-402-probe
+  label: x402 protocol (live 402 probe)
+  partner_name: x402 protocol (live 402 probe)
+  category: x402 pay-per-call conformance (observed)
+  type: register
+  channel: standard-directory
+  evidence: https://docs.cdp.coinbase.com/x402/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: live x402 probe (unauthenticated request to a documented paid resource + negative control)
+    standard: x402
+    spec_file: null
+    role: x402-resource-server
+    matched_by: repo
+    certified_products:
+    - product: 'x402 resource server: payment challenge observed'
+      product_type: x402 resource server
+      lapsed: true
+      lapsed_note: verified serving a challenge in the 2026-09-10/24 probe; no challenge at the probed paths on
+        2026-10-21
+    probes:
+    - url: https://councilof.ai/api/a2a
+      method: GET
+      status: 200
+    - url: https://councilof.ai/api/action-jobs
+      method: GET
+      status: 200
+    - url: https://councilof.ai/api/agentic-fix
+      method: GET
+      status: 503
+    signal_note: 'conformance OBSERVED, not certified by a body: 402 plus an x402 header or a complete accepts[]
+      body, and a negative control on the same host not challenged; one entry per product type'
+    detected_by: sweep-x402-micropayments.py
+    detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
