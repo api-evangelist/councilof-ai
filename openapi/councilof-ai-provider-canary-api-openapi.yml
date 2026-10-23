@@ -143,3 +143,9 @@ x-x402:
   scheme: exact
   unauthenticated_facades: 42
   well_known: https://councilof.ai/.well-known/x402.json
+x-provenance:
+  method: harvested
+  publisher: Council of AI
+  source: https://councilof.ai/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
